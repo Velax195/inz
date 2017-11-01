@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">GetData</string>
+    <string name="app_name">PMS</string>
+
+    <string name="menu_manage_parts">Zarządzaj częściami</string>
+    <string name="menu_manage_packages">Zarządzaj paczkami</string>
+    <string name="menu_scan">Zeskanuj paczkę</string>
+    <string name="menu_test">Aktywność testowa</string>
 </resources>
