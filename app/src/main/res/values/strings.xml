@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">PMS</string>
 
+    <string name="activity_name_list_packages">Lista paczek</string>
+
     <string name="menu_manage_parts">Zarządzaj częściami</string>
     <string name="menu_manage_packages">Zarządzaj paczkami</string>
     <string name="menu_scan">Zeskanuj paczkę</string>
     <string name="menu_test">Aktywność testowa</string>
+
+    <string name="action_add">Dodaj</string>
 
     <string name="not_implemented">Not yet implemented</string>
 </resources>
