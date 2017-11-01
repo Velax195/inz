@@ -2,26 +2,22 @@ package com.kszych.getdata.utils;
 
 import android.content.Context;
 
-/**
- * Created by kszyc on 29.10.2017.
- */
-
 public class Package {
 
-    public static final int DEFAULT_INT = -1;
-    public static final String DEFAULT_STRING = null;
-
-    private int mId = DEFAULT_INT;
+    private int mId = DatabaseHelper.DEFAULT_INT;
     private String mRfidTag;
-    private int mMass = DEFAULT_INT;
-    private int mDimH = DEFAULT_INT;
-    private int mDimW = DEFAULT_INT;
-    private int mDimD = DEFAULT_INT;
-    private String mAdditionalText = DEFAULT_STRING;
-    private String mBarcode = DEFAULT_STRING;
+    private int mMass = DatabaseHelper.DEFAULT_INT;
+    private int mDimH = DatabaseHelper.DEFAULT_INT;
+    private int mDimW = DatabaseHelper.DEFAULT_INT;
+    private int mDimD = DatabaseHelper.DEFAULT_INT;
+    private String mAdditionalText = DatabaseHelper.DEFAULT_STRING;
+    private String mBarcode = DatabaseHelper.DEFAULT_STRING;
+    private String mAisle = DatabaseHelper.DEFAULT_STRING;
+    private int mRack = DatabaseHelper.DEFAULT_INT;
+    private int mShelf = DatabaseHelper.DEFAULT_INT;
 
     public Package(int id, String rfidTag, int mass, int dimH, int dimW, int dimD
-            , String additionalText, String barcode) {
+            , String additionalText, String barcode, String aisle, int rack, int shelf) {
         this.mId = id;
         this.mRfidTag = rfidTag;
         this.mMass = mass;
@@ -30,11 +26,16 @@ public class Package {
         this.mDimD = dimD;
         this.mAdditionalText = additionalText;
         this.mBarcode = barcode;
+        this.mAisle = aisle;
+        this.mRack = rack;
+        this.mShelf = shelf;
+
     }
 
     public Package(String rfidTag, int mass, int dimH, int dimW, int dimD
-            , String additionalText, String barcode) {
-        this(DEFAULT_INT, rfidTag, mass, dimH, dimW, dimD, additionalText, barcode);
+            , String additionalText, String barcode, String aisle, int rack, int shelf) {
+        this(DatabaseHelper.DEFAULT_INT, rfidTag, mass, dimH, dimW, dimD, additionalText, barcode
+                , aisle, rack, shelf);
     }
 
 
@@ -68,6 +69,18 @@ public class Package {
 
     public String getBarcode() {
         return mBarcode;
+    }
+
+    public String getAisle() {
+        return mAisle;
+    }
+
+    public int getRack() {
+        return mRack;
+    }
+
+    public int getShelf() {
+        return mShelf;
     }
 
     public void save(Context context) {

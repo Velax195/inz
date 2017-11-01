@@ -2,24 +2,15 @@ package com.kszych.getdata.utils;
 
 import android.content.Context;
 
-/**
- * Created by kszyc on 30.10.2017.
- */
-
 public class Part {
 
-    public static final int DEFAULT_INT = -1;
-    public static final String DEFAULT_STRING = null;
-
-    private int mId = DEFAULT_INT;
+    private int mId = DatabaseHelper.DEFAULT_INT;
     private String mName;
-    private int mBuyUrl = DEFAULT_INT;
-    private double mPrice = (double) DEFAULT_INT;
+    private int mBuyUrl = DatabaseHelper.DEFAULT_INT;
+    private double mPrice = DatabaseHelper.DEFAULT_REAL;
 
-
-
-    private String mProducerName = DEFAULT_STRING;
-    private String mAdditionalInfo = DEFAULT_STRING;
+    private String mProducerName = DatabaseHelper.DEFAULT_STRING;
+    private String mAdditionalInfo = DatabaseHelper.DEFAULT_STRING;
 
     public Part(int id, String name, int buyUrl, double price, String producerName, String additionalInfo){
         this.mId = id;
@@ -31,29 +22,29 @@ public class Part {
     }
 
     public Part (String name, int buyUrl, double price, String producerName, String additionalInfo){
-        this(DEFAULT_INT, name, buyUrl, price, producerName, additionalInfo);
+        this(DatabaseHelper.DEFAULT_INT, name, buyUrl, price, producerName, additionalInfo);
     }
     public int getId() {
         return mId;
     }
 
-    public String getmName() {
+    public String getName() {
         return mName;
     }
 
-    public int getmBuyUrl() {
+    public int getBuyUrl() {
         return mBuyUrl;
     }
 
-    public double getmPrice() {
+    public double getPrice() {
         return mPrice;
     }
 
-    public String getmProducerName() {
+    public String getProducerName() {
         return mProducerName;
     }
 
-    public String getmAdditionalInfo() {
+    public String getAdditionalInfo() {
         return mAdditionalInfo;
     }
 

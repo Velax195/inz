@@ -10,6 +10,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Database.db";
 
+    // default db values below
+    public static final String DEFAULT_STRING = null;
+    public static final int DEFAULT_INT = -1;
+    public static final double DEFAULT_REAL = -1.0;
+
     private static DatabaseHelper _instance = null;
 
     private static class TPackage {
@@ -23,6 +28,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         final static String DIM_D               = "dimD";
         final static String ADDITIONAL_INFO     = "additionalInfo";
         final static String BAR_CODE            = "barCode";
+        final static String AISLE = "aisle";
+        final static String RACK = "rack";
+        final static String SHELF = "shelf";
     }
 
     private static class TPart {
@@ -66,6 +74,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + TPackage.DIM_W + " INT, "
                 + TPackage.DIM_D + " INT, "
                 + TPackage.BAR_CODE + " TEXT, "
+                + TPackage.AISLE + " TEXT, "
+                + TPackage.RACK + " INT, "
+                + TPackage.SHELF + " INT, "
                 + TPackage.ADDITIONAL_INFO + " TEXT );";
         sqLiteDatabase.execSQL(createPackage);
 
@@ -98,7 +109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     }
 
     public void save(Package pack) {
-        if(pack.getId() == Package.DEFAULT_INT) {
+        if(pack.getId() == DEFAULT_INT) {
             // TODO insert
         }
         else {
@@ -107,7 +118,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     }
 
     public void save(Part part) {
-        if(part.getId() == Part.DEFAULT_INT) {
+        if(part.getId() == DEFAULT_INT) {
             //TODO insert
         } else {
             //TODO update
@@ -115,7 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     }
 
     public void save(PackagePart packagePart) {
-        if(packagePart.getId() == PackagePart.DEFAULT_INT) {
+        if(packagePart.getId() == DEFAULT_INT) {
             //TODO insert
         } else {
             //TODO update

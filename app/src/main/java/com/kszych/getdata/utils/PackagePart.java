@@ -2,18 +2,12 @@ package com.kszych.getdata.utils;
 
 import android.content.Context;
 
-/**
- * Created by kszyc on 30.10.2017.
- */
-
 public class PackagePart {
 
-    public static final int DEFAULT_INT = -1;
+    private int mId = DatabaseHelper.DEFAULT_INT;
 
-    private int mId = DEFAULT_INT;
-
-    private int mPackageId = DEFAULT_INT;
-    private int mPartId = DEFAULT_INT;
+    private int mPackageId = DatabaseHelper.DEFAULT_INT;
+    private int mPartId = DatabaseHelper.DEFAULT_INT;
 
     public PackagePart( int id, int packageId, int partId) {
         this.mId=id;
@@ -22,18 +16,18 @@ public class PackagePart {
     }
 
     public PackagePart( int packageId, int partId){
-        this(DEFAULT_INT, packageId, partId);
+        this(DatabaseHelper.DEFAULT_INT, packageId, partId);
     }
 
     public int getId() {
         return mId;
     }
 
-    public int getmPackageId() {
+    public int getPackageId() {
         return mPackageId;
     }
 
-    public int getmPartId() {
+    public int getPartId() {
         return mPartId;
     }
 
