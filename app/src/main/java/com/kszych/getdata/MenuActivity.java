@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -18,11 +19,39 @@ public class MenuActivity extends AppCompatActivity {
         Button btnScanRFID = findViewById(R.id.btnScanRFID);
         Button btnTestActivity = findViewById(R.id.btnTestActivity);
 
+        btnManageParts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO implement
+                showNotImplemented();
+            }
+        });
+
+        btnManagePackages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO implement
+                showNotImplemented();
+            }
+        });
+
+        btnScanRFID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO implement
+                showNotImplemented();
+            }
+        });
+
         btnTestActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MenuActivity.this, TestActivity.class));
             }
         });
+    }
+
+    private void showNotImplemented() {
+        Toast.makeText(MenuActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
     }
 }
