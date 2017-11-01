@@ -36,18 +36,14 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        btON = (Button) findViewById(R.id.btON);
-        btOFF = (Button) findViewById(R.id.btOFF);
-        btTimer = (Button) findViewById(R.id.btTimer);
-        // btData = (Button) findViewById(R.id.btData);
-        tvData = (TextView) this.findViewById(R.id.data);
+        btON = findViewById(R.id.btON);
+        btOFF = findViewById(R.id.btOFF);
+        btTimer =  findViewById(R.id.btTimer);
+        tvData = findViewById(R.id.data);
 
         btON.setOnClickListener(myListener);
         btOFF.setOnClickListener(myListener);
         btTimer.setOnClickListener(myListener);
-        // btData.setOnClickListener(myListener);
-
-
     }
 
 
