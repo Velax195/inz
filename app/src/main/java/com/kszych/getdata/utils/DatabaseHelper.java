@@ -1,9 +1,13 @@
 package com.kszych.getdata.utils;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
+
+import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
 
@@ -77,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + TPackage.AISLE + " TEXT, "
                 + TPackage.RACK + " INT, "
                 + TPackage.SHELF + " INT, "
-                + TPackage.ADDITIONAL_INFO + " TEXT );";
+                + TPackage.ADDITIONAL_INFO + " TEXT )";
         sqLiteDatabase.execSQL(createPackage);
 
         String createPart = "CREATE TABLE " + TPart.TNAME + " ("
@@ -86,7 +90,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + TPart.BUY_URL + " TEXT, "
                 + TPart.PRICE + " REAL, "
                 + TPart.PRODUCER_NAME + " TEXT, "
-                + TPart.ADDITIONAL_INFO + " TEXT);";
+                + TPart.ADDITIONAL_INFO + " TEXT)";
         sqLiteDatabase.execSQL(createPart);
 
         String createPackagePart = "CREATE TABLE " + TPackagePart.TNAME + " ("
@@ -94,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + TPackagePart.PACKAGE_ID + " INTEGER, "
                 + TPackagePart.PART_ID + " INTEGER, "
                 + "FOREIGN KEY (" + TPackagePart.PACKAGE_ID + ") REFERENCES Package(" + TPackagePart.ID + "), "
-                + "FOREIGN KEY (" + TPackagePart.PART_ID + ") REFERENCES Package(" + TPackagePart.ID + ");";
+                + "FOREIGN KEY (" + TPackagePart.PART_ID + ") REFERENCES Package(" + TPackagePart.ID + ") )";
         sqLiteDatabase.execSQL(createPackagePart);
     }
 
@@ -131,5 +135,31 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         } else {
             //TODO update
         }
+    }
+
+    public ArrayList<Package> getPackages() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TPackage.TNAME, null);
+
+        ArrayList<Package> packageList = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            Package newPackage = new Package(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(TPackage.ID))
+            , cursor.getString(cursor.getColumnIndexOrThrow(TPackage.RFID_TAG)));
+            packageList.add(newPackage);
+        }
+
+        cursor.close();
+
+        return packageList;
+    }
+
+    public long addTestPackage(String dummyRfidTag) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues vals = new ContentValues();
+        vals.put(TPackage.RFID_TAG, dummyRfidTag);
+
+        return db.insert(TPackage.TNAME, null, vals);
     }
 }

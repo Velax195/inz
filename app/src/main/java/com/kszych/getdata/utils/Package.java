@@ -16,6 +16,11 @@ public class Package {
     private int mRack = DatabaseHelper.DEFAULT_INT;
     private int mShelf = DatabaseHelper.DEFAULT_INT;
 
+    public Package(int id, String rfidTag) {
+        this.mId = id;
+        this.mRfidTag = rfidTag;
+    }
+
     public Package(int id, String rfidTag, int mass, int dimH, int dimW, int dimD
             , String additionalText, String barcode, String aisle, int rack, int shelf) {
         this.mId = id;
