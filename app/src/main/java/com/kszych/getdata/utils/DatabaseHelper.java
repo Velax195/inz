@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
 
 import java.util.ArrayList;
 
@@ -21,8 +20,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     private static DatabaseHelper _instance = null;
 
-    private static class TPackage {
-        final static String TNAME = "Package";
+    public static class TPackage {
+        public final static String TNAME = "Package";
 
         final static String ID                  = "ID";
         final static String RFID_TAG            = "rfidTag";
@@ -32,13 +31,13 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         final static String DIM_D               = "dimD";
         final static String ADDITIONAL_INFO     = "additionalInfo";
         final static String BAR_CODE            = "barCode";
-        final static String AISLE = "aisle";
-        final static String RACK = "rack";
-        final static String SHELF = "shelf";
+        final static String AISLE               = "aisle";
+        final static String RACK                = "rack";
+        final static String SHELF               = "shelf";
     }
 
-    private static class TPart {
-        final static String TNAME = "Part";
+    public static class TPart {
+        public final static String TNAME = "Part";
 
         final static String ID                  = "ID";
         final static String NAME                = "name";
@@ -48,8 +47,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         final static String ADDITIONAL_INFO     = "additionalInfo";
     }
 
-    private static class TPackagePart {
-        final static String TNAME = "PackagePart";
+    public static class TPackagePart {
+        public final static String TNAME = "PackagePart";
 
         final static String ID                  = "ID";
         final static String PACKAGE_ID          = "fk_package_id";
@@ -72,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
         String createPackage = "CREATE TABLE " + TPackage.TNAME + " ("
                 + TPackage.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + TPackage.RFID_TAG + " TEXT NOT NULL, "
+                + TPackage.RFID_TAG + " TEXT UNIQUE NOT NULL, "
                 + TPackage.MASS + " INT, "
                 + TPackage.DIM_H + " INT, "
                 + TPackage.DIM_W + " INT, "
@@ -137,16 +136,70 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         }
     }
 
+    private int safeGetVal(boolean isNull, int val) {
+        if(isNull) {
+            return DEFAULT_INT;
+        }
+        return val;
+    }
+
+    private String safeGetVal(boolean isNull, String val) {
+        if(isNull) {
+            return DEFAULT_STRING;
+        }
+        return val;
+    }
+
+    private double safeGetVal(boolean isNull, double val) {
+        if(isNull) {
+            return DEFAULT_REAL;
+        }
+        return val;
+    }
+
+    public int count(String tableName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + tableName, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+
+    }
+
     public ArrayList<Package> getPackages() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TPackage.TNAME, null);
+
+        int piId = cursor.getColumnIndexOrThrow(TPackage.ID);
+
+        int piRFID = cursor.getColumnIndexOrThrow(TPackage.RFID_TAG);
+        int piMass = cursor.getColumnIndexOrThrow(TPackage.MASS);
+        int piDimH = cursor.getColumnIndexOrThrow(TPackage.DIM_H);
+        int piDimW = cursor.getColumnIndexOrThrow(TPackage.DIM_W);
+        int piDimD = cursor.getColumnIndexOrThrow(TPackage.DIM_D);
+        int piAdditional = cursor.getColumnIndexOrThrow(TPackage.ADDITIONAL_INFO);
+        int piBarCode = cursor.getColumnIndexOrThrow(TPackage.BAR_CODE);
+        int piAisle = cursor.getColumnIndexOrThrow(TPackage.AISLE);
+        int piRack = cursor.getColumnIndexOrThrow(TPackage.RACK);
+        int piShelf = cursor.getColumnIndexOrThrow(TPackage.SHELF);
 
         ArrayList<Package> packageList = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             Package newPackage = new Package(
-                    cursor.getInt(cursor.getColumnIndexOrThrow(TPackage.ID))
-            , cursor.getString(cursor.getColumnIndexOrThrow(TPackage.RFID_TAG)));
+                    cursor.getInt(cursor.getInt(piId))
+            , cursor.getString(piRFID)
+            , safeGetVal(cursor.isNull(piMass), cursor.getInt(piMass))
+                    , safeGetVal(cursor.isNull(piDimH), cursor.getInt(piDimH))
+                    , safeGetVal(cursor.isNull(piDimW), cursor.getInt(piDimW))
+                    , safeGetVal(cursor.isNull(piDimD), cursor.getInt(piDimD))
+                    , safeGetVal(cursor.isNull(piAdditional), cursor.getString(piAdditional))
+                    , safeGetVal(cursor.isNull(piBarCode), cursor.getString(piBarCode))
+                    , safeGetVal(cursor.isNull(piAisle), cursor.getString(piAisle))
+                    , safeGetVal(cursor.isNull(piRack), cursor.getInt(piRack))
+                    , safeGetVal(cursor.isNull(piShelf), cursor.getInt(piShelf))
+            );
+
             packageList.add(newPackage);
         }
 

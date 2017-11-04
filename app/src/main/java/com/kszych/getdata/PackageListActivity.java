@@ -19,7 +19,7 @@ import com.kszych.getdata.utils.DatabaseHelper;
 import com.kszych.getdata.utils.Package;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 
 public class PackageListActivity extends AppCompatActivity {
 
@@ -33,10 +33,12 @@ public class PackageListActivity extends AppCompatActivity {
 
         mDb = DatabaseHelper.getInstance(PackageListActivity.this);
 
-        mDb.addTestPackage("sth1");
-        mDb.addTestPackage("sth2");
-        mDb.addTestPackage("sth3");
-        mDb.addTestPackage("sth4");
+        if(mDb.count(DatabaseHelper.TPackage.TNAME) < 20) {
+            Random r = new Random();
+            for (int i = 0; i < 20; i++) {
+                mDb.addTestPackage("sth" + r.nextInt(5000));
+            }
+        }
 
         ListView listView = findViewById(R.id.lv_packages);
         PackagesArrayAdapter adapter = new PackagesArrayAdapter(PackageListActivity.this, mDb.getPackages());
