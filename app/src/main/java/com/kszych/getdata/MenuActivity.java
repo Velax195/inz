@@ -22,15 +22,15 @@ public class MenuActivity extends AppCompatActivity {
         btnManageParts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MenuActivity.this, PackageListActivity.class));
+                // TODO implement
+                showNotImplemented();
             }
         });
 
         btnManagePackages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO implement
-                showNotImplemented();
+                startActivity(new Intent(MenuActivity.this, PackageListActivity.class));
             }
         });
 
