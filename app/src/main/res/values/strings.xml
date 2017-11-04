@@ -2,6 +2,12 @@
     <string name="app_name">PMS</string>
 
     <string name="activity_name_list_packages">Lista paczek</string>
+    <string name="activity_name_single_package">Paczka %1$05d</string>
+
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
+    <string name="modify">Modyfikuj</string>
+    <string name="delete">Usuń</string>
 
     <string name="menu_manage_parts">Zarządzaj częściami</string>
     <string name="menu_manage_packages">Zarządzaj paczkami</string>
@@ -9,6 +15,18 @@
     <string name="menu_test">Aktywność testowa</string>
 
     <string name="action_add">Dodaj</string>
+
+    <string name="label_package_part_list">Lista części w paczce:</string>
+    <string name="label_mass">Masa:</string>
+    <string name="label_dimensions">Wymiary:</string>
+    <string name="label_barcode">Kod kreskowy:</string>
+    <string name="label_location">Dzieto:</string>
+    <string name="label_additional_info">Dodatkowe informacje:</string>
+    <string name="label_aisle">Alejka:</string>
+
+
+    <string name="dialog_confirm_delete_title">Potwierdź usunięcie</string>
+    <string name="dialog_confirm_delete_message">Czy na pewno chcesz usunąć?</string>
 
     <string name="not_implemented">Not yet implemented</string>
 </resources>

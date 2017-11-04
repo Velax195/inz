@@ -184,20 +184,21 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         int piShelf = cursor.getColumnIndexOrThrow(TPackage.SHELF);
 
         ArrayList<Package> packageList = new ArrayList<>();
+        cursor.moveToFirst();
 
         while (cursor.moveToNext()) {
             Package newPackage = new Package(
-                    cursor.getInt(cursor.getInt(piId))
-            , cursor.getString(piRFID)
-            , safeGetVal(cursor.isNull(piMass), cursor.getInt(piMass))
-                    , safeGetVal(cursor.isNull(piDimH), cursor.getInt(piDimH))
-                    , safeGetVal(cursor.isNull(piDimW), cursor.getInt(piDimW))
-                    , safeGetVal(cursor.isNull(piDimD), cursor.getInt(piDimD))
-                    , safeGetVal(cursor.isNull(piAdditional), cursor.getString(piAdditional))
-                    , safeGetVal(cursor.isNull(piBarCode), cursor.getString(piBarCode))
-                    , safeGetVal(cursor.isNull(piAisle), cursor.getString(piAisle))
-                    , safeGetVal(cursor.isNull(piRack), cursor.getInt(piRack))
-                    , safeGetVal(cursor.isNull(piShelf), cursor.getInt(piShelf))
+                cursor.getInt(piId)
+                , cursor.getString(piRFID)
+                , safeGetVal(cursor.isNull(piMass), cursor.getInt(piMass))
+                , safeGetVal(cursor.isNull(piDimH), cursor.getInt(piDimH))
+                , safeGetVal(cursor.isNull(piDimW), cursor.getInt(piDimW))
+                , safeGetVal(cursor.isNull(piDimD), cursor.getInt(piDimD))
+                , safeGetVal(cursor.isNull(piAdditional), cursor.getString(piAdditional))
+                , safeGetVal(cursor.isNull(piBarCode), cursor.getString(piBarCode))
+                , safeGetVal(cursor.isNull(piAisle), cursor.getString(piAisle))
+                , safeGetVal(cursor.isNull(piRack), cursor.getInt(piRack))
+                , safeGetVal(cursor.isNull(piShelf), cursor.getInt(piShelf))
             );
 
             packageList.add(newPackage);

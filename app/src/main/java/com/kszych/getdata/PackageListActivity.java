@@ -1,6 +1,7 @@
 package com.kszych.getdata;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +26,8 @@ import java.util.Random;
 public class PackageListActivity extends AppCompatActivity {
 
     private DatabaseHelper mDb;
+
+    private ArrayList<Package> mPackages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +44,20 @@ public class PackageListActivity extends AppCompatActivity {
             }
         }
 
+        mPackages = mDb.getPackages();
+
         ListView listView = findViewById(R.id.lv_packages);
-        PackagesArrayAdapter adapter = new PackagesArrayAdapter(PackageListActivity.this, mDb.getPackages());
+        PackagesArrayAdapter adapter = new PackagesArrayAdapter(PackageListActivity.this, mPackages);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(PackageListActivity.this, PackageSingleActivity.class);
+                intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mPackages.get(i));
+                startActivity(intent); // TODO startactivity for result? because the record can be deleted
+            }
+        });
     }
 
     @Override

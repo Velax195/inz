@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".PackageListActivity" />
+        <activity android:name=".PackageSingleActivity"></activity>
     </application>
 
 </manifest>

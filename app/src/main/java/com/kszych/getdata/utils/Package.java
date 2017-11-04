@@ -1,8 +1,11 @@
 package com.kszych.getdata.utils;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
-public class Package {
+public class Package implements Parcelable {
 
     private int mId = DatabaseHelper.DEFAULT_INT;
     private String mRfidTag;
@@ -43,6 +46,24 @@ public class Package {
                 , aisle, rack, shelf);
     }
 
+    public Package(Parcel in) {
+        String[] data = new String[11];
+
+        in.readStringArray(data);
+
+        this.mId = Integer.parseInt(data[0]);
+        this.mRfidTag = data[1];
+        this.mMass = Integer.parseInt(data[2]);
+        this.mDimH = Integer.parseInt(data[3]);
+        this.mDimW = Integer.parseInt(data[4]);
+        this.mDimD = Integer.parseInt(data[5]);
+        this.mAdditionalText = data[6];
+        this.mBarcode = data[7];
+        this.mAisle = data[8];
+        this.mRack = Integer.parseInt(data[9]);
+        this.mShelf = Integer.parseInt(data[10]);
+    }
+
 
     public int getId() {
         return mId;
@@ -72,6 +93,7 @@ public class Package {
         return mAdditionalText;
     }
 
+    @Nullable
     public String getBarcode() {
         return mBarcode;
     }
@@ -92,4 +114,38 @@ public class Package {
         DatabaseHelper helper = DatabaseHelper.getInstance(context);
         helper.save(this);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeStringArray(new String[] {
+                Integer.toString(this.mId)
+                , this.mRfidTag
+                , Integer.toString(this.mMass)
+                , Integer.toString(this.mDimH)
+                , Integer.toString(this.mDimW)
+                , Integer.toString(this.mDimD)
+                , this.mAdditionalText
+                , this.mBarcode
+                , this.mAisle
+                , Integer.toString(this.mRack)
+                , Integer.toString(this.mShelf)
+        });
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator<Package>() {
+        @Override
+        public Package createFromParcel(Parcel parcel) {
+            return new Package(parcel);
+        }
+
+        @Override
+        public Package[] newArray(int size) {
+            return new Package[size];
+        }
+    };
 }
