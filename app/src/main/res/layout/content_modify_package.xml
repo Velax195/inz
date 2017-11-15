@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:padding="10dp"
+tools:context="com.kszych.getdata.utils.ModifyPackageActivity">
+
+<LinearLayout
+    android:id="@+id/bottomButtonBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:orientation="horizontal">
+    <Button
+        android:id="@+id/modifyPackageAdd"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/add"/>
+    <Button
+        android:id="@+id/modifyPackageDelete"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/delete"/>
+    <Button
+        android:id="@+id/modifyPackageSave"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/save"/>
+</LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@id/bottomButtonBar"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TableLayout
+            android:id="@+id/modifyPackageDataTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableRow>
+                <TextView
+                    android:text="@string/label_dimensions"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:text="@string/label_mass"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"/>
+            </TableRow>
+            <TableRow>
+                <EditText
+                    android:id="@+id/etDimensions"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"/>
+                <EditText
+                    android:id="@+id/etMass"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"/>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="0dp"
+                    android:text="@string/label_barcode"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:text="@string/label_location"
+                    android:layout_weight="1"/>
+            </TableRow>
+            <TableRow>
+                <EditText
+                    android:id="@+id/etBarcode"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"/>
+                <EditText
+                    android:id="@+id/etLocation"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"/>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="0dp"
+                    android:text="@string/label_additional_info"
+                    android:layout_weight="2"/>
+            </TableRow>
+
+        </TableLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/modifyPackageDataTable">
+            <EditText
+                android:id="@+id/etAdditionalInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+    </RelativeLayout>
+    <ListView
+        android:id="@+id/modifyPackagePartsList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>
+</RelativeLayout>
+

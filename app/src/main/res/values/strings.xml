@@ -8,6 +8,8 @@
     <string name="no">Nie</string>
     <string name="modify">Modyfikuj</string>
     <string name="delete">Usuń</string>
+    <string name="add">Dodaj</string>
+    <string name="save">Zapisz</string>
 
     <string name="menu_manage_parts">Zarządzaj częściami</string>
     <string name="menu_manage_packages">Zarządzaj paczkami</string>
@@ -29,4 +31,6 @@
     <string name="dialog_confirm_delete_message">Czy na pewno chcesz usunąć?</string>
 
     <string name="not_implemented">Not yet implemented</string>
+    <string name="title_activity_modify_package">Modyfikuj Paczkę</string>
+    <string name="modifyPackageTitle">Paczka (mCurrentPackage.getId())</string>
 </resources>

@@ -19,8 +19,6 @@ public class PackageSingleActivity extends AppCompatActivity {
 
     public static final String KEY_PACKAGE = "incoming_package";
 
-    private static final String NULL_VAL = "N/A";
-
     private Package mCurrentPackage;
 
     @Override
@@ -48,23 +46,23 @@ public class PackageSingleActivity extends AppCompatActivity {
         Button btnDelete = findViewById(R.id.singlePackageDelete);
 
         tvMass.setText(mCurrentPackage.getMass() == DatabaseHelper.DEFAULT_INT
-                ? NULL_VAL
+                ? DatabaseHelper.NULL_VAL
                 : Integer.toString(mCurrentPackage.getMass()));
-        tvDimension.setText(getDimensionsString(
+        tvDimension.setText(mCurrentPackage.getDimensionsString(
                 " x "
                 , " [mm]"
                 , mCurrentPackage.getDimH()
                 , mCurrentPackage.getDimW()
                 , mCurrentPackage.getDimD()));
         tvBarcode.setText(mCurrentPackage.getBarcode() == DatabaseHelper.DEFAULT_STRING
-                ? NULL_VAL
+                ? DatabaseHelper.NULL_VAL
                 : mCurrentPackage.getBarcode());
-        tvLocation.setText(getLocationString(
+        tvLocation.setText(mCurrentPackage.getLocationString(
                 mCurrentPackage.getAisle()
                 , mCurrentPackage.getRack()
                 , mCurrentPackage.getShelf()));
         tvAdditional.setText(mCurrentPackage.getAdditionalText() == DatabaseHelper.DEFAULT_STRING
-                ? NULL_VAL
+                ? DatabaseHelper.NULL_VAL
                 : mCurrentPackage.getAdditionalText());
 
         // TODO list view package parts
@@ -122,7 +120,7 @@ public class PackageSingleActivity extends AppCompatActivity {
         }
 
         if(isNull) {
-            return NULL_VAL;
+            return DatabaseHelper.NULL_VAL;
         }
 
         return builder.toString();
@@ -132,7 +130,7 @@ public class PackageSingleActivity extends AppCompatActivity {
         if(aisle == DatabaseHelper.DEFAULT_STRING
                 && rack == DatabaseHelper.DEFAULT_INT
                 && shelf == DatabaseHelper.DEFAULT_INT) {
-            return NULL_VAL;
+            return DatabaseHelper.NULL_VAL;
         }
 
         return getString(R.string.label_aisle) + " "

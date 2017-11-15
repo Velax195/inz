@@ -20,7 +20,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".PackageListActivity" />
-        <activity android:name=".PackageSingleActivity"></activity>
+        <activity android:name=".PackageSingleActivity" />
+        <activity
+            android:name=".utils.ModifyPackageActivity"
+            android:label="@string/title_activity_modify_package"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -3,7 +3,10 @@ package com.kszych.getdata.utils;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.kszych.getdata.R;
 
 public class Package implements Parcelable {
 
@@ -135,6 +138,43 @@ public class Package implements Parcelable {
                 , Integer.toString(this.mRack)
                 , Integer.toString(this.mShelf)
         });
+    }
+
+    public String getDimensionsString(@NonNull String separator, @Nullable String append, int... args) {
+        boolean isNull = true;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < args.length && isNull; i++) {
+            if(args[i] != DatabaseHelper.DEFAULT_INT) {
+                isNull = false;
+            }
+
+            if(i != 0) {
+                builder.append(separator);
+            }
+            builder.append(args[i] == DatabaseHelper.DEFAULT_INT ? "0" : Integer.toString(args[i]));
+        }
+        if(append != null) {
+            builder.append(append);
+        }
+
+        if(isNull) {
+            return DatabaseHelper.NULL_VAL;
+        }
+
+        return builder.toString();
+    }
+
+    public String getLocationString(@Nullable String aisle, int rack, int shelf) {
+        if(aisle == DatabaseHelper.DEFAULT_STRING
+                && rack == DatabaseHelper.DEFAULT_INT
+                && shelf == DatabaseHelper.DEFAULT_INT) {
+            return DatabaseHelper.NULL_VAL;
+        }
+
+        return R.string.label_aisle + " "
+                + (aisle == DatabaseHelper.DEFAULT_STRING ? "?" : aisle) + ": R"
+                + (rack == DatabaseHelper.DEFAULT_INT ? "?" : rack) + " P"
+                + (shelf == DatabaseHelper.DEFAULT_INT ? "?" : shelf);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator<Package>() {
