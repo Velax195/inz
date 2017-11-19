@@ -209,6 +209,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return packageList;
     }
 
+    Package findPackage(String scannedRFID){
+        Package mPackage = new Package(1, null);
+        //TODO get uid, find package in database, return it
+        return mPackage;
+    }
+
     public ArrayList<Part> getParts() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TPart.TNAME, null);

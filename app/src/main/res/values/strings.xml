@@ -40,4 +40,9 @@
     <string name="label_buyURL">Link do sklepu</string>
     <string name="label_price">Cena [zł]</string>
     <string name="search">Wyszukaj</string>
+    <string name="menuActivityName">MenuActivity</string>
+    <string name="packageListActivityName">PackageListActivity</string>
+    <string name="overwritePackage">Zamierzasz nadpisać paczkę</string>
+    <string name="warning">Uwaga!</string>
+    <string name="showInfo">Pokaż dalsze informacje</string>
 </resources>
