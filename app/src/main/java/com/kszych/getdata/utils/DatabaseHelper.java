@@ -209,11 +209,62 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return packageList;
     }
 
+    public ArrayList<Part> getParts() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TPart.TNAME, null);
+
+        int piId = cursor.getColumnIndexOrThrow(TPart.ID);
+
+        int piName = cursor.getColumnIndexOrThrow(TPart.NAME);
+        int piBuyUrl = cursor.getColumnIndexOrThrow(TPart.BUY_URL);
+        int piPrice = cursor.getColumnIndexOrThrow(TPart.PRICE);
+        int piProducerName = cursor.getColumnIndexOrThrow(TPart.PRODUCER_NAME);
+        int piAdditionalInfo = cursor.getColumnIndexOrThrow(TPart.ADDITIONAL_INFO);
+
+        ArrayList<Part> partList = new ArrayList<>();
+        cursor.moveToFirst();
+
+        while (cursor.moveToNext()) {
+            Part newPart = new Part(
+                    cursor.getInt(piId)
+                    , cursor.getString(piName)
+                    , cursor.getString(piBuyUrl)
+                    , safeGetVal(cursor.isNull(piPrice), cursor.getDouble(piPrice))
+                    , cursor.getString(piProducerName)
+                    , cursor.getString(piAdditionalInfo)
+            );
+
+            partList.add(newPart);
+        }
+
+        cursor.close();
+
+        return partList;
+    }
+
     public long addTestPackage(String dummyRfidTag) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues vals = new ContentValues();
         vals.put(TPackage.RFID_TAG, dummyRfidTag);
 
         return db.insert(TPackage.TNAME, null, vals);
+    }
+
+    public long addTestParts(String dummyName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues vals = new ContentValues();
+        vals.put(TPart.NAME, dummyName);
+
+        return db.insert(TPart.TNAME, null, vals);
+    }
+
+    public Package checkRFID(String Uid){
+        //TODO implement
+        return new Package(-1, null);
+    }
+
+    public boolean isInDatabase(String Uid){
+        //TODO implement
+        return true;
     }
 }

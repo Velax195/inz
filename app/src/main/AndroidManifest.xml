@@ -24,7 +24,15 @@
         <activity
             android:name=".utils.ModifyPackageActivity"
             android:label="@string/title_activity_modify_package"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".utils.scanRFID"
+            android:label="@string/title_activity_scan_rfid"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".PartListActivity" />
+        <activity android:name=".PartSingleActivity" />
+        <activity android:name=".PartAddActivity" />
+        <activity android:name=".utils.PartSearchActivity"></activity>
     </application>
 
 </manifest>

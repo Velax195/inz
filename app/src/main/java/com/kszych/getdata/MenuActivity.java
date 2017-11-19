@@ -23,7 +23,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO implement
-                showNotImplemented();
+                startActivity(new Intent(MenuActivity.this, PartListActivity.class));
             }
         });
 

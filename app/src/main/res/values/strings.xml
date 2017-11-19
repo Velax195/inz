@@ -33,4 +33,11 @@
     <string name="not_implemented">Not yet implemented</string>
     <string name="title_activity_modify_package">Modyfikuj Paczkę</string>
     <string name="modifyPackageTitle">Paczka (mCurrentPackage.getId())</string>
+    <string name="title_activity_scan_rfid">scanRFID</string>
+    <string name="scanRFID">Zeskanuj RFID</string>
+    <string name="label_name">Nazwa</string>
+    <string name="label_producer">Nazwa producenta</string>
+    <string name="label_buyURL">Link do sklepu</string>
+    <string name="label_price">Cena [zł]</string>
+    <string name="search">Wyszukaj</string>
 </resources>
