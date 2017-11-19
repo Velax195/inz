@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kszych.getdata.utils.DatabaseHelper;
 import com.kszych.getdata.utils.Package;
@@ -37,7 +36,7 @@ public class PackageListActivity extends AppCompatActivity {
 
         mDb = DatabaseHelper.getInstance(PackageListActivity.this);
 
-        if(mDb.count(DatabaseHelper.TPackage.TNAME) < 20) {
+        if (mDb.count(DatabaseHelper.TPackage.TNAME) < 20) {
             Random r = new Random();
             for (int i = 0; i < 20; i++) {
                 mDb.addTestPackage("sth" + r.nextInt(5000));
@@ -71,16 +70,20 @@ public class PackageListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_add:
                 // TODO implement
+                Intent mIntent = new Intent(PackageListActivity.this, ScanRFIDActivity.class);
+                mIntent.putExtra("FROM_ACTIVITY", getResources().getString(R.string.packageListActivityName));
+                startActivity(mIntent);
+
 //                Toast.makeText(PackageListActivity.this
 //                        , R.string.not_implemented, Toast.LENGTH_SHORT).show();
-                // DEBUG DELETE_ME
-                StringBuilder builder = new StringBuilder();
-                ArrayList<Package> packages = mDb.getPackages();
-                for(Package singlePackage : packages) {
-                    builder.append(singlePackage.getRfidTag());
-                }
-
-                Toast.makeText(PackageListActivity.this, builder.toString(), Toast.LENGTH_SHORT).show();
+//                // DEBUG DELETE_ME
+//                StringBuilder builder = new StringBuilder();
+//                ArrayList<Package> packages = mDb.getPackages();
+//                for(Package singlePackage : packages) {
+//                    builder.append(singlePackage.getRfidTag());
+//                }
+//
+//                Toast.makeText(PackageListActivity.this, builder.toString(), Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -101,7 +104,7 @@ public class PackageListActivity extends AppCompatActivity {
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            if(convertView == null) {
+            if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
             }

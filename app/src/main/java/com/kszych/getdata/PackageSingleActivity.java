@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,8 @@ public class PackageSingleActivity extends AppCompatActivity {
         else {
             // TODO fail die etc.
         }
+
+        // TODO edit layout - three separate fields for dimensions
 
         setTitle(getString(R.string.activity_name_single_package, mCurrentPackage.getId()));
 
@@ -100,6 +103,30 @@ public class PackageSingleActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private String readStringValueFromField(EditText field) {
+        String val = field.getText().toString().trim();
+        if(val.equals(DatabaseHelper.NULL_VAL) || val.length() == 0) {
+            return DatabaseHelper.DEFAULT_STRING;
+        }
+        return val;
+    }
+
+    private int readIntValueFromField(EditText field) {
+        String val = field.getText().toString().trim();
+        if(val.equals(DatabaseHelper.NULL_VAL) || val.length() == 0) {
+            return DatabaseHelper.DEFAULT_INT;
+        }
+        return Integer.valueOf(val);
+    }
+
+    private double readDoubleValueFromField(EditText field) {
+        String val = field.getText().toString().trim();
+        if(val.equals(DatabaseHelper.NULL_VAL) || val.length() == 0) {
+            return DatabaseHelper.DEFAULT_INT;
+        }
+        return Double.valueOf(val);
     }
 
     private String getDimensionsString(@NonNull String separator, @Nullable String append, int... args) {

@@ -6,8 +6,10 @@
 
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
+    <string name="ok">OK</string>
     <string name="modify">Modyfikuj</string>
     <string name="delete">Usuń</string>
+    <string name="overwrite">Nadpisz</string>
     <string name="add">Dodaj</string>
     <string name="save">Zapisz</string>
 
@@ -32,7 +34,7 @@
 
     <string name="not_implemented">Not yet implemented</string>
     <string name="title_activity_modify_package">Modyfikuj Paczkę</string>
-    <string name="modifyPackageTitle">Paczka (mCurrentPackage.getId())</string>
+    <string name="modifyPackageTitle">Paczka %1$s</string>
     <string name="title_activity_scan_rfid">scanRFID</string>
     <string name="scanRFID">Zeskanuj RFID</string>
     <string name="label_name">Nazwa</string>

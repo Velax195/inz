@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.kszych.getdata.utils.scanRFID;
-
 public class MenuActivity extends AppCompatActivity {
 
     @Override
@@ -40,8 +38,8 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO implement
-                Intent mIntent = new Intent(MenuActivity.this, scanRFID.class);
-                mIntent.putExtra("FROM_ACTIVITY", R.string.menuActivityName);
+                Intent mIntent = new Intent(MenuActivity.this, ScanRFIDActivity.class);
+                mIntent.putExtra("FROM_ACTIVITY", getResources().getString(R.string.menuActivityName));
                 startActivity(mIntent);
             }
         });

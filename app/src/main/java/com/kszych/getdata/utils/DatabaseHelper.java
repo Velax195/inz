@@ -5,12 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "Database.db";
 
     // default db values below
@@ -23,36 +24,36 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static class TPackage {
         public final static String TNAME = "Package";
 
-        final static String ID                  = "ID";
-        final static String RFID_TAG            = "rfidTag";
-        final static String MASS                = "mass";
-        final static String DIM_H               = "dimH";
-        final static String DIM_W               = "dimW";
-        final static String DIM_D               = "dimD";
-        final static String ADDITIONAL_INFO     = "additionalInfo";
-        final static String BAR_CODE            = "barCode";
-        final static String AISLE               = "aisle";
-        final static String RACK                = "rack";
-        final static String SHELF               = "shelf";
+        final static String ID                  = TPackage.TNAME + ".ID";
+        final static String RFID_TAG            = TPackage.TNAME + ".rfidTag";
+        final static String MASS                = TPackage.TNAME + ".mass";
+        final static String DIM_H               = TPackage.TNAME + ".dimH";
+        final static String DIM_W               = TPackage.TNAME + ".dimW";
+        final static String DIM_D               = TPackage.TNAME + ".dimD";
+        final static String ADDITIONAL_INFO     = TPackage.TNAME + ".additionalInfo";
+        final static String BAR_CODE            = TPackage.TNAME + ".barCode";
+        final static String AISLE               = TPackage.TNAME + ".aisle";
+        final static String RACK                = TPackage.TNAME + ".rack";
+        final static String SHELF               = TPackage.TNAME + ".shelf";
     }
 
     public static class TPart {
         public final static String TNAME = "Part";
 
-        final static String ID                  = "ID";
-        final static String NAME                = "name";
-        final static String BUY_URL             = "buyUrl";
-        final static String PRICE               = "price";
-        final static String PRODUCER_NAME       = "producerName";
-        final static String ADDITIONAL_INFO     = "additionalInfo";
+        final static String ID                  = TPart.TNAME + ".ID";
+        final static String NAME                = TPart.TNAME + ".name";
+        final static String BUY_URL             = TPart.TNAME + ".buyUrl";
+        final static String PRICE               = TPart.TNAME + ".price";
+        final static String PRODUCER_NAME       = TPart.TNAME + ".producerName";
+        final static String ADDITIONAL_INFO     = TPart.TNAME + ".additionalInfo";
     }
 
     public static class TPackagePart {
         public final static String TNAME = "PackagePart";
 
-        final static String ID                  = "ID";
-        final static String PACKAGE_ID          = "fk_package_id";
-        final static String PART_ID             = "fk_part_id";
+        final static String ID                  = TPackagePart.TNAME + ".ID";
+        final static String PACKAGE_ID          = TPackagePart.TNAME + ".fk_package_id";
+        final static String PART_ID             = TPackagePart.TNAME + ".fk_part_id";
     }
 
     private DatabaseHelper(Context context) {
@@ -167,8 +168,13 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     }
 
     public ArrayList<Package> getPackages() {
+        return getPackagesByQuery("SELECT * FROM " + TPackage.TNAME, null);
+    }
+
+    private ArrayList<Package> getPackagesByQuery(String query, String[] queryArgs) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TPackage.TNAME, null);
+        Cursor cursor = db.rawQuery(query, queryArgs);
+        ArrayList<Package> resultArrayList = new ArrayList<>();
 
         int piId = cursor.getColumnIndexOrThrow(TPackage.ID);
 
@@ -183,36 +189,59 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         int piRack = cursor.getColumnIndexOrThrow(TPackage.RACK);
         int piShelf = cursor.getColumnIndexOrThrow(TPackage.SHELF);
 
-        ArrayList<Package> packageList = new ArrayList<>();
         cursor.moveToFirst();
 
         while (cursor.moveToNext()) {
-            Package newPackage = new Package(
-                cursor.getInt(piId)
-                , cursor.getString(piRFID)
-                , safeGetVal(cursor.isNull(piMass), cursor.getInt(piMass))
-                , safeGetVal(cursor.isNull(piDimH), cursor.getInt(piDimH))
-                , safeGetVal(cursor.isNull(piDimW), cursor.getInt(piDimW))
-                , safeGetVal(cursor.isNull(piDimD), cursor.getInt(piDimD))
-                , safeGetVal(cursor.isNull(piAdditional), cursor.getString(piAdditional))
-                , safeGetVal(cursor.isNull(piBarCode), cursor.getString(piBarCode))
-                , safeGetVal(cursor.isNull(piAisle), cursor.getString(piAisle))
-                , safeGetVal(cursor.isNull(piRack), cursor.getInt(piRack))
-                , safeGetVal(cursor.isNull(piShelf), cursor.getInt(piShelf))
+            resultArrayList.add(new Package(
+                    cursor.getInt(piId)
+                    , cursor.getString(piRFID)
+                    , safeGetVal(cursor.isNull(piMass), cursor.getInt(piMass))
+                    , safeGetVal(cursor.isNull(piDimH), cursor.getInt(piDimH))
+                    , safeGetVal(cursor.isNull(piDimW), cursor.getInt(piDimW))
+                    , safeGetVal(cursor.isNull(piDimD), cursor.getInt(piDimD))
+                    , safeGetVal(cursor.isNull(piAdditional), cursor.getString(piAdditional))
+                    , safeGetVal(cursor.isNull(piBarCode), cursor.getString(piBarCode))
+                    , safeGetVal(cursor.isNull(piAisle), cursor.getString(piAisle))
+                    , safeGetVal(cursor.isNull(piRack), cursor.getInt(piRack))
+                    , safeGetVal(cursor.isNull(piShelf), cursor.getInt(piShelf))
+                    )
             );
-
-            packageList.add(newPackage);
         }
 
         cursor.close();
 
-        return packageList;
+        return resultArrayList;
     }
 
-    Package findPackage(String scannedRFID){
-        Package mPackage = new Package(1, null);
+    public Package getPackageByRFID(String scannedRFID){
         //TODO get uid, find package in database, return it
-        return mPackage;
+
+        String queryString = "SELECT * FROM " + TPackage.TNAME
+                + " WHERE " + TPackage.RFID_TAG + " = ?";
+        ArrayList<Package> foundPackages = getPackagesByQuery(queryString, new String[]{scannedRFID});
+
+        return foundPackages.size() == 0 ? null : foundPackages.get(0);
+    }
+
+    public ArrayList<Package> getPackagesContainingPart(@NonNull Part part) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String queryString = "SELECT "
+                + TPackage.ID + ", "
+                + TPackage.RFID_TAG + ", "
+                + TPackage.MASS + ", "
+                + TPackage.DIM_H + ", "
+                + TPackage.DIM_W + ", "
+                + TPackage.DIM_D + ", "
+                + TPackage.ADDITIONAL_INFO + ", "
+                + TPackage.BAR_CODE + ", "
+                + TPackage.AISLE + ", "
+                + TPackage.RACK + ", "
+                + TPackage.SHELF
+                + " FROM " + TPackagePart.TNAME
+                + " LEFT JOIN " + TPackage.TNAME + " ON " + TPackagePart.PACKAGE_ID + " = " + TPackage.ID
+                + " WHERE " + TPackagePart.PART_ID + " = ?";
+
+        return getPackagesByQuery(queryString, new String[]{ Integer.toString( part.getId() ) });
     }
 
     public ArrayList<Part> getParts() {

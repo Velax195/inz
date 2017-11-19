@@ -28,7 +28,7 @@ public class Part implements Parcelable {
     }
 
     public Part(Parcel in) {
-        String[] data = new String[11];
+        String[] data = new String[6];
 
         in.readStringArray(data);
 

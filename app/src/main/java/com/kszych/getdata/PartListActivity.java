@@ -51,14 +51,14 @@ public class PartListActivity extends AppCompatActivity {
         PartsArrayAdapter adapter = new PartsArrayAdapter(PartListActivity.this, mParts);
         listView.setAdapter(adapter);
 
-        //listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-         //   @Override
-         //   public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-         //       Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
-        //        intent.putExtra(PartSingleActivity.KEY_PACKAGE, mParts.get(i));
-        //        startActivity(intent); // TODO startactivity for result? because the record can be deleted
-        //    }
-        //});
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
+                intent.putExtra(PartSingleActivity.KEY_PART, mParts.get(position));
+                startActivity(intent); // TODO startactivity for result? because the record can be deleted
+            }
+        });
     }
 
     @Override

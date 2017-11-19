@@ -1,17 +1,15 @@
-package com.kszych.getdata.utils;
+package com.kszych.getdata;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.kszych.getdata.R;
+import com.kszych.getdata.utils.DatabaseHelper;
+import com.kszych.getdata.utils.Package;
 
 public class ModifyPackageActivity extends AppCompatActivity {
 
@@ -23,7 +21,6 @@ public class ModifyPackageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_package);
-
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -44,7 +41,13 @@ public class ModifyPackageActivity extends AppCompatActivity {
         Button btnDelete = findViewById(R.id.modifyPackageDelete);
         Button btnSave = findViewById(R.id.modifyPackageSave);
 
-        setTitle(getString(R.string.modifyPackageTitle));
+        if(mCurrentPackage != null) {
+            setTitle(getString(R.string.modifyPackageTitle, Integer.toString(mCurrentPackage.getId())));
+        }
+        else {
+            setTitle(getString(R.string.modifyPackageTitle, "nowa"));
+            mCurrentPackage = new Package(DatabaseHelper.DEFAULT_INT, DatabaseHelper.DEFAULT_STRING);
+        }
 
         etMass.setText(mCurrentPackage.getMass() == DatabaseHelper.DEFAULT_INT
                 ? DatabaseHelper.NULL_VAL
