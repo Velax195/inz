@@ -22,17 +22,17 @@
         <activity android:name=".PackageListActivity" />
         <activity android:name=".PackageSingleActivity" />
         <activity
-            android:name=".utils.ModifyPackageActivity"
-            android:label="@string/title_activity_modify_package"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".ModifyPackageActivity"
+            android:label="@string/title_activity_modify_package" />
         <activity
-            android:name=".utils.scanRFID"
+            android:name=".ScanRFIDActivity"
             android:label="@string/title_activity_scan_rfid"
+            android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".PartListActivity" />
         <activity android:name=".PartSingleActivity" />
         <activity android:name=".PartAddActivity" />
-        <activity android:name=".utils.PartSearchActivity"></activity>
+        <activity android:name=".PartSearchActivity"></activity>
     </application>
 
 </manifest>
