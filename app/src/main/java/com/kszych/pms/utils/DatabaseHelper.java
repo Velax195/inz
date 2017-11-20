@@ -8,11 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
 
 
-public static final int DATABASE_VERSION = 7;
+public static final int DATABASE_VERSION = 8;
 public static final String DATABASE_NAME = "Database.db";
 
 // default db values below
@@ -279,6 +280,50 @@ public static class TPackagePart {
         cursor.close();
 
         return partList;
+    }
+
+    private void testDeleteAll() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TPackagePart.TNAME, null, null);
+        db.delete(TPackage.TNAME, null, null);
+        db.delete(TPart.TNAME, null, null);
+    }
+
+    public void createTestDatabase() {
+        testDeleteAll();
+        Random r = new Random();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ArrayList<Long> packagesID = new ArrayList<>();
+        ArrayList<Long> partsID = new ArrayList<>();
+
+        for(int i=0; i<20; i++) {
+
+            ContentValues packageVals = new ContentValues();
+
+            packageVals.put(TPackage.RFID_TAG, r.nextInt(10000));
+            packageVals.put(TPackage.MASS, r.nextInt(1000));
+            packageVals.put(TPackage.DIM_D, r.nextInt(100));
+            packageVals.put(TPackage.DIM_H, r.nextInt(80));
+            packageVals.put(TPackage.DIM_W, r.nextInt(50));
+            packageVals.put(TPackage.ADDITIONAL_INFO, "Additional info nr " + r.nextInt(100));
+            packageVals.put(TPackage.BAR_CODE, r.nextInt(20000));
+            packageVals.put(TPackage.AISLE, "Aisle nr " + r.nextInt(5));
+            packageVals.put(TPackage.RACK, r.nextInt(10));
+            packageVals.put(TPackage.SHELF, r.nextInt(10));
+
+            packagesID.add(db.insert(TPackage.TNAME, null, packageVals));
+
+            ContentValues partVals = new ContentValues();
+
+            partVals.put(TPart.NAME, "Part nr " + r.nextInt(500));
+            partVals.put(TPart.BUY_URL, "Buy URL nr " + r.nextInt(1000));
+            partVals.put(TPart.PRICE, 1000 * r.nextDouble());
+            partVals.put(TPart.PRODUCER_NAME, "Producer nr " + r.nextInt(80));
+
+            partsID.add(db.insert(TPart.TNAME, null, partVals));
+        }
     }
 
     public long addTestPackage(String dummyRfidTag) {

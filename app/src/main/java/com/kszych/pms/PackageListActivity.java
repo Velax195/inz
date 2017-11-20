@@ -35,13 +35,13 @@ public class PackageListActivity extends AppCompatActivity {
         setTitle(R.string.activity_name_list_packages);
 
         mDb = DatabaseHelper.getInstance(PackageListActivity.this);
-
-        if (mDb.count(DatabaseHelper.TPackage.TNAME) < 20) {
-            Random r = new Random();
-            for (int i = 0; i < 20; i++) {
-                        mDb.addTestPackage("sth" + r.nextInt(5000));
-            }
-        }
+//
+//        if (mDb.count(DatabaseHelper.TPackage.TNAME) < 20) {
+//            Random r = new Random();
+//            for (int i = 0; i < 20; i++) {
+//                        mDb.addTestPackage("sth" + r.nextInt(5000));
+//            }
+//        }
 
         mPackages = mDb.getPackages();
 

@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.kszych.pms.utils.DatabaseHelper;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -63,9 +65,8 @@ public class TestActivity extends AppCompatActivity {
                 message = "/timer";
             } else if (view == btDatabase) {
                 message = "";
-               // DatabaseHelper mDb = DatabaseHelper.getInstance(TestActivity.this);
-                //mDb.removeAll();
-                //Db.createTestDatabase();
+                DatabaseHelper mDb = DatabaseHelper.getInstance(TestActivity.this);
+                mDb.createTestDatabase();
                 onBackPressed();
              }
             else {

@@ -37,12 +37,12 @@ public class PartListActivity extends AppCompatActivity {
 
         mDb = DatabaseHelper.getInstance(PartListActivity.this);
 
-        if(mDb.count(DatabaseHelper.TPart.TNAME) < 20) {
-            Random r = new Random();
-            for (int i = 0; i < 20; i++) {
-                mDb.addTestParts("sth" + r.nextInt(5000));
-            }
-        }
+//        if(mDb.count(DatabaseHelper.TPart.TNAME) < 20) {
+//            Random r = new Random();
+//            for (int i = 0; i < 20; i++) {
+//                mDb.addTestParts("sth" + r.nextInt(5000));
+//            }
+//        }
 
         mParts = mDb.getParts();
 
