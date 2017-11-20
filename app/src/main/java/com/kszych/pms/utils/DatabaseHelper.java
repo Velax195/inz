@@ -324,6 +324,16 @@ public static class TPackagePart {
 
             partsID.add(db.insert(TPart.TNAME, null, partVals));
         }
+        for(int i = 0; i < packagesID.size(); i++){
+            int partsCount = new Random().nextInt(partsID.size() / 2);
+            for(int j = 0; j < partsCount; j++) {
+                ContentValues cv = new ContentValues();
+                cv.put(TPackagePart.PACKAGE_ID, packagesID.get(i));
+                cv.put(TPackagePart.PART_ID, partsID.get(j));
+                db.insert(TPackagePart.TNAME, null, cv);
+            }
+        }
+
     }
 
     public long addTestPackage(String dummyRfidTag) {
