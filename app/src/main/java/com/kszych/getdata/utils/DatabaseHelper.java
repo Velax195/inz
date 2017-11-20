@@ -11,50 +11,51 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
 
-    public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = "Database.db";
 
-    // default db values below
-    public static final String DEFAULT_STRING = null;
-    public static final int DEFAULT_INT = -1;
-    public static final double DEFAULT_REAL = -1.0;
-    public static final String NULL_VAL = "N/A";
-    private static DatabaseHelper _instance = null;
+public static final int DATABASE_VERSION = 7;
+public static final String DATABASE_NAME = "Database.db";
 
-    public static class TPackage {
-        public final static String TNAME = "Package";
+// default db values below
+public static final String DEFAULT_STRING = null;
+public static final int DEFAULT_INT = -1;
+public static final double DEFAULT_REAL = -1.0;
+public static final String NULL_VAL = "N/A";
+private static DatabaseHelper _instance = null;
 
-        final static String ID                  = TPackage.TNAME + ".ID";
-        final static String RFID_TAG            = TPackage.TNAME + ".rfidTag";
-        final static String MASS                = TPackage.TNAME + ".mass";
-        final static String DIM_H               = TPackage.TNAME + ".dimH";
-        final static String DIM_W               = TPackage.TNAME + ".dimW";
-        final static String DIM_D               = TPackage.TNAME + ".dimD";
-        final static String ADDITIONAL_INFO     = TPackage.TNAME + ".additionalInfo";
-        final static String BAR_CODE            = TPackage.TNAME + ".barCode";
-        final static String AISLE               = TPackage.TNAME + ".aisle";
-        final static String RACK                = TPackage.TNAME + ".rack";
-        final static String SHELF               = TPackage.TNAME + ".shelf";
-    }
+public static class TPackage {
+    public final static String TNAME = "Package";
 
-    public static class TPart {
-        public final static String TNAME = "Part";
+    final static String ID                  = "ID";
+    final static String RFID_TAG            = "rfidTag";
+    final static String MASS                = "mass";
+    final static String DIM_H               = "dimH";
+    final static String DIM_W               = "dimW";
+    final static String DIM_D               = "dimD";
+    final static String ADDITIONAL_INFO     = "additionalInfo";
+    final static String BAR_CODE            = "barCode";
+    final static String AISLE               = "aisle";
+    final static String RACK                = "rack";
+    final static String SHELF               = "shelf";
+}
 
-        final static String ID                  = TPart.TNAME + ".ID";
-        final static String NAME                = TPart.TNAME + ".name";
-        final static String BUY_URL             = TPart.TNAME + ".buyUrl";
-        final static String PRICE               = TPart.TNAME + ".price";
-        final static String PRODUCER_NAME       = TPart.TNAME + ".producerName";
-        final static String ADDITIONAL_INFO     = TPart.TNAME + ".additionalInfo";
-    }
+public static class TPart {
+    public final static String TNAME = "Part";
 
-    public static class TPackagePart {
-        public final static String TNAME = "PackagePart";
+    final static String ID                  = "ID";
+    final static String NAME                = "name";
+    final static String BUY_URL             = "buyUrl";
+    final static String PRICE               = "price";
+    final static String PRODUCER_NAME       = "producerName";
+    final static String ADDITIONAL_INFO     = "additionalInfo";
+}
 
-        final static String ID                  = TPackagePart.TNAME + ".ID";
-        final static String PACKAGE_ID          = TPackagePart.TNAME + ".fk_package_id";
-        final static String PART_ID             = TPackagePart.TNAME + ".fk_part_id";
-    }
+public static class TPackagePart {
+    public final static String TNAME = "PackagePart";
+
+    final static String ID                  = "ID";
+    final static String PACKAGE_ID          = "fk_package_id";
+    final static String PART_ID             = "fk_part_id";
+}
 
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -97,8 +98,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + TPackagePart.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + TPackagePart.PACKAGE_ID + " INTEGER, "
                 + TPackagePart.PART_ID + " INTEGER, "
-                + "FOREIGN KEY (" + TPackagePart.PACKAGE_ID + ") REFERENCES Package(" + TPackagePart.ID + "), "
-                + "FOREIGN KEY (" + TPackagePart.PART_ID + ") REFERENCES Package(" + TPackagePart.ID + ") )";
+                + "FOREIGN KEY (" + TPackagePart.PACKAGE_ID + ") "
+                + "REFERENCES " + TPackage.TNAME + "(" + TPackage.ID + "), "
+                + "FOREIGN KEY (" + TPackagePart.PART_ID + ") "
+                + "REFERENCES " + TPart.TNAME + "(" + TPart.ID + ") )";
         sqLiteDatabase.execSQL(createPackagePart);
     }
 
@@ -176,34 +179,34 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(query, queryArgs);
         ArrayList<Package> resultArrayList = new ArrayList<>();
 
-        int piId = cursor.getColumnIndexOrThrow(TPackage.ID);
+        int piId = cursor.getColumnIndex(TPackage.ID);
 
-        int piRFID = cursor.getColumnIndexOrThrow(TPackage.RFID_TAG);
-        int piMass = cursor.getColumnIndexOrThrow(TPackage.MASS);
-        int piDimH = cursor.getColumnIndexOrThrow(TPackage.DIM_H);
-        int piDimW = cursor.getColumnIndexOrThrow(TPackage.DIM_W);
-        int piDimD = cursor.getColumnIndexOrThrow(TPackage.DIM_D);
-        int piAdditional = cursor.getColumnIndexOrThrow(TPackage.ADDITIONAL_INFO);
-        int piBarCode = cursor.getColumnIndexOrThrow(TPackage.BAR_CODE);
-        int piAisle = cursor.getColumnIndexOrThrow(TPackage.AISLE);
-        int piRack = cursor.getColumnIndexOrThrow(TPackage.RACK);
-        int piShelf = cursor.getColumnIndexOrThrow(TPackage.SHELF);
+        int piRFID = cursor.getColumnIndex(TPackage.RFID_TAG);
+        int piMass = cursor.getColumnIndex(TPackage.MASS);
+        int piDimH = cursor.getColumnIndex(TPackage.DIM_H);
+        int piDimW = cursor.getColumnIndex(TPackage.DIM_W);
+        int piDimD = cursor.getColumnIndex(TPackage.DIM_D);
+        int piAdditional = cursor.getColumnIndex(TPackage.ADDITIONAL_INFO);
+        int piBarCode = cursor.getColumnIndex(TPackage.BAR_CODE);
+        int piAisle = cursor.getColumnIndex(TPackage.AISLE);
+        int piRack = cursor.getColumnIndex(TPackage.RACK);
+        int piShelf = cursor.getColumnIndex(TPackage.SHELF);
 
         cursor.moveToFirst();
 
         while (cursor.moveToNext()) {
             resultArrayList.add(new Package(
-                    cursor.getInt(piId)
-                    , cursor.getString(piRFID)
-                    , safeGetVal(cursor.isNull(piMass), cursor.getInt(piMass))
-                    , safeGetVal(cursor.isNull(piDimH), cursor.getInt(piDimH))
-                    , safeGetVal(cursor.isNull(piDimW), cursor.getInt(piDimW))
-                    , safeGetVal(cursor.isNull(piDimD), cursor.getInt(piDimD))
-                    , safeGetVal(cursor.isNull(piAdditional), cursor.getString(piAdditional))
-                    , safeGetVal(cursor.isNull(piBarCode), cursor.getString(piBarCode))
-                    , safeGetVal(cursor.isNull(piAisle), cursor.getString(piAisle))
-                    , safeGetVal(cursor.isNull(piRack), cursor.getInt(piRack))
-                    , safeGetVal(cursor.isNull(piShelf), cursor.getInt(piShelf))
+                            cursor.getInt(piId)
+                            , cursor.getString(piRFID)
+                            , safeGetVal(cursor.isNull(piMass), cursor.getInt(piMass))
+                            , safeGetVal(cursor.isNull(piDimH), cursor.getInt(piDimH))
+                            , safeGetVal(cursor.isNull(piDimW), cursor.getInt(piDimW))
+                            , safeGetVal(cursor.isNull(piDimD), cursor.getInt(piDimD))
+                            , safeGetVal(cursor.isNull(piAdditional), cursor.getString(piAdditional))
+                            , safeGetVal(cursor.isNull(piBarCode), cursor.getString(piBarCode))
+                            , safeGetVal(cursor.isNull(piAisle), cursor.getString(piAisle))
+                            , safeGetVal(cursor.isNull(piRack), cursor.getInt(piRack))
+                            , safeGetVal(cursor.isNull(piShelf), cursor.getInt(piShelf))
                     )
             );
         }
@@ -238,7 +241,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 + TPackage.RACK + ", "
                 + TPackage.SHELF
                 + " FROM " + TPackagePart.TNAME
-                + " LEFT JOIN " + TPackage.TNAME + " ON " + TPackagePart.PACKAGE_ID + " = " + TPackage.ID
+                + " LEFT JOIN " + TPackage.TNAME + " ON "
+                + TPackagePart.PACKAGE_ID + " = " + TPackage.ID
                 + " WHERE " + TPackagePart.PART_ID + " = ?";
 
         return getPackagesByQuery(queryString, new String[]{ Integer.toString( part.getId() ) });
@@ -248,13 +252,13 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TPart.TNAME, null);
 
-        int piId = cursor.getColumnIndexOrThrow(TPart.ID);
+        int piId = cursor.getColumnIndex(TPart.ID);
 
-        int piName = cursor.getColumnIndexOrThrow(TPart.NAME);
-        int piBuyUrl = cursor.getColumnIndexOrThrow(TPart.BUY_URL);
-        int piPrice = cursor.getColumnIndexOrThrow(TPart.PRICE);
-        int piProducerName = cursor.getColumnIndexOrThrow(TPart.PRODUCER_NAME);
-        int piAdditionalInfo = cursor.getColumnIndexOrThrow(TPart.ADDITIONAL_INFO);
+        int piName = cursor.getColumnIndex(TPart.NAME);
+        int piBuyUrl = cursor.getColumnIndex(TPart.BUY_URL);
+        int piPrice = cursor.getColumnIndex(TPart.PRICE);
+        int piProducerName = cursor.getColumnIndex(TPart.PRODUCER_NAME);
+        int piAdditionalInfo = cursor.getColumnIndex(TPart.ADDITIONAL_INFO);
 
         ArrayList<Part> partList = new ArrayList<>();
         cursor.moveToFirst();

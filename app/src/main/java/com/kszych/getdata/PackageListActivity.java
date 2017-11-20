@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.kszych.getdata.utils.DatabaseHelper;
 import com.kszych.getdata.utils.Package;
+import com.kszych.getdata.utils.ScanRFIDActivity;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -39,7 +40,7 @@ public class PackageListActivity extends AppCompatActivity {
         if (mDb.count(DatabaseHelper.TPackage.TNAME) < 20) {
             Random r = new Random();
             for (int i = 0; i < 20; i++) {
-                mDb.addTestPackage("sth" + r.nextInt(5000));
+                        mDb.addTestPackage("sth" + r.nextInt(5000));
             }
         }
 
@@ -61,7 +62,7 @@ public class PackageListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.list_actions, menu);
+        getMenuInflater().inflate(R.menu.list_actions_2, menu);
         return true;
     }
 
@@ -69,11 +70,9 @@ public class PackageListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                // TODO implement
                 Intent mIntent = new Intent(PackageListActivity.this, ScanRFIDActivity.class);
                 mIntent.putExtra("FROM_ACTIVITY", getResources().getString(R.string.packageListActivityName));
                 startActivity(mIntent);
-
 //                Toast.makeText(PackageListActivity.this
 //                        , R.string.not_implemented, Toast.LENGTH_SHORT).show();
 //                // DEBUG DELETE_ME

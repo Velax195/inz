@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.kszych.getdata.utils.DatabaseHelper;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -24,7 +26,7 @@ public class TestActivity extends AppCompatActivity {
     Button btON;
     Button btOFF;
     Button btTimer;
-    //Button btData;
+    Button btDatabase;
     TextView tvData;
     String ip = "http://192.168.0.14";
 
@@ -40,10 +42,13 @@ public class TestActivity extends AppCompatActivity {
         btOFF = findViewById(R.id.btOFF);
         btTimer =  findViewById(R.id.btTimer);
         tvData = findViewById(R.id.data);
+        btDatabase=findViewById(R.id.btDatabase);
+
 
         btON.setOnClickListener(myListener);
         btOFF.setOnClickListener(myListener);
         btTimer.setOnClickListener(myListener);
+        btDatabase.setOnClickListener(myListener);
     }
 
 
@@ -58,7 +63,14 @@ public class TestActivity extends AppCompatActivity {
                 message = "/off";
             } else if (view == btTimer) {
                 message = "/timer";
-            } else {
+            } else if (view == btDatabase) {
+                message = "";
+               // DatabaseHelper mDb = DatabaseHelper.getInstance(TestActivity.this);
+                //mDb.removeAll();
+                //Db.createTestDatabase();
+                onBackPressed();
+             }
+            else {
                 message = null;
             }
             btON.setEnabled(false);
@@ -108,5 +120,6 @@ public class TestActivity extends AppCompatActivity {
         btON.setEnabled(true);
         btOFF.setEnabled(true);
         btTimer.setEnabled(true);
+        btDatabase.setEnabled(true);
     }
 }

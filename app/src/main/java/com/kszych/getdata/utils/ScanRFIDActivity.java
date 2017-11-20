@@ -1,4 +1,4 @@
-package com.kszych.getdata;
+package com.kszych.getdata.utils;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,10 +7,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.kszych.getdata.utils.DatabaseHelper;
-import com.kszych.getdata.utils.GetRFIDTask;
-import com.kszych.getdata.utils.GetRFIDTaskCompleteListener;
-import com.kszych.getdata.utils.Package;
+import com.kszych.getdata.ModifyPackageActivity;
+import com.kszych.getdata.PackageSingleActivity;
+import com.kszych.getdata.R;
 
 public class ScanRFIDActivity extends AppCompatActivity implements GetRFIDTaskCompleteListener {
 
@@ -20,7 +19,6 @@ public class ScanRFIDActivity extends AppCompatActivity implements GetRFIDTaskCo
 
     String ip = "http://192.168.0.14/scaner";
     Package mPackage;
-    //TODO check line under
     DatabaseHelper mDb = DatabaseHelper.getInstance(this);
 
     private GetRFIDTask mGetRFIDTask;
@@ -146,36 +144,4 @@ public class ScanRFIDActivity extends AppCompatActivity implements GetRFIDTaskCo
             // TODO handle case - unknown previous activity
         }
     }
-//
-//    void execute() {
-//        try {
-//            HttpClient httpClient = new DefaultHttpClient();
-//            HttpPost httpPost = new HttpPost(ip);
-//            HttpResponse httpResponse = httpClient.execute(httpPost);
-//            HttpEntity httpEntity = httpResponse.getEntity();
-//            InputStream inputStream = httpEntity.getContent();
-//            //StringBuilder stringBuffer = new StringBuilder();
-//            String newLine;
-//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-//
-//            newLine = bufferedReader.readLine();
-//            if (newLine == "STOP ASKING") {
-//                doneFlag = true;
-//                inputStream.close();
-//                return;
-//            } else {
-//                UidHex = newLine;
-//                newLine = bufferedReader.readLine();
-//                UidDec = newLine;
-//            }
-//            inputStream.close();
-//
-//        } catch (ClientProtocolException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-
 }

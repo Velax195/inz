@@ -2,8 +2,6 @@ package com.kszych.getdata.utils;
 
 import android.os.AsyncTask;
 
-import com.kszych.getdata.ScanRFIDActivity;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
