@@ -230,7 +230,7 @@ public static class TPackagePart {
     public ArrayList<Package> getPackagesContainingPart(@NonNull Part part) {
         SQLiteDatabase db = this.getReadableDatabase();
         String queryString = "SELECT "
-                + TPackage.ID + ", "
+                + TPackage.TNAME + "." + TPackage.ID + ", "
                 + TPackage.RFID_TAG + ", "
                 + TPackage.MASS + ", "
                 + TPackage.DIM_H + ", "
@@ -243,7 +243,7 @@ public static class TPackagePart {
                 + TPackage.SHELF
                 + " FROM " + TPackagePart.TNAME
                 + " LEFT JOIN " + TPackage.TNAME + " ON "
-                + TPackagePart.PACKAGE_ID + " = " + TPackage.ID
+                + TPackagePart.PACKAGE_ID + " = " + TPackage.TNAME + "." + TPackage.ID
                 + " WHERE " + TPackagePart.PART_ID + " = ?";
 
         return getPackagesByQuery(queryString, new String[]{ Integer.toString( part.getId() ) });
