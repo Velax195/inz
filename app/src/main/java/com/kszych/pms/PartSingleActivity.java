@@ -1,6 +1,7 @@
 package com.kszych.pms;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -78,6 +80,15 @@ public class PartSingleActivity extends AppCompatActivity {
             ListView packagesList = findViewById(R.id.singlePartPackagesList);
             PackagesInPartArrayAdapter adapter = new PackagesInPartArrayAdapter(this, mPackagesOfPart);
             packagesList.setAdapter(adapter);
+
+            packagesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(PartSingleActivity.this, PackageSingleActivity.class);
+                    intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mPackagesOfPart.get(i));
+                    startActivity(intent);
+                }
+            });
 
         }
         else {
