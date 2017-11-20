@@ -25,7 +25,7 @@
             android:name=".ModifyPackageActivity"
             android:label="@string/title_activity_modify_package" />
         <activity
-            android:name=".utils.ScanRFIDActivity"
+            android:name=".ScanRFIDActivity"
             android:label="@string/title_activity_scan_rfid"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />

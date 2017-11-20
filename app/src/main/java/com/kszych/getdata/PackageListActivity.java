@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.kszych.getdata.utils.DatabaseHelper;
 import com.kszych.getdata.utils.Package;
-import com.kszych.getdata.utils.ScanRFIDActivity;
 
 import java.util.ArrayList;
 import java.util.Random;

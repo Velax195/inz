@@ -1,4 +1,4 @@
-package com.kszych.getdata.utils;
+package com.kszych.getdata;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,15 +7,16 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.kszych.getdata.ModifyPackageActivity;
-import com.kszych.getdata.PackageSingleActivity;
-import com.kszych.getdata.R;
+import com.kszych.getdata.utils.DatabaseHelper;
+import com.kszych.getdata.utils.GetRFIDTask;
+import com.kszych.getdata.utils.GetRFIDTaskCompleteListener;
+import com.kszych.getdata.utils.Package;
 
 public class ScanRFIDActivity extends AppCompatActivity implements GetRFIDTaskCompleteListener {
 
 
-    protected static final String DEFAULT_RESPOND_MESSAGE = "CARD_NOT_PRESENT";
-    protected static final String NOT_READABLE_RESPOND_MESSAGE = "CARD_NOT_READABLE";
+    public static final String DEFAULT_RESPOND_MESSAGE = "CARD_NOT_PRESENT";
+    public static final String NOT_READABLE_RESPOND_MESSAGE = "CARD_NOT_READABLE";
 
     String ip = "http://192.168.0.14/scaner";
     Package mPackage;

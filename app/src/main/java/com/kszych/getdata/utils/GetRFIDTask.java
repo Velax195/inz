@@ -2,6 +2,8 @@ package com.kszych.getdata.utils;
 
 import android.os.AsyncTask;
 
+import com.kszych.getdata.ScanRFIDActivity;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -19,7 +21,7 @@ public class GetRFIDTask extends AsyncTask<String, Void, String[]> {
     String server;
     private GetRFIDTaskCompleteListener mResponseListener;
 
-    GetRFIDTask(String server, GetRFIDTaskCompleteListener listener){
+    public GetRFIDTask(String server, GetRFIDTaskCompleteListener listener){
         this.server=server;
         this.mResponseListener = listener;
     }
