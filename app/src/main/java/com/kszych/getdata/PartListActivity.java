@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kszych.getdata.utils.DatabaseHelper;
-import com.kszych.getdata.utils.Package;
 import com.kszych.getdata.utils.Part;
 
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public class PartListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.list_actions, menu);
+        getMenuInflater().inflate(R.menu.list_actions_part_list, menu);
         return true;
     }
 

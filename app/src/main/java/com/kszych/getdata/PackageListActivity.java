@@ -62,7 +62,7 @@ public class PackageListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.list_actions_2, menu);
+        getMenuInflater().inflate(R.menu.list_actions_packages_list, menu);
         return true;
     }
 
