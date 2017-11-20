@@ -56,11 +56,11 @@ public class PartSingleActivity extends AppCompatActivity {
     class PackagesInPartArrayAdapter extends ArrayAdapter<Package> {
 
         private Context mContext;
-        private ArrayList<Package> mParts;
+        private ArrayList<Package> mPackages;
 
         public PackagesInPartArrayAdapter(@NonNull Context context, ArrayList<Package> objects) {
             super(context, android.R.layout.simple_list_item_1, objects);
-            mParts = objects;
+            mPackages = objects;
             mContext = context;
         }
 
@@ -72,7 +72,7 @@ public class PartSingleActivity extends AppCompatActivity {
                 convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
             }
             TextView listItemText = convertView.findViewById(android.R.id.text1);
-            listItemText.setText(mParts.get(position).getRfidTag());
+            listItemText.setText(mPackages.get(position).getRfidTag());
 
             return convertView;
         }

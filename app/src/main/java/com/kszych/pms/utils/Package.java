@@ -143,24 +143,25 @@ public class Package implements Parcelable {
     public String getDimensionsString(@NonNull String separator, @Nullable String append, int... args) {
         boolean isNull = true;
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < args.length && isNull; i++) {
-            if(args[i] != DatabaseHelper.DEFAULT_INT) {
-                isNull = false;
-            }
+        if(isNull) {
+            for (int i = 0; i < args.length; i++) {
+                if (args[i] != DatabaseHelper.DEFAULT_INT) {
+                    isNull = false;
+                }
 
-            if(i != 0) {
-                builder.append(separator);
+                if (i != 0) {
+                    builder.append(separator);
+                }
+                builder.append(args[i] == DatabaseHelper.DEFAULT_INT ? "0" : Integer.toString(args[i]));
             }
-            builder.append(args[i] == DatabaseHelper.DEFAULT_INT ? "0" : Integer.toString(args[i]));
         }
         if(append != null) {
             builder.append(append);
         }
-
-        if(isNull) {
+        if(isNull)
+        {
             return DatabaseHelper.NULL_VAL;
         }
-
         return builder.toString();
     }
 
@@ -171,8 +172,7 @@ public class Package implements Parcelable {
             return DatabaseHelper.NULL_VAL;
         }
 
-        return R.string.label_aisle + " "
-                + (aisle == DatabaseHelper.DEFAULT_STRING ? "?" : aisle) + ": R"
+        return (aisle == DatabaseHelper.DEFAULT_STRING ? "?" : aisle) + ": R"
                 + (rack == DatabaseHelper.DEFAULT_INT ? "?" : rack) + " P"
                 + (shelf == DatabaseHelper.DEFAULT_INT ? "?" : shelf);
     }
