@@ -1,4 +1,4 @@
-package com.kszych.getdata;
+package com.kszych.pms;
 
 import org.junit.Test;
 

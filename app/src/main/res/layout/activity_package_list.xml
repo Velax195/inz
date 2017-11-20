@@ -4,6 +4,6 @@
     android:id="@+id/lv_packages"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kszych.getdata.PackageListActivity">
+    tools:context="com.kszych.pms.PackageListActivity">
 
 </ListView>

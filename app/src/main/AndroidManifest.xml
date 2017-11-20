@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kszych.getdata">
+    package="com.kszych.pms">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,28 +11,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TestActivity" />
-        <activity android:name=".MenuActivity">
+        <activity android:name="com.kszych.pms.TestActivity" />
+        <activity android:name="com.kszych.pms.MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PackageListActivity" />
-        <activity android:name=".PackageSingleActivity" />
+        <activity android:name="com.kszych.pms.PackageListActivity" />
+        <activity android:name="com.kszych.pms.PackageSingleActivity" />
         <activity
-            android:name=".ModifyPackageActivity"
+            android:name="com.kszych.pms.ModifyPackageActivity"
             android:label="@string/title_activity_modify_package" />
         <activity
-            android:name=".ScanRFIDActivity"
+            android:name="com.kszych.pms.ScanRFIDActivity"
             android:label="@string/title_activity_scan_rfid"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".PartListActivity" />
-        <activity android:name=".PartSingleActivity" />
-        <activity android:name=".PartAddActivity" />
-        <activity android:name=".PartSearchActivity"></activity>
+        <activity android:name="com.kszych.pms.PartListActivity" />
+        <activity android:name="com.kszych.pms.PartSingleActivity" />
+        <activity android:name="com.kszych.pms.PartAddActivity" />
+        <activity android:name="com.kszych.pms.PartSearchActivity"></activity>
     </application>
 
 </manifest>

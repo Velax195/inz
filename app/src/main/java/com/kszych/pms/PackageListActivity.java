@@ -1,4 +1,4 @@
-package com.kszych.getdata;
+package com.kszych.pms;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,46 +15,45 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.kszych.getdata.utils.DatabaseHelper;
-import com.kszych.getdata.utils.Part;
+import com.kszych.pms.utils.DatabaseHelper;
+import com.kszych.pms.utils.Package;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PartListActivity extends AppCompatActivity {
+public class PackageListActivity extends AppCompatActivity {
 
     private DatabaseHelper mDb;
 
-    private ArrayList<Part> mParts;
+    private ArrayList<Package> mPackages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_part_list);
-        setTitle("pms");
+        setContentView(R.layout.activity_package_list);
+        setTitle(R.string.activity_name_list_packages);
 
-        mDb = DatabaseHelper.getInstance(PartListActivity.this);
+        mDb = DatabaseHelper.getInstance(PackageListActivity.this);
 
-        if(mDb.count(DatabaseHelper.TPart.TNAME) < 20) {
+        if (mDb.count(DatabaseHelper.TPackage.TNAME) < 20) {
             Random r = new Random();
             for (int i = 0; i < 20; i++) {
-                mDb.addTestParts("sth" + r.nextInt(5000));
+                        mDb.addTestPackage("sth" + r.nextInt(5000));
             }
         }
 
-        mParts = mDb.getParts();
+        mPackages = mDb.getPackages();
 
-        ListView listView = findViewById(R.id.lv_parts);
-        PartsArrayAdapter adapter = new PartsArrayAdapter(PartListActivity.this, mParts);
+        ListView listView = findViewById(R.id.lv_packages);
+        PackagesArrayAdapter adapter = new PackagesArrayAdapter(PackageListActivity.this, mPackages);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
-                intent.putExtra(PartSingleActivity.KEY_PART, mParts.get(position));
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(PackageListActivity.this, PackageSingleActivity.class);
+                intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mPackages.get(i));
                 startActivity(intent); // TODO startactivity for result? because the record can be deleted
             }
         });
@@ -62,7 +61,7 @@ public class PartListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.list_actions_part_list, menu);
+        getMenuInflater().inflate(R.menu.list_actions_packages_list, menu);
         return true;
     }
 
@@ -70,43 +69,45 @@ public class PartListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                // TODO implement
+                Intent mIntent = new Intent(PackageListActivity.this, ScanRFIDActivity.class);
+                mIntent.putExtra("FROM_ACTIVITY", getResources().getString(R.string.packageListActivityName));
+                startActivity(mIntent);
 //                Toast.makeText(PackageListActivity.this
 //                        , R.string.not_implemented, Toast.LENGTH_SHORT).show();
-                // DEBUG DELETE_ME
-                StringBuilder builder = new StringBuilder();
-                ArrayList<Part> parts = mDb.getParts();
-                for(Part singlePart : parts) {
-                    builder.append(singlePart.getName());
-                }
-
-                Toast.makeText(PartListActivity.this, builder.toString(), Toast.LENGTH_SHORT).show();
+//                // DEBUG DELETE_ME
+//                StringBuilder builder = new StringBuilder();
+//                ArrayList<Package> packages = mDb.getPackages();
+//                for(Package singlePackage : packages) {
+//                    builder.append(singlePackage.getRfidTag());
+//                }
+//
+//                Toast.makeText(PackageListActivity.this, builder.toString(), Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    class PartsArrayAdapter extends ArrayAdapter<Part> {
+    class PackagesArrayAdapter extends ArrayAdapter<Package> {
 
         private Context mContext;
-        private ArrayList<Part> mParts;
+        private ArrayList<Package> mPackages;
 
-        public PartsArrayAdapter(@NonNull Context context, ArrayList<Part> objects) {
+        public PackagesArrayAdapter(@NonNull Context context, ArrayList<Package> objects) {
             super(context, android.R.layout.simple_list_item_1, objects);
-            mParts = objects;
+            mPackages = objects;
             mContext = context;
         }
 
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            if(convertView == null) {
+            if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
             }
             TextView listItemText = convertView.findViewById(android.R.id.text1);
-            listItemText.setText(mParts.get(position).getName());
+            listItemText.setText(mPackages.get(position).getRfidTag());
 
             return convertView;
         }

@@ -1,12 +1,12 @@
-package com.kszych.getdata;
+package com.kszych.pms;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.kszych.getdata.utils.DatabaseHelper;
-import com.kszych.getdata.utils.Package;
-import com.kszych.getdata.utils.Part;
+import com.kszych.pms.utils.DatabaseHelper;
+import com.kszych.pms.utils.Package;
+import com.kszych.pms.utils.Part;
 
 import java.util.ArrayList;
 

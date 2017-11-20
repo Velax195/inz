@@ -1,4 +1,4 @@
-package com.kszych.getdata;
+package com.kszych.pms;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,10 +7,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.kszych.getdata.utils.DatabaseHelper;
-import com.kszych.getdata.utils.GetRFIDTask;
-import com.kszych.getdata.utils.GetRFIDTaskCompleteListener;
-import com.kszych.getdata.utils.Package;
+import com.kszych.pms.utils.DatabaseHelper;
+import com.kszych.pms.utils.GetRFIDTask;
+import com.kszych.pms.utils.GetRFIDTaskCompleteListener;
+import com.kszych.pms.utils.Package;
 
 public class ScanRFIDActivity extends AppCompatActivity implements GetRFIDTaskCompleteListener {
 

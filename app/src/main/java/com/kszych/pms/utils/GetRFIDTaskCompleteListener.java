@@ -1,4 +1,4 @@
-package com.kszych.getdata.utils;
+package com.kszych.pms.utils;
 
 public interface GetRFIDTaskCompleteListener {
     void cardIsRead(String uidHex, String uidDec);

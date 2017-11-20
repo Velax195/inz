@@ -1,4 +1,4 @@
-package com.kszych.getdata.utils;
+package com.kszych.pms.utils;
 
 import android.content.Context;
 import android.os.Parcel;
@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.kszych.getdata.R;
+import com.kszych.pms.R;
 
 public class Package implements Parcelable {
 

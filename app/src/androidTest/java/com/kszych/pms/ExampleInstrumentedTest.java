@@ -1,4 +1,4 @@
-package com.kszych.getdata;
+package com.kszych.pms;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

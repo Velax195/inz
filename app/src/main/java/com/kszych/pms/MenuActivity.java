@@ -1,4 +1,4 @@
-package com.kszych.getdata;
+package com.kszych.pms;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

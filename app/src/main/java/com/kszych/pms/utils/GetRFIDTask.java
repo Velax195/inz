@@ -1,8 +1,8 @@
-package com.kszych.getdata.utils;
+package com.kszych.pms.utils;
 
 import android.os.AsyncTask;
 
-import com.kszych.getdata.ScanRFIDActivity;
+import com.kszych.pms.ScanRFIDActivity;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

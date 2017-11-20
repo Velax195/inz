@@ -1,4 +1,4 @@
-package com.kszych.getdata;
+package com.kszych.pms;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +8,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.kszych.getdata.utils.DatabaseHelper;
-import com.kszych.getdata.utils.Package;
+import com.kszych.pms.utils.DatabaseHelper;
+import com.kszych.pms.utils.Package;
 
 public class ModifyPackageActivity extends AppCompatActivity {
 
