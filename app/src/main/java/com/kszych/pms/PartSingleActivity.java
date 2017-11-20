@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +24,7 @@ public class PartSingleActivity extends AppCompatActivity {
 
     public static final String KEY_PART = "single_part";
 
-    private Part mPart;
+    private Part mCurrentPart;
     private ArrayList<Package> mPackagesOfPart;
     private DatabaseHelper mDb = DatabaseHelper.getInstance(this);
 
@@ -34,12 +35,45 @@ public class PartSingleActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            mPart = extras.getParcelable(KEY_PART);
+            mCurrentPart = extras.getParcelable(KEY_PART);
 
-            if(mPart == null) {
+            if(mCurrentPart == null) {
                 // TODO die panic etc
             }
-            mPackagesOfPart = mDb.getPackagesContainingPart(mPart);
+            mPackagesOfPart = mDb.getPackagesContainingPart(mCurrentPart);
+
+            setTitle(mCurrentPart.getName());
+
+            TextView tvName = findViewById(R.id.tvName);
+            TextView tvBuyURL = findViewById(R.id.tvBuyURL);
+            TextView tvProducerName = findViewById(R.id.tvProducer);
+            TextView tvPrice = findViewById(R.id.tvPrice);
+            TextView tvAdditionalInfo = findViewById(R.id.tvAdditionalInfo);
+            Button btnModify = findViewById(R.id.singlePartModify);
+
+            tvName.setText(mCurrentPart.getName() == DatabaseHelper.DEFAULT_STRING
+                    ? DatabaseHelper.NULL_VAL
+                    : (mCurrentPart.getName()));
+            tvBuyURL.setText(mCurrentPart.getBuyUrl() == DatabaseHelper.DEFAULT_STRING
+                    ? DatabaseHelper.NULL_VAL
+                    : mCurrentPart.getBuyUrl());
+            tvProducerName.setText(mCurrentPart.getProducerName() == DatabaseHelper.DEFAULT_STRING
+                    ? DatabaseHelper.NULL_VAL
+                    : mCurrentPart.getProducerName());
+            tvPrice.setText(mCurrentPart.getPrice() == DatabaseHelper.DEFAULT_REAL
+                    ? DatabaseHelper.NULL_VAL
+                    : Double.toString(mCurrentPart.getPrice()));
+            tvAdditionalInfo.setText(mCurrentPart.getAdditionalInfo() == DatabaseHelper.DEFAULT_STRING
+                    ? DatabaseHelper.NULL_VAL
+                    : mCurrentPart.getAdditionalInfo());
+
+            btnModify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // TODO implement
+                    Toast.makeText(PartSingleActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+                }
+            });
 
             ListView packagesList = findViewById(R.id.singlePartPackagesList);
             PackagesInPartArrayAdapter adapter = new PackagesInPartArrayAdapter(this, mPackagesOfPart);
