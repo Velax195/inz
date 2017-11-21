@@ -431,4 +431,13 @@ public static class TPackagePart {
         return true;
     }
 
+    public boolean deletePackage(String tagRFID){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(db.delete(TPackage.TNAME,  TPackage.RFID_TAG + " = ?" , new String[]{tagRFID}) == 1){
+            return true;
+        }
+        return false;
+    }
+
 }

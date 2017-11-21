@@ -105,10 +105,10 @@ public class ModifyPackageActivity extends AppCompatActivity {
                         mDb.SafeGetStringFromEditText(etAisle.getText().toString()),
                         mDb.SafeGetIntFromEditText(etRack.getText().toString()),
                         mDb.SafeGetIntFromEditText(etShelf.getText().toString())
-                        );
+                );
 
                 boolean success = mDb.addPackage(mNewPackage);
-                if(success) {
+                if (success) {
                     Toast.makeText(ModifyPackageActivity.this, "partially succes", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(ModifyPackageActivity.this, PackageSingleActivity.class);
                     intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mDb.getPackageByRFID(scannedID));
@@ -124,7 +124,11 @@ public class ModifyPackageActivity extends AppCompatActivity {
             //TODO implement
             @Override
             public void onClick(View view) {
-                Toast.makeText(ModifyPackageActivity.this, mDb.getPackageByRFID("9729").getMass(), Toast.LENGTH_SHORT).show();
+                if (mDb.deletePackage(mCurrentPackage.getRfidTag())) {
+                    Toast.makeText(ModifyPackageActivity.this, "deleted", Toast.LENGTH_SHORT).show();
+                }  else {
+                    Toast.makeText(ModifyPackageActivity.this, "sumting is ronk", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         btnSave.setOnClickListener(new View.OnClickListener() {
