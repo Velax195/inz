@@ -60,6 +60,25 @@ public class PackageListActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mPackages = mDb.getPackages();
+
+        ListView listView = findViewById(R.id.lv_packages);
+        PackagesArrayAdapter adapter = new PackagesArrayAdapter(PackageListActivity.this, mPackages);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(PackageListActivity.this, PackageSingleActivity.class);
+                intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mPackages.get(i));
+                startActivity(intent); // TODO startactivity for result? because the record can be deleted
+            }
+        });
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.list_actions_packages_list, menu);
         return true;

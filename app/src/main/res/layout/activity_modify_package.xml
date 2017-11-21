@@ -16,19 +16,20 @@
             android:id="@+id/modifyPackageAdd"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/add"/>
+            android:layout_height="fill_parent"
+            android:text="@string/add_parts"
+            />
         <Button
             android:id="@+id/modifyPackageDelete"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:text="@string/delete"/>
         <Button
             android:id="@+id/modifyPackageSave"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:text="@string/save"/>
     </LinearLayout>
 

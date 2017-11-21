@@ -92,7 +92,27 @@ public class ModifyPackageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(ModifyPackageActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ModifyPackageActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
 
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            //TODO implement
+            @Override
+            public void onClick(View view) {
+                if (mDb.deletePackage(mCurrentPackage.getRfidTag())) {
+                    Toast.makeText(ModifyPackageActivity.this, "deleted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ModifyPackageActivity.this, "sumting is ronk", Toast.LENGTH_SHORT).show();
+                }
+                onBackPressed();
+            }
+        });
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            //TODO implement
+            @Override
+            public void onClick(View view) {
 
                 Package mNewPackage = new Package(
                         scannedID,
@@ -116,26 +136,6 @@ public class ModifyPackageActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(ModifyPackageActivity.this, mNewPackage.getRfidTag(), Toast.LENGTH_SHORT).show();
                 }
-
-            }
-        });
-
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            //TODO implement
-            @Override
-            public void onClick(View view) {
-                if (mDb.deletePackage(mCurrentPackage.getRfidTag())) {
-                    Toast.makeText(ModifyPackageActivity.this, "deleted", Toast.LENGTH_SHORT).show();
-                }  else {
-                    Toast.makeText(ModifyPackageActivity.this, "sumting is ronk", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            //TODO implement
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(ModifyPackageActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
             }
         });
     }
