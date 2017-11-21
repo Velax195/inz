@@ -46,7 +46,9 @@ public class PackageSingleActivity extends AppCompatActivity {
             // TODO fail die etc.
         }
 
-        mPartsInPackage = mDb.getPartsInPackage(mCurrentPackage);
+        if(mCurrentPackage != null) {
+            mPartsInPackage = mDb.getPartsInPackage(mCurrentPackage);
+        }
         // TODO edit layout - three separate fields for dimensions
 
         setTitle(getString(R.string.activity_name_single_package, mCurrentPackage.getId()));

@@ -41,28 +41,68 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1.5">
             <TableLayout
                 android:id="@+id/modifyPackageDataTable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TableRow>
                     <TextView
-                        android:text="@string/label_dimensions"
+                        android:text="@string/label_height"
                         android:layout_width="0dp"
                         android:layout_weight="1"/>
                     <TextView
-                        android:text="@string/label_mass"
+                        android:text="@string/label_width"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:text="@string/label_depth"
                         android:layout_width="0dp"
                         android:layout_weight="1"/>
                 </TableRow>
                 <TableRow>
                     <EditText
-                        android:id="@+id/etDimensions"
+                        android:id="@+id/etHeight"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:inputType="number"/>
+                    <EditText
+                        android:id="@+id/etWidth"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:inputType="number"/>
+                    <EditText
+                        android:id="@+id/etDepth"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:inputType="number"/>
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:text="@string/label_aisle"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:text="@string/label_rack"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:text="@string/label_shelf"
+                        android:layout_weight="1"/>
+                </TableRow>
+                <TableRow>
+                    <EditText
+                        android:id="@+id/etAisle"
                         android:layout_width="0dp"
                         android:layout_weight="1"/>
                     <EditText
-                        android:id="@+id/etMass"
+                        android:id="@+id/etRack"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:inputType="number"/>
+                    <EditText
+                        android:id="@+id/etShelf"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:inputType="number"/>
@@ -74,18 +114,20 @@
                         android:layout_weight="1"/>
                     <TextView
                         android:layout_width="0dp"
-                        android:text="@string/label_location"
+                        android:text="@string/label_mass"
                         android:layout_weight="1"/>
                 </TableRow>
                 <TableRow>
                     <EditText
                         android:id="@+id/etBarcode"
                         android:layout_width="0dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:inputType="number"/>
                     <EditText
-                        android:id="@+id/etLocation"
+                        android:id="@+id/etMass"
                         android:layout_width="0dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:inputType="number"/>
                 </TableRow>
                 <TableRow>
                     <TextView
@@ -99,6 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/modifyPackageDataTable">
+
                 <EditText
                     android:id="@+id/etAdditionalInfo"
                     android:layout_width="match_parent"

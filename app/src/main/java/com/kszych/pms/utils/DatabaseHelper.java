@@ -13,7 +13,7 @@ import java.util.Random;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
 
-public static final int DATABASE_VERSION = 9;
+public static final int DATABASE_VERSION = 13;
 public static final String DATABASE_NAME = "Database.db";
 
 // default db values below
@@ -162,6 +162,25 @@ public static class TPackagePart {
         return val;
     }
 
+    public int SafeGetIntFromEditText(String val) {
+        if(val.equals(NULL_VAL) || val == null){
+            return DEFAULT_INT;
+        }
+        return Integer.valueOf(val);
+    }
+
+    public String SafeGetStringFromEditText(String val) {
+        if(val.equals(NULL_VAL) || val == null){
+            return DEFAULT_STRING;
+        }
+        return val;
+    }
+    public double SafeGetDoubleFromEditText(String val) {
+        if(val.equals(NULL_VAL) || val == null){
+            return DEFAULT_REAL;
+        }
+        return Double.valueOf(val);
+    }
     public int count(String tableName) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + tableName, null);
@@ -195,7 +214,8 @@ public static class TPackagePart {
 
         cursor.moveToFirst();
 
-        while (cursor.moveToNext()) {
+        do{
+
             resultArrayList.add(new Package(
                             cursor.getInt(piId)
                             , cursor.getString(piRFID)
@@ -210,8 +230,8 @@ public static class TPackagePart {
                             , safeGetVal(cursor.isNull(piShelf), cursor.getInt(piShelf))
                     )
             );
-        }
 
+        }while (cursor.moveToNext());
         cursor.close();
 
         return resultArrayList;
@@ -226,6 +246,7 @@ public static class TPackagePart {
 
         return foundPackages.size() == 0 ? null : foundPackages.get(0);
     }
+
 
     public ArrayList<Package> getPackagesContainingPart(@NonNull Part part) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -283,6 +304,7 @@ public static class TPackagePart {
         cursor.moveToFirst();
 
         while (cursor.moveToNext()) {
+            cursor.moveToPrevious();
             resultArrayList.add(new Part(
                             cursor.getInt(piId)
                             , cursor.getString(piName)
@@ -292,6 +314,7 @@ public static class TPackagePart {
                             , safeGetVal(cursor.isNull(piAdditionalInfo), cursor.getString(piAdditionalInfo))
                     )
             );
+            cursor.moveToNext();
         }
 
         cursor.close();
@@ -384,6 +407,48 @@ public static class TPackagePart {
             }
         }
 
+    }
+
+    public void addPackage(String tag_RFID, int mass, int dim_H,
+                            int dim_W, int dim_D, int barCode, String aisle, int rack, int shelf, String additionalInfo){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues packageVals = new ContentValues();
+
+        packageVals.put(TPackage.RFID_TAG, tag_RFID);
+        packageVals.put(TPackage.MASS, mass);
+        packageVals.put(TPackage.DIM_H, dim_H);
+        packageVals.put(TPackage.DIM_W, dim_W);
+        packageVals.put(TPackage.DIM_D, dim_D);
+        packageVals.put(TPackage.ADDITIONAL_INFO, additionalInfo);
+        packageVals.put(TPackage.BAR_CODE, barCode);
+        packageVals.put(TPackage.AISLE, aisle);
+        packageVals.put(TPackage.RACK, rack);
+        packageVals.put(TPackage.SHELF, shelf);
+
+        db.insert(TPackage.TNAME, null, packageVals);
+    }
+    public boolean addPackage(Package newPackage){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues vals = new ContentValues();
+
+        vals.put(TPackage.RFID_TAG, newPackage.getRfidTag());
+        vals.put(TPackage.MASS, newPackage.getMass());
+        vals.put(TPackage.DIM_H, newPackage.getDimH());
+        vals.put(TPackage.DIM_W, newPackage.getDimW());
+        vals.put(TPackage.DIM_D, newPackage.getDimD());
+        vals.put(TPackage.ADDITIONAL_INFO, newPackage.getAdditionalText());
+        vals.put(TPackage.BAR_CODE, newPackage.getBarcode());
+        vals.put(TPackage.AISLE, newPackage.getAisle());
+        vals.put(TPackage.RACK, newPackage.getRack());
+        vals.put(TPackage.SHELF, newPackage.getShelf());
+
+        if(db.insert(TPackage.TNAME, null, vals) == -1)
+        {
+            return false;
+        }
+        return true;
     }
 
     public long addTestPackage(String dummyRfidTag) {

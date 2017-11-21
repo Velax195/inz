@@ -88,13 +88,14 @@ public class ScanRFIDActivity extends AppCompatActivity {
 
     private void cardIsRead(String uidHex, String uidDec) {
         Toast.makeText(ScanRFIDActivity.this, "Read " + uidHex + " " + uidDec, Toast.LENGTH_SHORT).show();
-        onBackPressed();
-        mPackage = mDb.getPackageByRFID(uidDec);
+        //onBackPressed();
+        mPackage = mDb.getPackageByRFID(uidHex);
         String previousActivity = getIntent().getStringExtra("FROM_ACTIVITY");
         if (previousActivity.equals(getResources().getString(R.string.menuActivityName))) {
             if(mPackage == null) {
                 // TODO toast and back
                 Toast.makeText(ScanRFIDActivity.this, "Not in database", Toast.LENGTH_SHORT).show();
+                onBackPressed();
 //                AlertDialog.Builder newDialog = new AlertDialog.Builder(ScanRFIDActivity.this);
 //                newDialog.setMessage("No package is associated with this RFID tag")
 //                        .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -107,14 +108,15 @@ public class ScanRFIDActivity extends AppCompatActivity {
             }
             else {
                 Intent sendIntent = new Intent(ScanRFIDActivity.this, PackageSingleActivity.class);
-                sendIntent.putExtra("SCANNED_PACKAGE", mPackage);
+                sendIntent.putExtra(PackageSingleActivity.KEY_PACKAGE, mPackage);
                 startActivity(sendIntent);
             }
         }
         else if (previousActivity.equals(getResources().getString(R.string.packageListActivityName))) {
             if(mPackage == null) {
                 Intent sendIntent = new Intent(ScanRFIDActivity.this, ModifyPackageActivity.class);
-                sendIntent.putExtra("SCANNED_PACKAGE", mPackage);
+                sendIntent.putExtra(ModifyPackageActivity.KEY_PACKAGE, mPackage);
+                sendIntent.putExtra("SCANNED_PACKAGE", uidHex);
                 startActivity(sendIntent);
             }
             else {

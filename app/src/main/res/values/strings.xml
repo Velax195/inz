@@ -47,4 +47,9 @@
     <string name="overwritePackage">Zamierzasz nadpisać paczkę</string>
     <string name="warning">Uwaga!</string>
     <string name="showInfo">Pokaż dalsze informacje</string>
+    <string name="label_height">Wysokość</string>
+    <string name="label_width">Szerokość</string>
+    <string name="label_depth">Głębokość</string>
+    <string name="label_rack">Regał</string>
+    <string name="label_shelf">Półka</string>
 </resources>
