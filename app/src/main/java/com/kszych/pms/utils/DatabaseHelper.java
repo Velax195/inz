@@ -13,7 +13,7 @@ import java.util.Random;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
 
-public static final int DATABASE_VERSION = 8;
+public static final int DATABASE_VERSION = 9;
 public static final String DATABASE_NAME = "Database.db";
 
 // default db values below
@@ -247,6 +247,56 @@ public static class TPackagePart {
                 + " WHERE " + TPackagePart.PART_ID + " = ?";
 
         return getPackagesByQuery(queryString, new String[]{ Integer.toString( part.getId() ) });
+    }
+
+
+    public ArrayList<Part> getPartsInPackage(@NonNull Package singlePackage) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String queryString = "SELECT "
+                + TPart.TNAME + "." + TPart.ID + ", "
+                + TPart.NAME + ", "
+                + TPart.BUY_URL + ", "
+                + TPart.PRICE + ", "
+                + TPart.PRODUCER_NAME + ", "
+                + TPart.ADDITIONAL_INFO
+                + " FROM " + TPackagePart.TNAME
+                + " LEFT JOIN " + TPart.TNAME + " ON "
+                + TPackagePart.PART_ID + " = " + TPart.TNAME + "." + TPart.ID
+                + " WHERE " + TPackagePart.PACKAGE_ID + " = ?";
+
+        return getPartsByQuery(queryString, new String[]{ Integer.toString( singlePackage.getId() ) });
+    }
+
+    private ArrayList<Part> getPartsByQuery(String query, String[] queryArgs) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, queryArgs);
+        ArrayList<Part> resultArrayList = new ArrayList<>();
+
+        int piId = cursor.getColumnIndex(TPart.ID);
+
+        int piName = cursor.getColumnIndex(TPart.NAME);
+        int piBuyUrl = cursor.getColumnIndex(TPart.BUY_URL);
+        int piPrice = cursor.getColumnIndex(TPart.PRICE);
+        int piProducerName = cursor.getColumnIndex(TPart.PRODUCER_NAME);
+        int piAdditionalInfo = cursor.getColumnIndex(TPart.ADDITIONAL_INFO);
+
+        cursor.moveToFirst();
+
+        while (cursor.moveToNext()) {
+            resultArrayList.add(new Part(
+                            cursor.getInt(piId)
+                            , cursor.getString(piName)
+                            , safeGetVal(cursor.isNull(piBuyUrl), cursor.getString(piBuyUrl))
+                            , safeGetVal(cursor.isNull(piPrice), cursor.getDouble(piPrice))
+                            , safeGetVal(cursor.isNull(piProducerName), cursor.getString(piProducerName))
+                            , safeGetVal(cursor.isNull(piAdditionalInfo), cursor.getString(piAdditionalInfo))
+                    )
+            );
+        }
+
+        cursor.close();
+
+        return resultArrayList;
     }
 
     public ArrayList<Part> getParts() {

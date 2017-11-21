@@ -1,12 +1,18 @@
 package com.kszych.pms;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -15,11 +21,16 @@ import android.widget.Toast;
 
 import com.kszych.pms.utils.DatabaseHelper;
 import com.kszych.pms.utils.Package;
+import com.kszych.pms.utils.Part;
+
+import java.util.ArrayList;
 
 public class PackageSingleActivity extends AppCompatActivity {
 
     public static final String KEY_PACKAGE = "incoming_package";
 
+    private ArrayList<Part> mPartsInPackage;
+    private DatabaseHelper mDb = DatabaseHelper.getInstance(this);
     private Package mCurrentPackage;
 
     @Override
@@ -35,6 +46,7 @@ public class PackageSingleActivity extends AppCompatActivity {
             // TODO fail die etc.
         }
 
+        mPartsInPackage = mDb.getPartsInPackage(mCurrentPackage);
         // TODO edit layout - three separate fields for dimensions
 
         setTitle(getString(R.string.activity_name_single_package, mCurrentPackage.getId()));
@@ -69,6 +81,18 @@ public class PackageSingleActivity extends AppCompatActivity {
                 : mCurrentPackage.getAdditionalText());
 
         // TODO list view package parts
+
+        PartsInPackageArrayAdapter adapter = new PartsInPackageArrayAdapter(this, mPartsInPackage);
+        lvPackageParts.setAdapter(adapter);
+
+        lvPackageParts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent (PackageSingleActivity.this, PartSingleActivity.class);
+                intent.putExtra(PartSingleActivity.KEY_PART, mPartsInPackage.get(i));
+                startActivity(intent);
+            }
+        });
 
         btnModify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,5 +188,30 @@ public class PackageSingleActivity extends AppCompatActivity {
                 + (aisle == DatabaseHelper.DEFAULT_STRING ? "?" : aisle) + ": R"
                 + (rack == DatabaseHelper.DEFAULT_INT ? "?" : rack) + " P"
                 + (shelf == DatabaseHelper.DEFAULT_INT ? "?" : shelf);
+    }
+
+    class PartsInPackageArrayAdapter extends ArrayAdapter<Part> {
+
+        private Context mContext;
+        private ArrayList<Part> mParts;
+
+        public PartsInPackageArrayAdapter(@NonNull Context context, ArrayList<Part> objects ) {
+            super(context, android.R.layout.simple_list_item_1, objects);
+                    mParts = objects;
+                    mContext = context;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            if(convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
+            }
+            TextView listItemText = convertView.findViewById(android.R.id.text1);
+            listItemText.setText(mParts.get(position).getName());
+
+            return convertView;
+        }
     }
 }
