@@ -194,6 +194,41 @@ public static class TPackagePart {
         return getPackagesByQuery("SELECT * FROM " + TPackage.TNAME, null);
     }
 
+
+    public ArrayList<Part> getParts() {
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = db.rawQuery("SELECT * FROM " + TPart.TNAME, null);
+//
+//        int piId = cursor.getColumnIndex(TPart.ID);
+//
+//        int piName = cursor.getColumnIndex(TPart.NAME);
+//        int piBuyUrl = cursor.getColumnIndex(TPart.BUY_URL);
+//        int piPrice = cursor.getColumnIndex(TPart.PRICE);
+//        int piProducerName = cursor.getColumnIndex(TPart.PRODUCER_NAME);
+//        int piAdditionalInfo = cursor.getColumnIndex(TPart.ADDITIONAL_INFO);
+//
+//        ArrayList<Part> partList = new ArrayList<>();
+//        cursor.moveToFirst();
+//
+//        while (cursor.moveToNext()) {
+//            Part newPart = new Part(
+//                    cursor.getInt(piId)
+//                    , cursor.getString(piName)
+//                    , cursor.getString(piBuyUrl)
+//                    , safeGetVal(cursor.isNull(piPrice), cursor.getDouble(piPrice))
+//                    , cursor.getString(piProducerName)
+//                    , cursor.getString(piAdditionalInfo)
+//            );
+//
+//            partList.add(newPart);
+//        }
+//
+//        cursor.close();
+//
+//        return partList;
+        return getPartsByQuery("SELECT * FROM " + TPart.TNAME, null);
+    }
+
     private ArrayList<Package> getPackagesByQuery(String query, String[] queryArgs) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, queryArgs);
@@ -230,6 +265,36 @@ public static class TPackagePart {
             );
 
         }
+        cursor.close();
+
+        return resultArrayList;
+    }
+
+    private ArrayList<Part> getPartsByQuery(String query, String[] queryArgs) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, queryArgs);
+        ArrayList<Part> resultArrayList = new ArrayList<>();
+
+        int piId = cursor.getColumnIndex(TPart.ID);
+
+        int piName = cursor.getColumnIndex(TPart.NAME);
+        int piBuyUrl = cursor.getColumnIndex(TPart.BUY_URL);
+        int piPrice = cursor.getColumnIndex(TPart.PRICE);
+        int piProducerName = cursor.getColumnIndex(TPart.PRODUCER_NAME);
+        int piAdditionalInfo = cursor.getColumnIndex(TPart.ADDITIONAL_INFO);
+
+        while (cursor.moveToNext()) {
+            resultArrayList.add(new Part(
+                            cursor.getInt(piId)
+                            , cursor.getString(piName)
+                            , safeGetVal(cursor.isNull(piBuyUrl), cursor.getString(piBuyUrl))
+                            , safeGetVal(cursor.isNull(piPrice), cursor.getDouble(piPrice))
+                            , safeGetVal(cursor.isNull(piProducerName), cursor.getString(piProducerName))
+                            , safeGetVal(cursor.isNull(piAdditionalInfo), cursor.getString(piAdditionalInfo))
+                    )
+            );
+        }
+
         cursor.close();
 
         return resultArrayList;
@@ -286,68 +351,8 @@ public static class TPackagePart {
         return getPartsByQuery(queryString, new String[]{ Integer.toString( singlePackage.getId() ) });
     }
 
-    private ArrayList<Part> getPartsByQuery(String query, String[] queryArgs) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, queryArgs);
-        ArrayList<Part> resultArrayList = new ArrayList<>();
 
-        int piId = cursor.getColumnIndex(TPart.ID);
 
-        int piName = cursor.getColumnIndex(TPart.NAME);
-        int piBuyUrl = cursor.getColumnIndex(TPart.BUY_URL);
-        int piPrice = cursor.getColumnIndex(TPart.PRICE);
-        int piProducerName = cursor.getColumnIndex(TPart.PRODUCER_NAME);
-        int piAdditionalInfo = cursor.getColumnIndex(TPart.ADDITIONAL_INFO);
-
-        while (cursor.moveToNext()) {
-            resultArrayList.add(new Part(
-                            cursor.getInt(piId)
-                            , cursor.getString(piName)
-                            , safeGetVal(cursor.isNull(piBuyUrl), cursor.getString(piBuyUrl))
-                            , safeGetVal(cursor.isNull(piPrice), cursor.getDouble(piPrice))
-                            , safeGetVal(cursor.isNull(piProducerName), cursor.getString(piProducerName))
-                            , safeGetVal(cursor.isNull(piAdditionalInfo), cursor.getString(piAdditionalInfo))
-                    )
-            );
-        }
-
-        cursor.close();
-
-        return resultArrayList;
-    }
-
-    public ArrayList<Part> getParts() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TPart.TNAME, null);
-
-        int piId = cursor.getColumnIndex(TPart.ID);
-
-        int piName = cursor.getColumnIndex(TPart.NAME);
-        int piBuyUrl = cursor.getColumnIndex(TPart.BUY_URL);
-        int piPrice = cursor.getColumnIndex(TPart.PRICE);
-        int piProducerName = cursor.getColumnIndex(TPart.PRODUCER_NAME);
-        int piAdditionalInfo = cursor.getColumnIndex(TPart.ADDITIONAL_INFO);
-
-        ArrayList<Part> partList = new ArrayList<>();
-        cursor.moveToFirst();
-
-        while (cursor.moveToNext()) {
-            Part newPart = new Part(
-                    cursor.getInt(piId)
-                    , cursor.getString(piName)
-                    , cursor.getString(piBuyUrl)
-                    , safeGetVal(cursor.isNull(piPrice), cursor.getDouble(piPrice))
-                    , cursor.getString(piProducerName)
-                    , cursor.getString(piAdditionalInfo)
-            );
-
-            partList.add(newPart);
-        }
-
-        cursor.close();
-
-        return partList;
-    }
 
     private void testDeleteAll() {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -403,25 +408,6 @@ public static class TPackagePart {
 
     }
 
-    public void addPackage(String tag_RFID, int mass, int dim_H,
-                            int dim_W, int dim_D, int barCode, String aisle, int rack, int shelf, String additionalInfo){
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues packageVals = new ContentValues();
-
-        packageVals.put(TPackage.RFID_TAG, tag_RFID);
-        packageVals.put(TPackage.MASS, mass);
-        packageVals.put(TPackage.DIM_H, dim_H);
-        packageVals.put(TPackage.DIM_W, dim_W);
-        packageVals.put(TPackage.DIM_D, dim_D);
-        packageVals.put(TPackage.ADDITIONAL_INFO, additionalInfo);
-        packageVals.put(TPackage.BAR_CODE, barCode);
-        packageVals.put(TPackage.AISLE, aisle);
-        packageVals.put(TPackage.RACK, rack);
-        packageVals.put(TPackage.SHELF, shelf);
-
-        db.insert(TPackage.TNAME, null, packageVals);
-    }
     public boolean addPackage(Package newPackage){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -445,29 +431,4 @@ public static class TPackagePart {
         return true;
     }
 
-    public long addTestPackage(String dummyRfidTag) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues vals = new ContentValues();
-        vals.put(TPackage.RFID_TAG, dummyRfidTag);
-
-        return db.insert(TPackage.TNAME, null, vals);
-    }
-
-    public long addTestParts(String dummyName) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues vals = new ContentValues();
-        vals.put(TPart.NAME, dummyName);
-
-        return db.insert(TPart.TNAME, null, vals);
-    }
-
-    public Package checkRFID(String Uid){
-        //TODO implement
-        return new Package(-1, null);
-    }
-
-    public boolean isInDatabase(String Uid){
-        //TODO implement
-        return true;
-    }
 }
