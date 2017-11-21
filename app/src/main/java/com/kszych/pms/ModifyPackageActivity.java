@@ -110,9 +110,9 @@ public class ModifyPackageActivity extends AppCompatActivity {
                 boolean success = mDb.addPackage(mNewPackage);
                 if(success) {
                     Toast.makeText(ModifyPackageActivity.this, "partially succes", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(ModifyPackageActivity.this, PackageSingleActivity.class);
-//                    intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mDb.getPackageByRFID(scannedID));
-//                    startActivity(intent);
+                    Intent intent = new Intent(ModifyPackageActivity.this, PackageSingleActivity.class);
+                    intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mDb.getPackageByRFID(scannedID));
+                    startActivity(intent);
                 } else {
                     Toast.makeText(ModifyPackageActivity.this, mNewPackage.getRfidTag(), Toast.LENGTH_SHORT).show();
                 }
