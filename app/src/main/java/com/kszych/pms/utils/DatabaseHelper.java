@@ -212,9 +212,7 @@ public static class TPackagePart {
         int piRack = cursor.getColumnIndex(TPackage.RACK);
         int piShelf = cursor.getColumnIndex(TPackage.SHELF);
 
-        cursor.moveToFirst();
-
-        do{
+        while (cursor.moveToNext()){
 
             resultArrayList.add(new Package(
                             cursor.getInt(piId)
@@ -231,7 +229,7 @@ public static class TPackagePart {
                     )
             );
 
-        }while (cursor.moveToNext());
+        }
         cursor.close();
 
         return resultArrayList;
@@ -301,10 +299,7 @@ public static class TPackagePart {
         int piProducerName = cursor.getColumnIndex(TPart.PRODUCER_NAME);
         int piAdditionalInfo = cursor.getColumnIndex(TPart.ADDITIONAL_INFO);
 
-        cursor.moveToFirst();
-
         while (cursor.moveToNext()) {
-            cursor.moveToPrevious();
             resultArrayList.add(new Part(
                             cursor.getInt(piId)
                             , cursor.getString(piName)
@@ -314,7 +309,6 @@ public static class TPackagePart {
                             , safeGetVal(cursor.isNull(piAdditionalInfo), cursor.getString(piAdditionalInfo))
                     )
             );
-            cursor.moveToNext();
         }
 
         cursor.close();
