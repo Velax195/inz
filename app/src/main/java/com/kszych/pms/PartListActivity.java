@@ -74,13 +74,17 @@ public class PartListActivity extends AppCompatActivity {
 //                Toast.makeText(PackageListActivity.this
 //                        , R.string.not_implemented, Toast.LENGTH_SHORT).show();
                 // DEBUG DELETE_ME
-                StringBuilder builder = new StringBuilder();
-                ArrayList<Part> parts = mDb.getParts();
-                for(Part singlePart : parts) {
-                    builder.append(singlePart.getName());
-                }
 
-                Toast.makeText(PartListActivity.this, builder.toString(), Toast.LENGTH_SHORT).show();
+//                StringBuilder builder = new StringBuilder();
+//                ArrayList<Part> parts = mDb.getParts();
+//                for(Part singlePart : parts) {
+//                    builder.append(singlePart.getName());
+//                }
+//
+//                Toast.makeText(PartListActivity.this, builder.toString(), Toast.LENGTH_SHORT).show();
+                Intent sIntent = new Intent(PartListActivity.this, PartAddActivity.class);
+                startActivity(sIntent);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

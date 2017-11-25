@@ -35,6 +35,7 @@
     <string name="not_implemented">Not yet implemented</string>
     <string name="title_activity_modify_package">Modyfikuj Paczkę</string>
     <string name="modifyPackageTitle">Paczka %1$s</string>
+    <string name="modifyPartTitle">Część %1$s</string>
     <string name="title_activity_scan_rfid">scanRFID</string>
     <string name="scanRFID">Zeskanuj RFID</string>
     <string name="label_name">Nazwa</string>
