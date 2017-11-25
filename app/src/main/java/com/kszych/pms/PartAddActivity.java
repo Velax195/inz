@@ -69,7 +69,6 @@ public class PartAddActivity extends AppCompatActivity {
                         || etName.getText().toString() == DatabaseHelper.NULL_VAL){
                     Toast.makeText(PartAddActivity.this, "Wprowadź nazwę", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(PartAddActivity.this, etName.getText().toString(), Toast.LENGTH_SHORT).show();
                     Part mNewPart = new Part(
                             mDb.SafeGetStringFromEditText(etName.getText().toString()),
                             mDb.SafeGetStringFromEditText(etBuyURL.getText().toString()),
@@ -82,7 +81,7 @@ public class PartAddActivity extends AppCompatActivity {
                     if (success) {
                         Toast.makeText(PartAddActivity.this, "succes", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(PartAddActivity.this, PartSingleActivity.class);
-                        intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mNewPart);
+                        intent.putExtra(PartSingleActivity.KEY_PART, mDb.getPartByName(etName.getText().toString()));
                         startActivity(intent);
                     } else {
                         Toast.makeText(PartAddActivity.this, "error", Toast.LENGTH_SHORT).show();

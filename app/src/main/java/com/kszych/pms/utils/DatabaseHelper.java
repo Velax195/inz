@@ -310,6 +310,15 @@ public static class TPackagePart {
         return foundPackages.size() == 0 ? null : foundPackages.get(0);
     }
 
+    public Part getPartByName(String name){
+
+        String queryString = "SELECT * FROM " + TPart.TNAME
+                + " WHERE " + TPart.NAME + " = ?";
+        ArrayList<Part> foundParts = getPartsByQuery(queryString, new String[]{name});
+
+        return foundParts.size() == 0 ? null : foundParts.get(0);
+    }
+
 
     public ArrayList<Package> getPackagesContainingPart(@NonNull Part part) {
         SQLiteDatabase db = this.getReadableDatabase();
