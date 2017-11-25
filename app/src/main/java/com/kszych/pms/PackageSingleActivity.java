@@ -1,11 +1,9 @@
 package com.kszych.pms;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,6 +26,7 @@ import java.util.ArrayList;
 public class PackageSingleActivity extends AppCompatActivity {
 
     public static final String KEY_PACKAGE = "incoming_package";
+    public static final String ACTIVITY_NAME = "package_single";
 
     private ArrayList<Part> mPartsInPackage;
     private DatabaseHelper mDb = DatabaseHelper.getInstance(this);
@@ -99,10 +98,10 @@ public class PackageSingleActivity extends AppCompatActivity {
         btnModify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO implement
                 Toast.makeText(PackageSingleActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(PackageSingleActivity.this, ModifyPackageActivity.class);
                 intent.putExtra(ModifyPackageActivity.KEY_PACKAGE, mCurrentPackage);
+                intent.putExtra(ModifyPackageActivity.KEY_ACTIVITY, ACTIVITY_NAME);
                 startActivity(intent);
             }
         });

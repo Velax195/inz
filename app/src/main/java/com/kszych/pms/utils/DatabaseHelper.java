@@ -431,10 +431,36 @@ public static class TPackagePart {
         return true;
     }
 
+    public boolean addPart(Part newPart){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues vals = new ContentValues();
+
+        vals.put(TPart.NAME, newPart.getName());
+        vals.put(TPart.BUY_URL, newPart.getBuyUrl());
+        vals.put(TPart.PRICE, newPart.getPrice());
+        vals.put(TPart.PRODUCER_NAME, newPart.getProducerName());
+        vals.put(TPart.ADDITIONAL_INFO, newPart.getAdditionalInfo());
+
+        if(db.insert(TPart.TNAME, null, vals) == -1)
+        {
+            return false;
+        }
+        return true;
+    }
+
     public boolean deletePackage(String tagRFID){
 
         SQLiteDatabase db = this.getWritableDatabase();
         if(db.delete(TPackage.TNAME,  TPackage.RFID_TAG + " = ?" , new String[]{tagRFID}) == 1){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean deletePart(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(db.delete(TPart.TNAME, TPart.NAME + " = ?", new String[]{name}) == 1){
             return true;
         }
         return false;

@@ -15,11 +15,13 @@ import com.kszych.pms.utils.Package;
 public class ModifyPackageActivity extends AppCompatActivity {
 
     public static final String KEY_PACKAGE = "incoming_package";
+    public static final String KEY_ACTIVITY = "previous_activity";
 
     private Package mCurrentPackage;
 
     DatabaseHelper mDb = DatabaseHelper.getInstance(this);
     String scannedID;
+    String previousActivity = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public class ModifyPackageActivity extends AppCompatActivity {
         if (extras != null) {
             mCurrentPackage = extras.getParcelable(KEY_PACKAGE);
             scannedID = extras.getString("SCANNED_PACKAGE");
+            previousActivity = extras.getString(KEY_ACTIVITY);
         } else {
             // TODO fail die etc.
             Toast.makeText(ModifyPackageActivity.this, "error", Toast.LENGTH_SHORT).show();
@@ -49,6 +52,8 @@ public class ModifyPackageActivity extends AppCompatActivity {
         Button btnAdd = findViewById(R.id.modifyPackageAdd);
         Button btnDelete = findViewById(R.id.modifyPackageDelete);
         Button btnSave = findViewById(R.id.modifyPackageSave);
+
+
 
         if (mCurrentPackage != null) {
             setTitle(getString(R.string.modifyPackageTitle, Integer.toString(mCurrentPackage.getId())));
@@ -97,18 +102,29 @@ public class ModifyPackageActivity extends AppCompatActivity {
             }
         });
 
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            //TODO implement
-            @Override
-            public void onClick(View view) {
-                if (mDb.deletePackage(mCurrentPackage.getRfidTag())) {
-                    Toast.makeText(ModifyPackageActivity.this, "deleted", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(ModifyPackageActivity.this, "sumting is ronk", Toast.LENGTH_SHORT).show();
+        if(previousActivity.equals(getResources().getString(R.string.packageListActivityName))){
+            btnDelete.setText("Cofnij");
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
                 }
-                onBackPressed();
-            }
-        });
+            });
+        }
+        else {
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                //TODO implement
+                @Override
+                public void onClick(View view) {
+                    if (mDb.deletePackage(mCurrentPackage.getRfidTag())) {
+                        Toast.makeText(ModifyPackageActivity.this, "deleted", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ModifyPackageActivity.this, "sumting is ronk", Toast.LENGTH_SHORT).show();
+                    }
+                    onBackPressed();
+                }
+            });
+        }
         btnSave.setOnClickListener(new View.OnClickListener() {
             //TODO implement
             @Override
