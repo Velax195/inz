@@ -54,7 +54,6 @@ public class ModifyPackageActivity extends AppCompatActivity {
         Button btnSave = findViewById(R.id.modifyPackageSave);
 
 
-
         if (mCurrentPackage != null) {
             setTitle(getString(R.string.modifyPackageTitle, Integer.toString(mCurrentPackage.getId())));
         } else {
@@ -102,7 +101,7 @@ public class ModifyPackageActivity extends AppCompatActivity {
             }
         });
 
-        if(previousActivity.equals(getResources().getString(R.string.packageListActivityName))){
+        if (previousActivity.equals(getResources().getString(R.string.packageListActivityName))) {
             btnDelete.setText("Cofnij");
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -110,8 +109,7 @@ public class ModifyPackageActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             });
-        }
-        else {
+        } else {
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 //TODO implement
                 @Override
@@ -130,27 +128,53 @@ public class ModifyPackageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Package mNewPackage = new Package(
-                        scannedID,
-                        mDb.SafeGetIntFromEditText(etMass.getText().toString()),
-                        mDb.SafeGetIntFromEditText(etHeight.getText().toString()),
-                        mDb.SafeGetIntFromEditText(etWidth.getText().toString()),
-                        mDb.SafeGetIntFromEditText(etDepth.getText().toString()),
-                        mDb.SafeGetStringFromEditText(etAdditionalInfo.getText().toString()),
-                        mDb.SafeGetStringFromEditText(etBarcode.getText().toString()),
-                        mDb.SafeGetStringFromEditText(etAisle.getText().toString()),
-                        mDb.SafeGetIntFromEditText(etRack.getText().toString()),
-                        mDb.SafeGetIntFromEditText(etShelf.getText().toString())
-                );
-
-                boolean success = mDb.addPackage(mNewPackage);
-                if (success) {
-                    Toast.makeText(ModifyPackageActivity.this, "partially succes", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(ModifyPackageActivity.this, PackageSingleActivity.class);
-                    intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mDb.getPackageByRFID(scannedID));
-                    startActivity(intent);
+                if (previousActivity.equals(PackageSingleActivity.ACTIVITY_NAME)) {
+                    Package mNewPackage = new Package(
+                            mCurrentPackage.getRfidTag(),
+                            mDb.SafeGetIntFromEditText(etMass.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etHeight.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etWidth.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etDepth.getText().toString()),
+                            mDb.SafeGetStringFromEditText(etAdditionalInfo.getText().toString()),
+                            mDb.SafeGetStringFromEditText(etBarcode.getText().toString()),
+                            mDb.SafeGetStringFromEditText(etAisle.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etRack.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etShelf.getText().toString())
+                    );
+                    boolean succes = mDb.updatePackage(mNewPackage);
+                    if(succes) {
+                        Toast.makeText(ModifyPackageActivity.this, "partially succes", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(ModifyPackageActivity.this, PackageSingleActivity.class);
+//                        intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mDb.getPackageByRFID(mNewPackage.getRfidTag()));
+//                        startActivity(intent);
+                        //TODO deal with activityStack, onBack shows previous values
+                        onBackPressed();
+                    } else {
+                        Toast.makeText(ModifyPackageActivity.this, "sumtink ronk", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(ModifyPackageActivity.this, mNewPackage.getRfidTag(), Toast.LENGTH_SHORT).show();
+                    Package mNewPackage = new Package(
+                            scannedID,
+                            mDb.SafeGetIntFromEditText(etMass.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etHeight.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etWidth.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etDepth.getText().toString()),
+                            mDb.SafeGetStringFromEditText(etAdditionalInfo.getText().toString()),
+                            mDb.SafeGetStringFromEditText(etBarcode.getText().toString()),
+                            mDb.SafeGetStringFromEditText(etAisle.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etRack.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etShelf.getText().toString())
+                    );
+
+                    boolean success = mDb.addPackage(mNewPackage);
+                    if (success) {
+                        Toast.makeText(ModifyPackageActivity.this, "partially succes", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(ModifyPackageActivity.this, PackageSingleActivity.class);
+                        intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mDb.getPackageByRFID(scannedID));
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(ModifyPackageActivity.this, mNewPackage.getRfidTag(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

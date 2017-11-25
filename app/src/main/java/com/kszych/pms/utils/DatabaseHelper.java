@@ -475,4 +475,25 @@ public static class TPackagePart {
         return false;
     }
 
+    public boolean updatePackage(Package updatedPackage){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues vals = new ContentValues();
+
+        vals.put(TPackage.RFID_TAG, updatedPackage.getRfidTag());
+        vals.put(TPackage.MASS, updatedPackage.getMass());
+        vals.put(TPackage.DIM_H, updatedPackage.getDimH());
+        vals.put(TPackage.DIM_W, updatedPackage.getDimW());
+        vals.put(TPackage.DIM_D, updatedPackage.getDimD());
+        vals.put(TPackage.ADDITIONAL_INFO, updatedPackage.getAdditionalText());
+        vals.put(TPackage.BAR_CODE, updatedPackage.getBarcode());
+        vals.put(TPackage.AISLE, updatedPackage.getAisle());
+        vals.put(TPackage.RACK, updatedPackage.getRack());
+        vals.put(TPackage.SHELF, updatedPackage.getShelf());
+
+        if(db.update(TPackage.TNAME,vals, TPackage.RFID_TAG + " = ?", new String[]{updatedPackage.getRfidTag()}) == 0 ) {
+            return false;
+        }
+        return true;
+    }
+
 }

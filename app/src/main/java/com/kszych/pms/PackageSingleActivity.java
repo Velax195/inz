@@ -52,34 +52,12 @@ public class PackageSingleActivity extends AppCompatActivity {
 
         setTitle(getString(R.string.activity_name_single_package, mCurrentPackage.getId()));
 
-        TextView tvMass = findViewById(R.id.tvMass);
-        TextView tvDimension = findViewById(R.id.tvDimensions);
-        TextView tvBarcode = findViewById(R.id.tvBarcode);
-        TextView tvLocation = findViewById(R.id.tvLocation);
-        TextView tvAdditional = findViewById(R.id.tvAdditionalInfo);
+
         ListView lvPackageParts = findViewById(R.id.singlePackagePartsList);
         Button btnModify = findViewById(R.id.singlePackageModify);
         Button btnDelete = findViewById(R.id.singlePackageDelete);
 
-        tvMass.setText(mCurrentPackage.getMass() == DatabaseHelper.DEFAULT_INT
-                ? DatabaseHelper.NULL_VAL
-                : Integer.toString(mCurrentPackage.getMass()));
-        tvDimension.setText(mCurrentPackage.getDimensionsString(
-                " x "
-                , " [mm]"
-                , mCurrentPackage.getDimH()
-                , mCurrentPackage.getDimW()
-                , mCurrentPackage.getDimD()));
-        tvBarcode.setText(mCurrentPackage.getBarcode() == DatabaseHelper.DEFAULT_STRING
-                ? DatabaseHelper.NULL_VAL
-                : mCurrentPackage.getBarcode());
-        tvLocation.setText(mCurrentPackage.getLocationString(
-                mCurrentPackage.getAisle()
-                , mCurrentPackage.getRack()
-                , mCurrentPackage.getShelf()));
-        tvAdditional.setText(mCurrentPackage.getAdditionalText() == DatabaseHelper.DEFAULT_STRING
-                ? DatabaseHelper.NULL_VAL
-                : mCurrentPackage.getAdditionalText());
+        setText();
 
         // TODO list view package parts
 
@@ -135,65 +113,11 @@ public class PackageSingleActivity extends AppCompatActivity {
 
     }
 
-    private String readStringValueFromField(EditText field) {
-        String val = field.getText().toString().trim();
-        if(val.equals(DatabaseHelper.NULL_VAL) || val.length() == 0) {
-            return DatabaseHelper.DEFAULT_STRING;
-        }
-        return val;
-    }
-
-    private int readIntValueFromField(EditText field) {
-        String val = field.getText().toString().trim();
-        if(val.equals(DatabaseHelper.NULL_VAL) || val.length() == 0) {
-            return DatabaseHelper.DEFAULT_INT;
-        }
-        return Integer.valueOf(val);
-    }
-
-    private double readDoubleValueFromField(EditText field) {
-        String val = field.getText().toString().trim();
-        if(val.equals(DatabaseHelper.NULL_VAL) || val.length() == 0) {
-            return DatabaseHelper.DEFAULT_INT;
-        }
-        return Double.valueOf(val);
-    }
-
-    private String getDimensionsString(@NonNull String separator, @Nullable String append, int... args) {
-        boolean isNull = true;
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < args.length && isNull; i++) {
-            if(args[i] != DatabaseHelper.DEFAULT_INT) {
-                isNull = false;
-            }
-
-            if(i != 0) {
-                builder.append(separator);
-            }
-            builder.append(args[i] == DatabaseHelper.DEFAULT_INT ? "0" : Integer.toString(args[i]));
-        }
-        if(append != null) {
-            builder.append(append);
-        }
-
-        if(isNull) {
-            return DatabaseHelper.NULL_VAL;
-        }
-
-        return builder.toString();
-    }
-
-    private String getLocationString(@Nullable String aisle, int rack, int shelf) {
-        if(aisle == DatabaseHelper.DEFAULT_STRING
-                && rack == DatabaseHelper.DEFAULT_INT
-                && shelf == DatabaseHelper.DEFAULT_INT) {
-            return DatabaseHelper.NULL_VAL;
-        }
-
-        return getString(R.string.label_aisle) + " "
-                + (aisle == DatabaseHelper.DEFAULT_STRING ? "?" : aisle) + ": R"
-                + (rack == DatabaseHelper.DEFAULT_INT ? "?" : rack) + " P"
-                + (shelf == DatabaseHelper.DEFAULT_INT ? "?" : shelf);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mCurrentPackage = mDb.getPackageByRFID(mCurrentPackage.getRfidTag());
+        setText();
     }
 
     class PartsInPackageArrayAdapter extends ArrayAdapter<Part> {
@@ -219,5 +143,32 @@ public class PackageSingleActivity extends AppCompatActivity {
 
             return convertView;
         }
+    }
+
+    void setText(){
+        TextView tvMass = findViewById(R.id.tvMass);
+        TextView tvDimension = findViewById(R.id.tvDimensions);
+        TextView tvBarcode = findViewById(R.id.tvBarcode);
+        TextView tvLocation = findViewById(R.id.tvLocation);
+        TextView tvAdditional = findViewById(R.id.tvAdditionalInfo);
+        tvMass.setText(mCurrentPackage.getMass() == DatabaseHelper.DEFAULT_INT
+                ? DatabaseHelper.NULL_VAL
+                : Integer.toString(mCurrentPackage.getMass()));
+        tvDimension.setText(mCurrentPackage.getDimensionsString(
+                " x "
+                , " [mm]"
+                , mCurrentPackage.getDimH()
+                , mCurrentPackage.getDimW()
+                , mCurrentPackage.getDimD()));
+        tvBarcode.setText(mCurrentPackage.getBarcode() == DatabaseHelper.DEFAULT_STRING
+                ? DatabaseHelper.NULL_VAL
+                : mCurrentPackage.getBarcode());
+        tvLocation.setText(mCurrentPackage.getLocationString(
+                mCurrentPackage.getAisle()
+                , mCurrentPackage.getRack()
+                , mCurrentPackage.getShelf()));
+        tvAdditional.setText(mCurrentPackage.getAdditionalText() == DatabaseHelper.DEFAULT_STRING
+                ? DatabaseHelper.NULL_VAL
+                : mCurrentPackage.getAdditionalText());
     }
 }
