@@ -2,6 +2,7 @@ package com.kszych.pms.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -10,60 +11,60 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class DatabaseHelper extends SQLiteOpenHelper{
+public class DatabaseHelper extends SQLiteOpenHelper {
 
 
-public static final int DATABASE_VERSION = 13;
-public static final String DATABASE_NAME = "Database.db";
+    public static final int DATABASE_VERSION = 13;
+    public static final String DATABASE_NAME = "Database.db";
 
-// default db values below
-public static final String DEFAULT_STRING = null;
-public static final int DEFAULT_INT = -1;
-public static final double DEFAULT_REAL = -1.0;
-public static final String NULL_VAL = "N/A";
-private static DatabaseHelper _instance = null;
+    // default db values below
+    public static final String DEFAULT_STRING = null;
+    public static final int DEFAULT_INT = -1;
+    public static final double DEFAULT_REAL = -1.0;
+    public static final String NULL_VAL = "N/A";
+    private static DatabaseHelper _instance = null;
 
-public static class TPackage {
-    public final static String TNAME = "Package";
+    public static class TPackage {
+        public final static String TNAME = "Package";
 
-    final static String ID                  = "ID";
-    final static String RFID_TAG            = "rfidTag";
-    final static String MASS                = "mass";
-    final static String DIM_H               = "dimH";
-    final static String DIM_W               = "dimW";
-    final static String DIM_D               = "dimD";
-    final static String ADDITIONAL_INFO     = "additionalInfo";
-    final static String BAR_CODE            = "barCode";
-    final static String AISLE               = "aisle";
-    final static String RACK                = "rack";
-    final static String SHELF               = "shelf";
-}
+        final static String ID = "ID";
+        final static String RFID_TAG = "rfidTag";
+        final static String MASS = "mass";
+        final static String DIM_H = "dimH";
+        final static String DIM_W = "dimW";
+        final static String DIM_D = "dimD";
+        final static String ADDITIONAL_INFO = "additionalInfo";
+        final static String BAR_CODE = "barCode";
+        final static String AISLE = "aisle";
+        final static String RACK = "rack";
+        final static String SHELF = "shelf";
+    }
 
-public static class TPart {
-    public final static String TNAME = "Part";
+    public static class TPart {
+        public final static String TNAME = "Part";
 
-    final static String ID                  = "ID";
-    final static String NAME                = "name";
-    final static String BUY_URL             = "buyUrl";
-    final static String PRICE               = "price";
-    final static String PRODUCER_NAME       = "producerName";
-    final static String ADDITIONAL_INFO     = "additionalInfo";
-}
+        final static String ID = "ID";
+        final static String NAME = "name";
+        final static String BUY_URL = "buyUrl";
+        final static String PRICE = "price";
+        final static String PRODUCER_NAME = "producerName";
+        final static String ADDITIONAL_INFO = "additionalInfo";
+    }
 
-public static class TPackagePart {
-    public final static String TNAME = "PackagePart";
+    public static class TPackagePart {
+        public final static String TNAME = "PackagePart";
 
-    final static String ID                  = "ID";
-    final static String PACKAGE_ID          = "fk_package_id";
-    final static String PART_ID             = "fk_part_id";
-}
+        final static String ID = "ID";
+        final static String PACKAGE_ID = "fk_package_id";
+        final static String PART_ID = "fk_part_id";
+    }
 
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     public static DatabaseHelper getInstance(Context context) {
-        if(_instance == null) {
+        if (_instance == null) {
             _instance = new DatabaseHelper(context);
         }
         return _instance;
@@ -117,16 +118,15 @@ public static class TPackagePart {
     }
 
     public void save(Package pack) {
-        if(pack.getId() == DEFAULT_INT) {
+        if (pack.getId() == DEFAULT_INT) {
             // TODO insert
-        }
-        else {
+        } else {
             // TODO update
         }
     }
 
     public void save(Part part) {
-        if(part.getId() == DEFAULT_INT) {
+        if (part.getId() == DEFAULT_INT) {
             //TODO insert
         } else {
             //TODO update
@@ -134,7 +134,7 @@ public static class TPackagePart {
     }
 
     public void save(PackagePart packagePart) {
-        if(packagePart.getId() == DEFAULT_INT) {
+        if (packagePart.getId() == DEFAULT_INT) {
             //TODO insert
         } else {
             //TODO update
@@ -142,45 +142,47 @@ public static class TPackagePart {
     }
 
     private int safeGetVal(boolean isNull, int val) {
-        if(isNull) {
+        if (isNull) {
             return DEFAULT_INT;
         }
         return val;
     }
 
     private String safeGetVal(boolean isNull, String val) {
-        if(isNull) {
+        if (isNull) {
             return DEFAULT_STRING;
         }
         return val;
     }
 
     private double safeGetVal(boolean isNull, double val) {
-        if(isNull) {
+        if (isNull) {
             return DEFAULT_REAL;
         }
         return val;
     }
 
     public int SafeGetIntFromEditText(String val) {
-        if(val.equals(NULL_VAL) || val.matches("")){
+        if (val.equals(NULL_VAL) || val.matches("")) {
             return DEFAULT_INT;
         }
         return Integer.valueOf(val);
     }
 
     public String SafeGetStringFromEditText(String val) {
-        if(val.equals(NULL_VAL) || val.matches("")){
+        if (val.equals(NULL_VAL) || val.matches("")) {
             return DEFAULT_STRING;
         }
         return val;
     }
+
     public double SafeGetDoubleFromEditText(String val) {
-        if(val.equals(NULL_VAL) || val.matches("")){
+        if (val.equals(NULL_VAL) || val.matches("")) {
             return DEFAULT_REAL;
         }
         return Double.valueOf(val);
     }
+
     public int count(String tableName) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + tableName, null);
@@ -247,7 +249,7 @@ public static class TPackagePart {
         int piRack = cursor.getColumnIndex(TPackage.RACK);
         int piShelf = cursor.getColumnIndex(TPackage.SHELF);
 
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
 
             resultArrayList.add(new Package(
                             cursor.getInt(piId)
@@ -300,7 +302,7 @@ public static class TPackagePart {
         return resultArrayList;
     }
 
-    public Package getPackageByRFID(String scannedRFID){
+    public Package getPackageByRFID(String scannedRFID) {
         //TODO get uid, find package in database, return it
 
         String queryString = "SELECT * FROM " + TPackage.TNAME
@@ -310,11 +312,20 @@ public static class TPackagePart {
         return foundPackages.size() == 0 ? null : foundPackages.get(0);
     }
 
-    public Part getPartByName(String name){
+    public Part getPartByName(String name) {
 
         String queryString = "SELECT * FROM " + TPart.TNAME
                 + " WHERE " + TPart.NAME + " = ?";
         ArrayList<Part> foundParts = getPartsByQuery(queryString, new String[]{name});
+
+        return foundParts.size() == 0 ? null : foundParts.get(0);
+    }
+
+    public Part getPartById(int Id) {
+
+        String queryString = "SELECT * FROM " + TPart.TNAME
+                + " WHERE " + TPart.ID + " = ?";
+        ArrayList<Part> foundParts = getPartsByQuery(queryString, new String[]{Integer.toString(Id)});
 
         return foundParts.size() == 0 ? null : foundParts.get(0);
     }
@@ -339,7 +350,7 @@ public static class TPackagePart {
                 + TPackagePart.PACKAGE_ID + " = " + TPackage.TNAME + "." + TPackage.ID
                 + " WHERE " + TPackagePart.PART_ID + " = ?";
 
-        return getPackagesByQuery(queryString, new String[]{ Integer.toString( part.getId() ) });
+        return getPackagesByQuery(queryString, new String[]{Integer.toString(part.getId())});
     }
 
 
@@ -357,10 +368,8 @@ public static class TPackagePart {
                 + TPackagePart.PART_ID + " = " + TPart.TNAME + "." + TPart.ID
                 + " WHERE " + TPackagePart.PACKAGE_ID + " = ?";
 
-        return getPartsByQuery(queryString, new String[]{ Integer.toString( singlePackage.getId() ) });
+        return getPartsByQuery(queryString, new String[]{Integer.toString(singlePackage.getId())});
     }
-
-
 
 
     private void testDeleteAll() {
@@ -379,7 +388,7 @@ public static class TPackagePart {
         ArrayList<Long> packagesID = new ArrayList<>();
         ArrayList<Long> partsID = new ArrayList<>();
 
-        for(int i=0; i<20; i++) {
+        for (int i = 0; i < 20; i++) {
 
             ContentValues packageVals = new ContentValues();
 
@@ -405,9 +414,9 @@ public static class TPackagePart {
 
             partsID.add(db.insert(TPart.TNAME, null, partVals));
         }
-        for(int i = 0; i < packagesID.size(); i++){
+        for (int i = 0; i < packagesID.size(); i++) {
             int partsCount = new Random().nextInt(partsID.size() / 2);
-            for(int j = 0; j < partsCount; j++) {
+            for (int j = 0; j < partsCount; j++) {
                 ContentValues cv = new ContentValues();
                 cv.put(TPackagePart.PACKAGE_ID, packagesID.get(i));
                 cv.put(TPackagePart.PART_ID, partsID.get(j));
@@ -417,7 +426,7 @@ public static class TPackagePart {
 
     }
 
-    public boolean addPackage(Package newPackage){
+    public boolean addPackage(Package newPackage) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues vals = new ContentValues();
@@ -433,14 +442,13 @@ public static class TPackagePart {
         vals.put(TPackage.RACK, newPackage.getRack());
         vals.put(TPackage.SHELF, newPackage.getShelf());
 
-        if(db.insert(TPackage.TNAME, null, vals) == -1)
-        {
+        if (db.insert(TPackage.TNAME, null, vals) == -1) {
             return false;
         }
         return true;
     }
 
-    public boolean addPart(Part newPart){
+    public boolean addPart(Part newPart) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues vals = new ContentValues();
@@ -451,31 +459,30 @@ public static class TPackagePart {
         vals.put(TPart.PRODUCER_NAME, newPart.getProducerName());
         vals.put(TPart.ADDITIONAL_INFO, newPart.getAdditionalInfo());
 
-        if(db.insert(TPart.TNAME, null, vals) == -1)
-        {
+        if (db.insert(TPart.TNAME, null, vals) == -1) {
             return false;
         }
         return true;
     }
 
-    public boolean deletePackage(String tagRFID){
+    public boolean deletePackage(String tagRFID) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        if(db.delete(TPackage.TNAME,  TPackage.RFID_TAG + " = ?" , new String[]{tagRFID}) == 1){
+        if (db.delete(TPackage.TNAME, TPackage.RFID_TAG + " = ?", new String[]{tagRFID}) == 1) {
             return true;
         }
         return false;
     }
 
-    public boolean deletePart(String name){
+    public boolean deletePart(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(db.delete(TPart.TNAME, TPart.NAME + " = ?", new String[]{name}) == 1){
+        if (db.delete(TPart.TNAME, TPart.NAME + " = ?", new String[]{name}) == 1) {
             return true;
         }
         return false;
     }
 
-    public boolean updatePackage(Package updatedPackage){
+    public boolean updatePackage(Package updatedPackage) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues vals = new ContentValues();
 
@@ -490,10 +497,27 @@ public static class TPackagePart {
         vals.put(TPackage.RACK, updatedPackage.getRack());
         vals.put(TPackage.SHELF, updatedPackage.getShelf());
 
-        if(db.update(TPackage.TNAME,vals, TPackage.RFID_TAG + " = ?", new String[]{updatedPackage.getRfidTag()}) == 0 ) {
+        if (db.update(TPackage.TNAME, vals, TPackage.ID + " = ?",
+                new String[]{Integer.toString(updatedPackage.getId())}) == 0) {
             return false;
         }
         return true;
     }
 
+    public boolean updatePart(Part updatedPart) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues vals = new ContentValues();
+
+        vals.put(TPart.NAME, updatedPart.getName());
+        vals.put(TPart.BUY_URL, updatedPart.getBuyUrl());
+        vals.put(TPart.PRICE, updatedPart.getPrice());
+        vals.put(TPart.PRODUCER_NAME, updatedPart.getProducerName());
+        vals.put(TPart.ADDITIONAL_INFO, updatedPart.getAdditionalInfo());
+
+        if (db.update(TPart.TNAME, vals, TPart.ID + " = ?",
+                new String[]{Integer.toString(updatedPart.getId())}) == 0) {
+            return false;
+        }
+        return true;
+    }
 }

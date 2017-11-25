@@ -68,7 +68,7 @@ public class PartAddActivity extends AppCompatActivity {
                 if(etName.getText().toString().matches("")
                         || etName.getText().toString() == DatabaseHelper.NULL_VAL){
                     Toast.makeText(PartAddActivity.this, "Wprowadź nazwę", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if(mCurrentPart == null) {
                     Part mNewPart = new Part(
                             mDb.SafeGetStringFromEditText(etName.getText().toString()),
                             mDb.SafeGetStringFromEditText(etBuyURL.getText().toString()),
@@ -86,7 +86,27 @@ public class PartAddActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(PartAddActivity.this, "error", Toast.LENGTH_SHORT).show();
                     }
-                }
+                }else {
+                    Part mNewPart = new Part(
+                            mCurrentPart.getId(),
+                            mDb.SafeGetStringFromEditText(etName.getText().toString()),
+                            mDb.SafeGetStringFromEditText(etBuyURL.getText().toString()),
+                            mDb.SafeGetDoubleFromEditText(etPrice.getText().toString()),
+                            mDb.SafeGetStringFromEditText(etProducer.getText().toString()),
+                            mDb.SafeGetStringFromEditText(etAdditionalInfo.getText().toString())
+                    );
+                        boolean success = mDb.updatePart(mNewPart);
+                        if (success) {
+//                            Toast.makeText(PartAddActivity.this, "succes2", Toast.LENGTH_SHORT).show();
+//                            Intent intent = new Intent(PartAddActivity.this, PartSingleActivity.class);
+//                            intent.putExtra(PartSingleActivity.KEY_PART, mDb.getPartByName(etName.getText().toString()));
+//                            startActivity(intent);
+                            onBackPressed();
+                        } else {
+                            Toast.makeText(PartAddActivity.this, "error2", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
             }
         });
     }

@@ -44,37 +44,19 @@ public class PartSingleActivity extends AppCompatActivity {
             }
             mPackagesOfPart = mDb.getPackagesContainingPart(mCurrentPart);
 
-            setTitle(mCurrentPart.getName());
-
-            TextView tvName = findViewById(R.id.tvName);
-            TextView tvBuyURL = findViewById(R.id.tvBuyURL);
-            TextView tvProducerName = findViewById(R.id.tvProducer);
-            TextView tvPrice = findViewById(R.id.tvPrice);
-            TextView tvAdditionalInfo = findViewById(R.id.tvAdditionalInfo);
             Button btnModify = findViewById(R.id.singlePartModify);
             Button btnDelete = findViewById(R.id.btnDelete);
 
-            tvName.setText(mCurrentPart.getName() == DatabaseHelper.DEFAULT_STRING
-                    ? DatabaseHelper.NULL_VAL
-                    : (mCurrentPart.getName()));
-            tvBuyURL.setText(mCurrentPart.getBuyUrl() == DatabaseHelper.DEFAULT_STRING
-                    ? DatabaseHelper.NULL_VAL
-                    : mCurrentPart.getBuyUrl());
-            tvProducerName.setText(mCurrentPart.getProducerName() == DatabaseHelper.DEFAULT_STRING
-                    ? DatabaseHelper.NULL_VAL
-                    : mCurrentPart.getProducerName());
-            tvPrice.setText(mCurrentPart.getPrice() == DatabaseHelper.DEFAULT_REAL
-                    ? DatabaseHelper.NULL_VAL
-                    : Double.toString(mCurrentPart.getPrice()));
-            tvAdditionalInfo.setText(mCurrentPart.getAdditionalInfo() == DatabaseHelper.DEFAULT_STRING
-                    ? DatabaseHelper.NULL_VAL
-                    : mCurrentPart.getAdditionalInfo());
+            setText();
 
             btnModify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // TODO implement
                     Toast.makeText(PartSingleActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(PartSingleActivity.this, PartAddActivity.class);
+                    intent.putExtra(PartAddActivity.KEY_PART, mCurrentPart);
+                    startActivity(intent);
                 }
             });
 
@@ -107,6 +89,13 @@ public class PartSingleActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mCurrentPart = mDb.getPartById(mCurrentPart.getId());
+        setText();
+    }
+
     class PackagesInPartArrayAdapter extends ArrayAdapter<Package> {
 
         private Context mContext;
@@ -130,5 +119,32 @@ public class PartSingleActivity extends AppCompatActivity {
 
             return convertView;
         }
+    }
+
+    void setText(){
+
+        setTitle(mCurrentPart.getName());
+
+        TextView tvName = findViewById(R.id.tvName);
+        TextView tvBuyURL = findViewById(R.id.tvBuyURL);
+        TextView tvProducerName = findViewById(R.id.tvProducer);
+        TextView tvPrice = findViewById(R.id.tvPrice);
+        TextView tvAdditionalInfo = findViewById(R.id.tvAdditionalInfo);
+
+        tvName.setText(mCurrentPart.getName() == DatabaseHelper.DEFAULT_STRING
+                ? DatabaseHelper.NULL_VAL
+                : (mCurrentPart.getName()));
+        tvBuyURL.setText(mCurrentPart.getBuyUrl() == DatabaseHelper.DEFAULT_STRING
+                ? DatabaseHelper.NULL_VAL
+                : mCurrentPart.getBuyUrl());
+        tvProducerName.setText(mCurrentPart.getProducerName() == DatabaseHelper.DEFAULT_STRING
+                ? DatabaseHelper.NULL_VAL
+                : mCurrentPart.getProducerName());
+        tvPrice.setText(mCurrentPart.getPrice() == DatabaseHelper.DEFAULT_REAL
+                ? DatabaseHelper.NULL_VAL
+                : Double.toString(mCurrentPart.getPrice()));
+        tvAdditionalInfo.setText(mCurrentPart.getAdditionalInfo() == DatabaseHelper.DEFAULT_STRING
+                ? DatabaseHelper.NULL_VAL
+                : mCurrentPart.getAdditionalInfo());
     }
 }
