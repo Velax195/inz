@@ -7,18 +7,31 @@
     tools:context="com.kszych.pms.PartSingleActivity">
 
 
+    <LinearLayout
+        android:id="@+id/bottomButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
         <Button
             android:id="@+id/singlePartModify"
-            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/modify"
             android:layout_alignParentBottom="true"/>
-
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/delete"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/singlePartModify"
+        android:layout_above="@id/bottomButtonBar"
         android:layout_marginBottom="10dp"
         android:orientation="vertical">
         <RelativeLayout

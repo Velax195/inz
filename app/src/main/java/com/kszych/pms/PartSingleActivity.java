@@ -52,6 +52,7 @@ public class PartSingleActivity extends AppCompatActivity {
             TextView tvPrice = findViewById(R.id.tvPrice);
             TextView tvAdditionalInfo = findViewById(R.id.tvAdditionalInfo);
             Button btnModify = findViewById(R.id.singlePartModify);
+            Button btnDelete = findViewById(R.id.btnDelete);
 
             tvName.setText(mCurrentPart.getName() == DatabaseHelper.DEFAULT_STRING
                     ? DatabaseHelper.NULL_VAL
@@ -74,6 +75,14 @@ public class PartSingleActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     // TODO implement
                     Toast.makeText(PartSingleActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mDb.deletePart(mCurrentPart.getName());
+                    onBackPressed();
                 }
             });
 

@@ -61,6 +61,25 @@ public class PartListActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mParts = mDb.getParts();
+
+        ListView listView = findViewById(R.id.lv_parts);
+        PartsArrayAdapter adapter = new PartsArrayAdapter(PartListActivity.this, mParts);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
+                intent.putExtra(PartSingleActivity.KEY_PART, mParts.get(position));
+                startActivity(intent); // TODO startactivity for result? because the record can be deleted
+            }
+        });
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.list_actions_part_list, menu);
         return true;
