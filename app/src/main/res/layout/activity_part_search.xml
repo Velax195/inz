@@ -23,12 +23,12 @@
         <TableRow>
 
             <EditText
-                android:id="@+id/etProducer"
+                android:id="@+id/etName"
                 android:layout_width="0dp"
                 android:layout_weight="1"/>
 
             <EditText
-                android:id="@+id/etName"
+                android:id="@+id/etProducer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
@@ -71,6 +71,7 @@
 
     </ScrollView>
     <Button
+        android:id="@+id/btnSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

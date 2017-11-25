@@ -198,38 +198,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public ArrayList<Part> getParts() {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = db.rawQuery("SELECT * FROM " + TPart.TNAME, null);
-//
-//        int piId = cursor.getColumnIndex(TPart.ID);
-//
-//        int piName = cursor.getColumnIndex(TPart.NAME);
-//        int piBuyUrl = cursor.getColumnIndex(TPart.BUY_URL);
-//        int piPrice = cursor.getColumnIndex(TPart.PRICE);
-//        int piProducerName = cursor.getColumnIndex(TPart.PRODUCER_NAME);
-//        int piAdditionalInfo = cursor.getColumnIndex(TPart.ADDITIONAL_INFO);
-//
-//        ArrayList<Part> partList = new ArrayList<>();
-//        cursor.moveToFirst();
-//
-//        while (cursor.moveToNext()) {
-//            Part newPart = new Part(
-//                    cursor.getInt(piId)
-//                    , cursor.getString(piName)
-//                    , cursor.getString(piBuyUrl)
-//                    , safeGetVal(cursor.isNull(piPrice), cursor.getDouble(piPrice))
-//                    , cursor.getString(piProducerName)
-//                    , cursor.getString(piAdditionalInfo)
-//            );
-//
-//            partList.add(newPart);
-//        }
-//
-//        cursor.close();
-//
-//        return partList;
         return getPartsByQuery("SELECT * FROM " + TPart.TNAME, null);
     }
+
+    public ArrayList<Part> searchParts(Part filteredPart) {
+        String querry = "SELECT * FROM " + TPart.TNAME + " WHERE ";
+        String temp = null;
+        temp = appendQuerryFromString(temp ,TPart.NAME, filteredPart.getName());
+        querry += temp;
+        temp = appendQuerryFromString(temp ,TPart.BUY_URL, filteredPart.getBuyUrl());
+        querry += temp;
+        temp = appendQuerryFromDouble(temp ,TPart.PRICE, filteredPart.getPrice());
+        querry += temp;
+        temp = appendQuerryFromString(temp ,TPart.PRODUCER_NAME, filteredPart.getProducerName());
+        querry += temp;
+        temp = appendQuerryFromString(temp ,TPart.ADDITIONAL_INFO, filteredPart.getAdditionalInfo());
+        querry += temp;
+
+        return getPartsByQuery(querry, null);
+    }
+
+    private String appendQuerryFromString(String previous ,String name, String value){
+        String string = "";
+        if (value == DEFAULT_STRING || value.matches("")){
+            return string;
+        } else {
+            if(previous != null)
+            {
+                string += " OR ";
+            }
+            string += name + " LIKE " + "'%" + value + "%' ";
+        }
+        return string;
+    }
+
+    private String appendQuerryFromDouble(String previous ,String name, Double value){
+        String string = "";
+        if (value == DEFAULT_REAL){
+            return string;
+        } else {
+            if(previous == null)
+            {
+                string += " OR ";
+            }
+            string += name + " LIKE " + Double.toString(value) + " ";
+        }
+        return string;
+    }
+
+
 
     private ArrayList<Package> getPackagesByQuery(String query, String[] queryArgs) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -237,7 +254,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<Package> resultArrayList = new ArrayList<>();
 
         int piId = cursor.getColumnIndex(TPackage.ID);
-
         int piRFID = cursor.getColumnIndex(TPackage.RFID_TAG);
         int piMass = cursor.getColumnIndex(TPackage.MASS);
         int piDimH = cursor.getColumnIndex(TPackage.DIM_H);
@@ -278,7 +294,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<Part> resultArrayList = new ArrayList<>();
 
         int piId = cursor.getColumnIndex(TPart.ID);
-
         int piName = cursor.getColumnIndex(TPart.NAME);
         int piBuyUrl = cursor.getColumnIndex(TPart.BUY_URL);
         int piPrice = cursor.getColumnIndex(TPart.PRICE);

@@ -29,6 +29,10 @@ public class PartListActivity extends AppCompatActivity {
 
     private ArrayList<Part> mParts;
 
+    final int sendRequestCode = 1;
+
+    boolean shouldResume = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,20 +67,22 @@ public class PartListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mParts = mDb.getParts();
+        if (shouldResume) {
+            mParts = mDb.getParts();
+            ListView listView = findViewById(R.id.lv_parts);
+            PartsArrayAdapter adapter = new PartsArrayAdapter(PartListActivity.this, mParts);
+            listView.setAdapter(adapter);
 
-        ListView listView = findViewById(R.id.lv_parts);
-        PartsArrayAdapter adapter = new PartsArrayAdapter(PartListActivity.this, mParts);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
-                intent.putExtra(PartSingleActivity.KEY_PART, mParts.get(position));
-                startActivity(intent); // TODO startactivity for result? because the record can be deleted
-            }
-        });
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
+                    intent.putExtra(PartSingleActivity.KEY_PART, mParts.get(position));
+                    startActivity(intent); // TODO startactivity for result? because the record can be deleted
+                }
+            });
+        }
+        shouldResume = true;
     }
 
     @Override
@@ -105,8 +111,42 @@ public class PartListActivity extends AppCompatActivity {
                 startActivity(sIntent);
 
                 return true;
+            case R.id.action_search:
+                Intent sendIntent = new Intent(PartListActivity.this, PartSearchActivity.class);
+                startActivityForResult(sendIntent, sendRequestCode);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == sendRequestCode) {
+            if (resultCode == RESULT_OK) {
+                shouldResume = false;
+
+                Toast.makeText(PartListActivity.this, "działa", Toast.LENGTH_SHORT).show();
+                Part mFilteredPart = data.getParcelableExtra(PartSearchActivity.SEARCH_PACKAGE);
+                mParts = mDb.searchParts(mFilteredPart);
+
+                ListView listView = findViewById(R.id.lv_parts);
+                PartsArrayAdapter adapter = new PartsArrayAdapter(PartListActivity.this, mParts);
+                listView.setAdapter(adapter);
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
+                        intent.putExtra(PartSingleActivity.KEY_PART, mParts.get(position));
+                        startActivity(intent); // TODO startactivity for result? because the record can be deleted
+                    }
+                });
+            } else {
+                Toast.makeText(PartListActivity.this, "nie działa", Toast.LENGTH_SHORT).show();
+                onResume();
+            }
         }
     }
 
@@ -124,7 +164,7 @@ public class PartListActivity extends AppCompatActivity {
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            if(convertView == null) {
+            if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
             }
