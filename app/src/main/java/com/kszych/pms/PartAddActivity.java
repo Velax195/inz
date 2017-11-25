@@ -65,10 +65,11 @@ public class PartAddActivity extends AppCompatActivity {
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(etName.getText().toString() == DatabaseHelper.DEFAULT_STRING
+                if(etName.getText().toString().matches("")
                         || etName.getText().toString() == DatabaseHelper.NULL_VAL){
                     Toast.makeText(PartAddActivity.this, "Wprowadź nazwę", Toast.LENGTH_SHORT).show();
                 } else {
+                    Toast.makeText(PartAddActivity.this, etName.getText().toString(), Toast.LENGTH_SHORT).show();
                     Part mNewPart = new Part(
                             mDb.SafeGetStringFromEditText(etName.getText().toString()),
                             mDb.SafeGetStringFromEditText(etBuyURL.getText().toString()),

@@ -163,20 +163,20 @@ public static class TPackagePart {
     }
 
     public int SafeGetIntFromEditText(String val) {
-        if(val.equals(NULL_VAL) || val == null){
+        if(val.equals(NULL_VAL) || val.matches("")){
             return DEFAULT_INT;
         }
         return Integer.valueOf(val);
     }
 
     public String SafeGetStringFromEditText(String val) {
-        if(val.equals(NULL_VAL) || val == null){
+        if(val.equals(NULL_VAL) || val.matches("")){
             return DEFAULT_STRING;
         }
         return val;
     }
     public double SafeGetDoubleFromEditText(String val) {
-        if(val.equals(NULL_VAL) || val == null){
+        if(val.equals(NULL_VAL) || val.matches("")){
             return DEFAULT_REAL;
         }
         return Double.valueOf(val);
