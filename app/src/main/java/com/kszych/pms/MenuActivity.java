@@ -36,7 +36,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent mIntent = new Intent(MenuActivity.this, ScanRFIDActivity.class);
-                mIntent.putExtra("FROM_ACTIVITY", getResources().getString(R.string.menuActivityName));
+                mIntent.putExtra(ScanRFIDActivity.FROM_ACTIVITY, getResources().getString(R.string.menuActivityName));
                 startActivity(mIntent);
             }
         });
@@ -48,8 +48,4 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
     }
-
-//    private void showNotImplemented() {
-//        Toast.makeText(MenuActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
-//    }
 }
