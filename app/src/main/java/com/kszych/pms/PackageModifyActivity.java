@@ -140,6 +140,7 @@ public class PackageModifyActivity extends AppCompatActivity {
 
                 if (previousActivity.equals(PackageSingleActivity.ACTIVITY_NAME)) {
                     Package mNewPackage = new Package(
+                            mCurrentPackage.getId(),
                             mCurrentPackage.getRfidTag(),
                             mDb.SafeGetIntFromEditText(etMass.getText().toString()),
                             mDb.SafeGetIntFromEditText(etHeight.getText().toString()),
@@ -180,6 +181,7 @@ public class PackageModifyActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mCurrentPackage = mDb.getPackageByRFID(mCurrentPackage.getRfidTag());
         ListView lvPackageParts = findViewById(R.id.modifyPackagePartsList);
         PartsInPackageArrayAdapter adapter = new PartsInPackageArrayAdapter(this, mCurrentParts);
         lvPackageParts.setAdapter(adapter);
