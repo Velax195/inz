@@ -7,8 +7,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -534,5 +536,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return false;
         }
         return true;
+    }
+
+    public void deletePackageParts(@NonNull Package fromPackage, @Nullable List<Part> parts) {
+        if(parts != null && parts.size() > 0) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            StringBuilder builder = new StringBuilder();
+            for (Part singlePart : parts) {
+                builder.append(singlePart.getId()).append(",");
+            }
+            builder.setLength(builder.length() - 1);
+
+            db.delete(TPackagePart.TNAME
+                    , TPackagePart.PACKAGE_ID + "=? " +
+                            "AND " + TPackagePart.PART_ID + " IN (" + builder.toString() + ")"
+                    , new String[]{ String.valueOf(fromPackage.getId()) } );
+        }
+        // else do nothing
+    }
+
+    public void addPackageParts(@NonNull Package fromPackage, @Nullable List<Part> parts) {
+        if(parts != null && parts.size() > 0) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.beginTransaction();
+            for(Part singlePart : parts) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(TPackagePart.PACKAGE_ID, fromPackage.getId());
+                contentValues.put(TPackagePart.PART_ID, singlePart.getId());
+                db.insert(TPackagePart.TNAME, null, contentValues);
+            }
+            db.setTransactionSuccessful();
+            db.endTransaction();
+        }
     }
 }

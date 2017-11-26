@@ -97,4 +97,9 @@ public class Part implements Parcelable {
             return new Part[size];
         }
     };
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Part && ((Part) obj).getId() == this.getId();
+    }
 }

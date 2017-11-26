@@ -54,4 +54,5 @@
     <string name="label_rack">Regał</string>
     <string name="label_shelf">Półka</string>
     <string name="add_parts">Dodaj części</string>
+    <string name="action_done">Done</string>
 </resources>

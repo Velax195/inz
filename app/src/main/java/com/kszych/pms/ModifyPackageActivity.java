@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import com.kszych.pms.utils.DatabaseHelper;
 import com.kszych.pms.utils.Package;
+import com.kszych.pms.utils.Part;
+
+import java.util.ArrayList;
 
 public class ModifyPackageActivity extends AppCompatActivity {
 
@@ -18,7 +21,10 @@ public class ModifyPackageActivity extends AppCompatActivity {
     public static final String KEY_ACTIVITY = "previous_activity";
     public static final String KEY_RFID_TAG = "scanned_rfid_tag";
 
+    private static final int REQUEST_CODE_ADD_PARTS = 101;
+
     private Package mCurrentPackage;
+    private ArrayList<Part> mCurrentParts;
 
     DatabaseHelper mDb = DatabaseHelper.getInstance(this);
     String scannedID;
@@ -34,11 +40,11 @@ public class ModifyPackageActivity extends AppCompatActivity {
             mCurrentPackage = extras.getParcelable(KEY_PACKAGE);
             scannedID = extras.getString(KEY_RFID_TAG);
             previousActivity = extras.getString(KEY_ACTIVITY);
+            mCurrentParts = mDb.getPartsInPackage(mCurrentPackage);
         } else {
             // TODO fail die etc.
             Toast.makeText(ModifyPackageActivity.this, "error", Toast.LENGTH_SHORT).show();
         }
-
 
         final EditText etMass = findViewById(R.id.etMass);
         final EditText etHeight = findViewById(R.id.etHeight);
@@ -96,8 +102,9 @@ public class ModifyPackageActivity extends AppCompatActivity {
             //TODO implement
             @Override
             public void onClick(View view) {
-                Toast.makeText(ModifyPackageActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
-
+                Intent intent = new Intent(ModifyPackageActivity.this, PartListActivity.class);
+                intent.putExtra(PartListActivity.KEY_ACTIVITY, PartListActivity.Flow.CHECKABLE.name());
+                startActivityForResult(intent, REQUEST_CODE_ADD_PARTS);
             }
         });
 
@@ -163,4 +170,32 @@ public class ModifyPackageActivity extends AppCompatActivity {
         });
     }
 
+    private void updatePartsPackageDatabase(ArrayList<Part> oldList, ArrayList<Part> newList) {
+        ArrayList<Part> partsToRemove = new ArrayList<>();
+        for(Part singleOldPart : oldList) {
+            if(newList.contains(singleOldPart)) {
+                partsToRemove.add(singleOldPart);
+            }
+        }
+
+        for(Part singlePartToRemove : partsToRemove) {
+            oldList.remove(singlePartToRemove);
+            newList.remove(singlePartToRemove);
+        }
+
+        mDb.deletePackageParts(mCurrentPackage, oldList);
+        mDb.addPackageParts(mCurrentPackage, newList);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_ADD_PARTS) {
+            if(resultCode == RESULT_OK) {
+                ArrayList<Part> newParts = data.getParcelableArrayListExtra(PartListActivity.KEY_SELECTED_PARTS);
+                updatePartsPackageDatabase(mCurrentParts, newParts);
+                mCurrentParts = mDb.getPartsInPackage(mCurrentPackage);
+            }
+        }
+    }
 }
