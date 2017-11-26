@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +22,7 @@ import com.kszych.pms.utils.Part;
 
 import java.util.ArrayList;
 
-public class ModifyPackageActivity extends AppCompatActivity {
+public class PackageModifyActivity extends AppCompatActivity {
 
     public static final String KEY_PACKAGE = "incoming_package";
     public static final String KEY_ACTIVITY = "previous_activity";
@@ -51,7 +50,7 @@ public class ModifyPackageActivity extends AppCompatActivity {
             mCurrentParts = mDb.getPartsInPackage(mCurrentPackage);
         } else {
             // TODO fail die etc.
-            Toast.makeText(ModifyPackageActivity.this, "error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PackageModifyActivity.this, "error", Toast.LENGTH_SHORT).show();
         }
 
         final EditText etMass = findViewById(R.id.etMass);
@@ -114,7 +113,7 @@ public class ModifyPackageActivity extends AppCompatActivity {
             //TODO implement
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ModifyPackageActivity.this, PartListActivity.class);
+                Intent intent = new Intent(PackageModifyActivity.this, PartListActivity.class);
                 intent.putExtra(PartListActivity.KEY_ACTIVITY, PartListActivity.Flow.CHECKABLE.name());
                 startActivityForResult(intent, REQUEST_CODE_ADD_PARTS);
             }
@@ -174,7 +173,7 @@ public class ModifyPackageActivity extends AppCompatActivity {
                             mDb.SafeGetIntFromEditText(etShelf.getText().toString())
                     );
                     mDb.addPackage(mNewPackage);
-                    Intent intent = new Intent(ModifyPackageActivity.this, PackageSingleActivity.class);
+                    Intent intent = new Intent(PackageModifyActivity.this, PackageSingleActivity.class);
                     intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mDb.getPackageByRFID(scannedID));
                     startActivity(intent);
                 }

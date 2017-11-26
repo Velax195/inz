@@ -22,7 +22,7 @@
         <activity android:name="com.kszych.pms.PackageListActivity" />
         <activity android:name="com.kszych.pms.PackageSingleActivity" />
         <activity
-            android:name="com.kszych.pms.ModifyPackageActivity"
+            android:name="com.kszych.pms.PackageModifyActivity"
             android:label="@string/title_activity_modify_package" />
         <activity
             android:name="com.kszych.pms.ScanRFIDActivity"

@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,32 +50,16 @@ public class PackageSingleActivity extends AppCompatActivity {
 
         setTitle(getString(R.string.activity_name_single_package, mCurrentPackage.getId()));
 
-
-        ListView lvPackageParts = findViewById(R.id.singlePackagePartsList);
         Button btnModify = findViewById(R.id.singlePackageModify);
         Button btnDelete = findViewById(R.id.singlePackageDelete);
-
-        setText();
-
-        PartsInPackageArrayAdapter adapter = new PartsInPackageArrayAdapter(this, mPartsInPackage);
-        lvPackageParts.setAdapter(adapter);
-
-        lvPackageParts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent (PackageSingleActivity.this, PartSingleActivity.class);
-                intent.putExtra(PartSingleActivity.KEY_PART, mPartsInPackage.get(i));
-                startActivity(intent);
-            }
-        });
 
         btnModify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(PackageSingleActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(PackageSingleActivity.this, ModifyPackageActivity.class);
-                intent.putExtra(ModifyPackageActivity.KEY_PACKAGE, mCurrentPackage);
-                intent.putExtra(ModifyPackageActivity.KEY_ACTIVITY, ACTIVITY_NAME);
+                Intent intent = new Intent(PackageSingleActivity.this, PackageModifyActivity.class);
+                intent.putExtra(PackageModifyActivity.KEY_PACKAGE, mCurrentPackage);
+                intent.putExtra(PackageModifyActivity.KEY_ACTIVITY, ACTIVITY_NAME);
                 startActivity(intent);
             }
         });
@@ -96,7 +79,20 @@ public class PackageSingleActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mCurrentPackage = mDb.getPackageByRFID(mCurrentPackage.getRfidTag());
+        mPartsInPackage = mDb.getPartsInPackage(mCurrentPackage);
         setText();
+        ListView lvPackageParts = findViewById(R.id.singlePackagePartsList);
+        PartsInPackageArrayAdapter adapter = new PartsInPackageArrayAdapter(this, mPartsInPackage);
+        lvPackageParts.setAdapter(adapter);
+
+        lvPackageParts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent (PackageSingleActivity.this, PartSingleActivity.class);
+                intent.putExtra(PartSingleActivity.KEY_PART, mPartsInPackage.get(i));
+                startActivity(intent);
+            }
+        });
     }
 
     class PartsInPackageArrayAdapter extends ArrayAdapter<Part> {
