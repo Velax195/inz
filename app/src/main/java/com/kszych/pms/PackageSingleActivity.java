@@ -48,7 +48,6 @@ public class PackageSingleActivity extends AppCompatActivity {
         if(mCurrentPackage != null) {
             mPartsInPackage = mDb.getPartsInPackage(mCurrentPackage);
         }
-        // TODO edit layout - three separate fields for dimensions
 
         setTitle(getString(R.string.activity_name_single_package, mCurrentPackage.getId()));
 
@@ -58,8 +57,6 @@ public class PackageSingleActivity extends AppCompatActivity {
         Button btnDelete = findViewById(R.id.singlePackageDelete);
 
         setText();
-
-        // TODO list view package parts
 
         PartsInPackageArrayAdapter adapter = new PartsInPackageArrayAdapter(this, mPartsInPackage);
         lvPackageParts.setAdapter(adapter);
@@ -87,24 +84,6 @@ public class PackageSingleActivity extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(PackageSingleActivity.this);
-//                builder.setTitle(R.string.dialog_confirm_delete_title)
-//                        .setMessage(R.string.dialog_confirm_delete_message)
-//                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                // TODO delete from database and call on back pressed and other scary things
-//                                Toast.makeText(PackageSingleActivity.this
-//                                        , "DELETED! Just kidding", Toast.LENGTH_SHORT).show();
-//                            }
-//                        })
-//                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                dialogInterface.dismiss();
-//                            }
-//                        })
-//                        .show();
                 mDb.deletePackage(mCurrentPackage.getRfidTag());
                 onBackPressed();
             }

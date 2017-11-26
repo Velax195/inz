@@ -52,8 +52,6 @@ public class PartSingleActivity extends AppCompatActivity {
             btnModify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // TODO implement
-                    Toast.makeText(PartSingleActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(PartSingleActivity.this, PartAddActivity.class);
                     intent.putExtra(PartAddActivity.KEY_PART, mCurrentPart);
                     startActivity(intent);

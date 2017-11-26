@@ -27,24 +27,6 @@ public class PartSearchActivity extends AppCompatActivity {
         final EditText etAdditionalInfo = findViewById(R.id.etAdditionalInfo);
         Button btnSearch = findViewById(R.id.btnSearch);
 
-//        if(mCurrentPart != null){
-//            etName.setText(mCurrentPart.getName() == DatabaseHelper.DEFAULT_STRING
-//                    ? DatabaseHelper.NULL_VAL
-//                    : mCurrentPart.getName());
-//            etBuyURL.setText(mCurrentPart.getBuyUrl() == DatabaseHelper.DEFAULT_STRING
-//                    ? DatabaseHelper.NULL_VAL
-//                    : mCurrentPart.getBuyUrl());
-//            etPrice.setText(mCurrentPart.getPrice() == DatabaseHelper.DEFAULT_REAL
-//                    ? DatabaseHelper.NULL_VAL
-//                    : Double.toString(mCurrentPart.getPrice()));
-//            etProducer.setText(mCurrentPart.getProducerName() == DatabaseHelper.DEFAULT_STRING
-//                    ? DatabaseHelper.NULL_VAL
-//                    : mCurrentPart.getProducerName());
-//            etAdditionalInfo.setText(mCurrentPart.getAdditionalInfo() == DatabaseHelper.DEFAULT_STRING
-//                    ? DatabaseHelper.NULL_VAL
-//                    : mCurrentPart.getAdditionalInfo());
-//        }
-
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

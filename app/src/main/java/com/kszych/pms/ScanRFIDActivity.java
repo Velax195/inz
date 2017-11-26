@@ -107,7 +107,7 @@ public class ScanRFIDActivity extends AppCompatActivity {
             if(mPackage == null) {
                 Intent sendIntent = new Intent(ScanRFIDActivity.this, ModifyPackageActivity.class);
                 sendIntent.putExtra(ModifyPackageActivity.KEY_PACKAGE, mPackage);
-                sendIntent.putExtra(ModifyPackageActivity.KEY_PACKAGE, uidHex);
+                sendIntent.putExtra(ModifyPackageActivity.KEY_RFID_TAG, uidHex);
                 sendIntent.putExtra(ModifyPackageActivity.KEY_ACTIVITY, previousActivity);
                 startActivity(sendIntent);
             }

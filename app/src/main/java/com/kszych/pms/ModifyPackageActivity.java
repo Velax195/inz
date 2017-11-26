@@ -16,6 +16,7 @@ public class ModifyPackageActivity extends AppCompatActivity {
 
     public static final String KEY_PACKAGE = "incoming_package";
     public static final String KEY_ACTIVITY = "previous_activity";
+    public static final String KEY_RFID_TAG = "scanned_rfid_tag";
 
     private Package mCurrentPackage;
 
@@ -31,7 +32,7 @@ public class ModifyPackageActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mCurrentPackage = extras.getParcelable(KEY_PACKAGE);
-            scannedID = extras.getString("SCANNED_PACKAGE");
+            scannedID = extras.getString(KEY_RFID_TAG);
             previousActivity = extras.getString(KEY_ACTIVITY);
         } else {
             // TODO fail die etc.
@@ -95,7 +96,6 @@ public class ModifyPackageActivity extends AppCompatActivity {
             //TODO implement
             @Override
             public void onClick(View view) {
-                //Toast.makeText(ModifyPackageActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
                 Toast.makeText(ModifyPackageActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
 
             }
@@ -114,11 +114,7 @@ public class ModifyPackageActivity extends AppCompatActivity {
                 //TODO implement
                 @Override
                 public void onClick(View view) {
-                    if (mDb.deletePackage(mCurrentPackage.getRfidTag())) {
-                        Toast.makeText(ModifyPackageActivity.this, "deleted", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(ModifyPackageActivity.this, "sumting is ronk", Toast.LENGTH_SHORT).show();
-                    }
+                    mDb.deletePackage(mCurrentPackage.getRfidTag());
                     onBackPressed();
                 }
             });
@@ -141,17 +137,10 @@ public class ModifyPackageActivity extends AppCompatActivity {
                             mDb.SafeGetIntFromEditText(etRack.getText().toString()),
                             mDb.SafeGetIntFromEditText(etShelf.getText().toString())
                     );
-                    boolean succes = mDb.updatePackage(mNewPackage);
-                    if(succes) {
-                        Toast.makeText(ModifyPackageActivity.this, "partially succes", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(ModifyPackageActivity.this, PackageSingleActivity.class);
-//                        intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mDb.getPackageByRFID(mNewPackage.getRfidTag()));
-//                        startActivity(intent);
-                        //TODO deal with activityStack, onBack shows previous values
-                        onBackPressed();
-                    } else {
-                        Toast.makeText(ModifyPackageActivity.this, "sumtink ronk", Toast.LENGTH_SHORT).show();
-                    }
+                    mDb.updatePackage(mNewPackage);
+                    //TODO deal with activityStack, onBack shows previous values
+                    onBackPressed();
+
                 } else {
                     Package mNewPackage = new Package(
                             scannedID,
@@ -165,16 +154,10 @@ public class ModifyPackageActivity extends AppCompatActivity {
                             mDb.SafeGetIntFromEditText(etRack.getText().toString()),
                             mDb.SafeGetIntFromEditText(etShelf.getText().toString())
                     );
-
-                    boolean success = mDb.addPackage(mNewPackage);
-                    if (success) {
-                        Toast.makeText(ModifyPackageActivity.this, "partially succes", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ModifyPackageActivity.this, PackageSingleActivity.class);
-                        intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mDb.getPackageByRFID(scannedID));
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(ModifyPackageActivity.this, mNewPackage.getRfidTag(), Toast.LENGTH_SHORT).show();
-                    }
+                    mDb.addPackage(mNewPackage);
+                    Intent intent = new Intent(ModifyPackageActivity.this, PackageSingleActivity.class);
+                    intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mDb.getPackageByRFID(scannedID));
+                    startActivity(intent);
                 }
             }
         });

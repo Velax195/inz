@@ -25,7 +25,6 @@ import java.util.Random;
 public class PackageListActivity extends AppCompatActivity {
 
     private DatabaseHelper mDb;
-
     private ArrayList<Package> mPackages;
 
     @Override
@@ -35,14 +34,6 @@ public class PackageListActivity extends AppCompatActivity {
         setTitle(R.string.activity_name_list_packages);
 
         mDb = DatabaseHelper.getInstance(PackageListActivity.this);
-//
-//        if (mDb.count(DatabaseHelper.TPackage.TNAME) < 20) {
-//            Random r = new Random();
-//            for (int i = 0; i < 20; i++) {
-//                        mDb.addTestPackage("sth" + r.nextInt(5000));
-//            }
-//        }
-
         mPackages = mDb.getPackages();
 
         ListView listView = findViewById(R.id.lv_packages);
@@ -54,7 +45,7 @@ public class PackageListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(PackageListActivity.this, PackageSingleActivity.class);
                 intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mPackages.get(i));
-                startActivity(intent); // TODO startactivity for result? because the record can be deleted
+                startActivity(intent);
             }
         });
     }
@@ -73,7 +64,7 @@ public class PackageListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(PackageListActivity.this, PackageSingleActivity.class);
                 intent.putExtra(PackageSingleActivity.KEY_PACKAGE, mPackages.get(i));
-                startActivity(intent); // TODO startactivity for result? because the record can be deleted
+                startActivity(intent);
             }
         });
     }

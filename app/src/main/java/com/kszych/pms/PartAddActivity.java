@@ -38,13 +38,13 @@ public class PartAddActivity extends AppCompatActivity {
         final EditText etAdditionalInfo = findViewById(R.id.etAdditionalInfo);
         Button btAdd = findViewById(R.id.btnAdd);
 
-        if(mCurrentPart != null) {
+        if (mCurrentPart != null) {
             setTitle(getString(R.string.modifyPartTitle, mCurrentPart.getName()));
         } else {
             setTitle(getString(R.string.modifyPartTitle, "nowa"));
         }
 
-        if(mCurrentPart != null){
+        if (mCurrentPart != null) {
             etName.setText(mCurrentPart.getName() == DatabaseHelper.DEFAULT_STRING
                     ? DatabaseHelper.NULL_VAL
                     : mCurrentPart.getName());
@@ -65,10 +65,10 @@ public class PartAddActivity extends AppCompatActivity {
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(etName.getText().toString().matches("")
-                        || etName.getText().toString() == DatabaseHelper.NULL_VAL){
+                if (etName.getText().toString().matches("")
+                        || etName.getText().toString() == DatabaseHelper.NULL_VAL) {
                     Toast.makeText(PartAddActivity.this, "Wprowadź nazwę", Toast.LENGTH_SHORT).show();
-                } else if(mCurrentPart == null) {
+                } else if (mCurrentPart == null) {
                     Part mNewPart = new Part(
                             mDb.SafeGetStringFromEditText(etName.getText().toString()),
                             mDb.SafeGetStringFromEditText(etBuyURL.getText().toString()),
@@ -77,16 +77,12 @@ public class PartAddActivity extends AppCompatActivity {
                             mDb.SafeGetStringFromEditText(etAdditionalInfo.getText().toString())
                     );
 
-                    boolean success = mDb.addPart(mNewPart);
-                    if (success) {
-                        Toast.makeText(PartAddActivity.this, "succes", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(PartAddActivity.this, PartSingleActivity.class);
-                        intent.putExtra(PartSingleActivity.KEY_PART, mDb.getPartByName(etName.getText().toString()));
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(PartAddActivity.this, "error", Toast.LENGTH_SHORT).show();
-                    }
-                }else {
+                    mDb.addPart(mNewPart);
+                    Intent intent = new Intent(PartAddActivity.this, PartSingleActivity.class);
+                    intent.putExtra(PartSingleActivity.KEY_PART, mDb.getPartByName(etName.getText().toString()));
+                    startActivity(intent);
+
+                } else {
                     Part mNewPart = new Part(
                             mCurrentPart.getId(),
                             mDb.SafeGetStringFromEditText(etName.getText().toString()),
@@ -95,17 +91,9 @@ public class PartAddActivity extends AppCompatActivity {
                             mDb.SafeGetStringFromEditText(etProducer.getText().toString()),
                             mDb.SafeGetStringFromEditText(etAdditionalInfo.getText().toString())
                     );
-                        boolean success = mDb.updatePart(mNewPart);
-                        if (success) {
-//                            Toast.makeText(PartAddActivity.this, "succes2", Toast.LENGTH_SHORT).show();
-//                            Intent intent = new Intent(PartAddActivity.this, PartSingleActivity.class);
-//                            intent.putExtra(PartSingleActivity.KEY_PART, mDb.getPartByName(etName.getText().toString()));
-//                            startActivity(intent);
-                            onBackPressed();
-                        } else {
-                            Toast.makeText(PartAddActivity.this, "error2", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                    mDb.updatePart(mNewPart);
+                     onBackPressed();
+                }
 
             }
         });

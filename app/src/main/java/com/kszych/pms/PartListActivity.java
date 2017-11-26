@@ -26,28 +26,17 @@ import java.util.Random;
 public class PartListActivity extends AppCompatActivity {
 
     private DatabaseHelper mDb;
-
     private ArrayList<Part> mParts;
-
     final int sendRequestCode = 1;
-
     boolean shouldResume = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_part_list);
-        setTitle("pms");
+        setTitle("PMS");
 
         mDb = DatabaseHelper.getInstance(PartListActivity.this);
-
-//        if(mDb.count(DatabaseHelper.TPart.TNAME) < 20) {
-//            Random r = new Random();
-//            for (int i = 0; i < 20; i++) {
-//                mDb.addTestParts("sth" + r.nextInt(5000));
-//            }
-//        }
-
         mParts = mDb.getParts();
 
         ListView listView = findViewById(R.id.lv_parts);
@@ -59,7 +48,7 @@ public class PartListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
                 intent.putExtra(PartSingleActivity.KEY_PART, mParts.get(position));
-                startActivity(intent); // TODO startactivity for result? because the record can be deleted
+                startActivity(intent);
             }
         });
     }
@@ -78,7 +67,7 @@ public class PartListActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
                     intent.putExtra(PartSingleActivity.KEY_PART, mParts.get(position));
-                    startActivity(intent); // TODO startactivity for result? because the record can be deleted
+                    startActivity(intent);
                 }
             });
         }
@@ -95,21 +84,8 @@ public class PartListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                // TODO implement
-//                Toast.makeText(PackageListActivity.this
-//                        , R.string.not_implemented, Toast.LENGTH_SHORT).show();
-                // DEBUG DELETE_ME
-
-//                StringBuilder builder = new StringBuilder();
-//                ArrayList<Part> parts = mDb.getParts();
-//                for(Part singlePart : parts) {
-//                    builder.append(singlePart.getName());
-//                }
-//
-//                Toast.makeText(PartListActivity.this, builder.toString(), Toast.LENGTH_SHORT).show();
                 Intent sIntent = new Intent(PartListActivity.this, PartAddActivity.class);
                 startActivity(sIntent);
-
                 return true;
             case R.id.action_search:
                 Intent sendIntent = new Intent(PartListActivity.this, PartSearchActivity.class);
@@ -127,7 +103,6 @@ public class PartListActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 shouldResume = false;
 
-                Toast.makeText(PartListActivity.this, "działa", Toast.LENGTH_SHORT).show();
                 Part mFilteredPart = data.getParcelableExtra(PartSearchActivity.SEARCH_PACKAGE);
                 mParts = mDb.searchParts(mFilteredPart);
 
@@ -140,11 +115,10 @@ public class PartListActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
                         intent.putExtra(PartSingleActivity.KEY_PART, mParts.get(position));
-                        startActivity(intent); // TODO startactivity for result? because the record can be deleted
+                        startActivity(intent);
                     }
                 });
             } else {
-                Toast.makeText(PartListActivity.this, "nie działa", Toast.LENGTH_SHORT).show();
                 onResume();
             }
         }
