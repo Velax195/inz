@@ -189,8 +189,20 @@ public class PartListActivity extends AppCompatActivity {
         }
 
         private void initBoolArray() {
-            for (int i = 0; i < mCheckArray.length; i++) {
-                mCheckArray[i] = false;
+            ArrayList <Part> partsToCheck = getIntent().getParcelableArrayListExtra(PackageModifyActivity.KEY_CHECK_PARTS);
+            if(partsToCheck == null) {
+                Toast.makeText(PartListActivity.this, "dupa", Toast.LENGTH_SHORT).show();
+                for (int i = 0; i < mCheckArray.length; i++) {
+                    mCheckArray[i] = false;
+                }
+            } else {
+                for (int i = 0; i < mCheckArray.length; i++) {
+                    if(partsToCheck.contains(mParts.get(i)))                     {
+                        mCheckArray [i] = true;
+                    } else {
+                        mCheckArray[i] = false;
+                    }
+                }
             }
         }
 

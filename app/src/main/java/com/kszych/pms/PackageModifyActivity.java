@@ -27,6 +27,7 @@ public class PackageModifyActivity extends AppCompatActivity {
     public static final String KEY_PACKAGE = "incoming_package";
     public static final String KEY_ACTIVITY = "previous_activity";
     public static final String KEY_RFID_TAG = "scanned_rfid_tag";
+    public static final String KEY_CHECK_PARTS = "parts_to_check";
 
     private static final int REQUEST_CODE_ADD_PARTS = 101;
 
@@ -103,18 +104,13 @@ public class PackageModifyActivity extends AppCompatActivity {
                 ? DatabaseHelper.NULL_VAL
                 : mCurrentPackage.getAdditionalText());
 
-        //TODO list view package parts
-
-
-
-
-
         btnAdd.setOnClickListener(new View.OnClickListener() {
             //TODO implement
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PackageModifyActivity.this, PartListActivity.class);
                 intent.putExtra(PartListActivity.KEY_ACTIVITY, PartListActivity.Flow.CHECKABLE.name());
+                intent.putParcelableArrayListExtra(KEY_CHECK_PARTS, mCurrentParts);
                 startActivityForResult(intent, REQUEST_CODE_ADD_PARTS);
             }
         });
