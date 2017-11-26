@@ -33,7 +33,7 @@
         <activity android:name="com.kszych.pms.PartSingleActivity" />
         <activity android:name="com.kszych.pms.PartAddActivity"
             android:noHistory="true"/>
-        <activity android:name="com.kszych.pms.PartSearchActivity"></activity>
+        <activity android:name="com.kszych.pms.PartSearchActivity" />
     </application>
 
 </manifest>

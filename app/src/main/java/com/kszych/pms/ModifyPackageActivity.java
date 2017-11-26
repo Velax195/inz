@@ -1,12 +1,20 @@
 package com.kszych.pms;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kszych.pms.utils.DatabaseHelper;
@@ -55,7 +63,7 @@ public class ModifyPackageActivity extends AppCompatActivity {
         final EditText etShelf = findViewById(R.id.etShelf);
         final EditText etBarcode = findViewById(R.id.etBarcode);
         final EditText etAdditionalInfo = findViewById(R.id.etAdditionalInfo);
-        ListView lvPackageParts = findViewById(R.id.modifyPackagePartsList);
+
         Button btnAdd = findViewById(R.id.modifyPackageAdd);
         Button btnDelete = findViewById(R.id.modifyPackageDelete);
         Button btnSave = findViewById(R.id.modifyPackageSave);
@@ -97,6 +105,10 @@ public class ModifyPackageActivity extends AppCompatActivity {
                 : mCurrentPackage.getAdditionalText());
 
         //TODO list view package parts
+
+
+
+
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             //TODO implement
@@ -170,6 +182,14 @@ public class ModifyPackageActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ListView lvPackageParts = findViewById(R.id.modifyPackagePartsList);
+        PartsInPackageArrayAdapter adapter = new PartsInPackageArrayAdapter(this, mCurrentParts);
+        lvPackageParts.setAdapter(adapter);
+    }
+
     private void updatePartsPackageDatabase(ArrayList<Part> oldList, ArrayList<Part> newList) {
         ArrayList<Part> partsToRemove = new ArrayList<>();
         for(Part singleOldPart : oldList) {
@@ -195,7 +215,33 @@ public class ModifyPackageActivity extends AppCompatActivity {
                 ArrayList<Part> newParts = data.getParcelableArrayListExtra(PartListActivity.KEY_SELECTED_PARTS);
                 updatePartsPackageDatabase(mCurrentParts, newParts);
                 mCurrentParts = mDb.getPartsInPackage(mCurrentPackage);
+
             }
+        }
+    }
+
+    class PartsInPackageArrayAdapter extends ArrayAdapter<Part> {
+
+        private Context mContext;
+        private ArrayList<Part> mParts;
+
+        public PartsInPackageArrayAdapter(@NonNull Context context, ArrayList<Part> objects ) {
+            super(context, android.R.layout.simple_list_item_1, objects);
+            mParts = objects;
+            mContext = context;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            if(convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
+            }
+            TextView listItemText = convertView.findViewById(android.R.id.text1);
+            listItemText.setText(mParts.get(position).getName());
+
+            return convertView;
         }
     }
 }
