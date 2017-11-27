@@ -10,7 +10,6 @@ public class Part implements Parcelable {
     private String mName;
     private String mBuyUrl = DatabaseHelper.DEFAULT_STRING;
     private double mPrice = DatabaseHelper.DEFAULT_REAL;
-
     private String mProducerName = DatabaseHelper.DEFAULT_STRING;
     private String mAdditionalInfo = DatabaseHelper.DEFAULT_STRING;
 

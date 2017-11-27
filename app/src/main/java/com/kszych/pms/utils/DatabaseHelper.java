@@ -24,6 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DEFAULT_INT = -1;
     public static final double DEFAULT_REAL = -1.0;
     public static final String NULL_VAL = "N/A";
+    public static final boolean DEFAULT_BOOLEAN = false;
     private static DatabaseHelper _instance = null;
 
     public static class TPackage {
