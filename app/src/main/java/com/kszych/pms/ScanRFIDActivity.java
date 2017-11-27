@@ -88,7 +88,6 @@ public class ScanRFIDActivity extends AppCompatActivity {
 
     private void cardIsRead(final String uidHex, String uidDec) {
         Toast.makeText(ScanRFIDActivity.this, "Read " + uidHex + " " + uidDec, Toast.LENGTH_SHORT).show();
-        //onBackPressed();
         mPackage = mDb.getPackageByRFID(uidHex);
         String previousActivity = getIntent().getStringExtra(FROM_ACTIVITY);
         if (previousActivity.equals(getResources().getString(R.string.menuActivityName))) {
@@ -108,7 +107,7 @@ public class ScanRFIDActivity extends AppCompatActivity {
                 Intent sendIntent = new Intent(ScanRFIDActivity.this, PackageModifyActivity.class);
                 sendIntent.putExtra(PackageModifyActivity.KEY_PACKAGE, mPackage);
                 sendIntent.putExtra(PackageModifyActivity.KEY_RFID_TAG, uidHex);
-                sendIntent.putExtra(PackageModifyActivity.KEY_ACTIVITY, previousActivity);
+                sendIntent.putExtra(PackageModifyActivity.KEY_ACTIVITY, getResources().getString(R.string.packageListActivityName));
                 startActivity(sendIntent);
             }
             else {
@@ -120,7 +119,8 @@ public class ScanRFIDActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 mDb.deletePackage(uidHex);
                                 Intent sIntent = new Intent(ScanRFIDActivity.this, PackageModifyActivity.class);
-                                sIntent.putExtra(PackageModifyActivity.KEY_ACTIVITY, "ScanRFID");
+                                sIntent.putExtra(PackageModifyActivity.KEY_RFID_TAG, uidHex);
+                                sIntent.putExtra(PackageModifyActivity.KEY_ACTIVITY, getResources().getString(R.string.packageListActivityName));
                                 startActivity(sIntent);
                             }
                         })

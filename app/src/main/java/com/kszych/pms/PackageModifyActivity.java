@@ -31,12 +31,13 @@ public class PackageModifyActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_ADD_PARTS = 101;
 
-    private Package mCurrentPackage;
+    private Package mCurrentPackage = null;
     private ArrayList<Part> mCurrentParts;
 
     DatabaseHelper mDb = DatabaseHelper.getInstance(this);
     String scannedID;
     String previousActivity = null;
+    boolean shit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +46,14 @@ public class PackageModifyActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mCurrentPackage = extras.getParcelable(KEY_PACKAGE);
-            scannedID = extras.getString(KEY_RFID_TAG);
             previousActivity = extras.getString(KEY_ACTIVITY);
+            scannedID = extras.getString(KEY_RFID_TAG);
+            if (previousActivity.equals(getResources().getString(R.string.packageListActivityName))) {
+                shit = true;
+            } else {
+            mCurrentPackage = extras.getParcelable(KEY_PACKAGE);
             mCurrentParts = mDb.getPartsInPackage(mCurrentPackage);
+            }
         } else {
             // TODO fail die etc.
             Toast.makeText(PackageModifyActivity.this, "error", Toast.LENGTH_SHORT).show();
@@ -73,44 +78,62 @@ public class PackageModifyActivity extends AppCompatActivity {
             setTitle(getString(R.string.modifyPackageTitle, Integer.toString(mCurrentPackage.getId())));
         } else {
             setTitle(getString(R.string.modifyPackageTitle, "nowa"));
-            mCurrentPackage = new Package(DatabaseHelper.DEFAULT_INT, DatabaseHelper.DEFAULT_STRING);
+            //mCurrentPackage = new Package(DatabaseHelper.DEFAULT_INT, DatabaseHelper.DEFAULT_STRING);
         }
 
-        etMass.setText(mCurrentPackage.getMass() == DatabaseHelper.DEFAULT_INT
-                ? DatabaseHelper.NULL_VAL
-                : Integer.toString(mCurrentPackage.getMass()));
-        etHeight.setText(mCurrentPackage.getDimH() == DatabaseHelper.DEFAULT_INT
-                ? DatabaseHelper.NULL_VAL
-                : Integer.toString(mCurrentPackage.getDimH()));
-        etWidth.setText(mCurrentPackage.getDimW() == DatabaseHelper.DEFAULT_INT
-                ? DatabaseHelper.NULL_VAL
-                : Integer.toString(mCurrentPackage.getDimW()));
-        etDepth.setText(mCurrentPackage.getDimD() == DatabaseHelper.DEFAULT_INT
-                ? DatabaseHelper.NULL_VAL
-                : Integer.toString(mCurrentPackage.getDimD()));
-        etBarcode.setText(mCurrentPackage.getBarcode() == DatabaseHelper.DEFAULT_STRING
-                ? DatabaseHelper.NULL_VAL
-                : mCurrentPackage.getBarcode());
-        etAisle.setText(mCurrentPackage.getAisle() == DatabaseHelper.DEFAULT_STRING
-                ? DatabaseHelper.NULL_VAL
-                : mCurrentPackage.getAisle());
-        etRack.setText(mCurrentPackage.getRack() == DatabaseHelper.DEFAULT_INT
-                ? DatabaseHelper.NULL_VAL
-                : Integer.toString(mCurrentPackage.getRack()));
-        etShelf.setText(mCurrentPackage.getShelf() == DatabaseHelper.DEFAULT_INT
-                ? DatabaseHelper.NULL_VAL
-                : Integer.toString(mCurrentPackage.getShelf()));
-        etAdditionalInfo.setText(mCurrentPackage.getAdditionalText() == DatabaseHelper.DEFAULT_STRING
-                ? DatabaseHelper.NULL_VAL
-                : mCurrentPackage.getAdditionalText());
+        if (mCurrentPackage!=null) {
+            etMass.setText(mCurrentPackage.getMass() == DatabaseHelper.DEFAULT_INT
+                    ? DatabaseHelper.NULL_VAL
+                    : Integer.toString(mCurrentPackage.getMass()));
+            etHeight.setText(mCurrentPackage.getDimH() == DatabaseHelper.DEFAULT_INT
+                    ? DatabaseHelper.NULL_VAL
+                    : Integer.toString(mCurrentPackage.getDimH()));
+            etWidth.setText(mCurrentPackage.getDimW() == DatabaseHelper.DEFAULT_INT
+                    ? DatabaseHelper.NULL_VAL
+                    : Integer.toString(mCurrentPackage.getDimW()));
+            etDepth.setText(mCurrentPackage.getDimD() == DatabaseHelper.DEFAULT_INT
+                    ? DatabaseHelper.NULL_VAL
+                    : Integer.toString(mCurrentPackage.getDimD()));
+            etBarcode.setText(mCurrentPackage.getBarcode() == DatabaseHelper.DEFAULT_STRING
+                    ? DatabaseHelper.NULL_VAL
+                    : mCurrentPackage.getBarcode());
+            etAisle.setText(mCurrentPackage.getAisle() == DatabaseHelper.DEFAULT_STRING
+                    ? DatabaseHelper.NULL_VAL
+                    : mCurrentPackage.getAisle());
+            etRack.setText(mCurrentPackage.getRack() == DatabaseHelper.DEFAULT_INT
+                    ? DatabaseHelper.NULL_VAL
+                    : Integer.toString(mCurrentPackage.getRack()));
+            etShelf.setText(mCurrentPackage.getShelf() == DatabaseHelper.DEFAULT_INT
+                    ? DatabaseHelper.NULL_VAL
+                    : Integer.toString(mCurrentPackage.getShelf()));
+            etAdditionalInfo.setText(mCurrentPackage.getAdditionalText() == DatabaseHelper.DEFAULT_STRING
+                    ? DatabaseHelper.NULL_VAL
+                    : mCurrentPackage.getAdditionalText());
+        }
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
-            //TODO implement
             @Override
             public void onClick(View view) {
+                //TODO changes here
                 Intent intent = new Intent(PackageModifyActivity.this, PartListActivity.class);
                 intent.putExtra(PartListActivity.KEY_ACTIVITY, PartListActivity.Flow.CHECKABLE.name());
                 intent.putParcelableArrayListExtra(KEY_CHECK_PARTS, mCurrentParts);
+                if (previousActivity.equals(getResources().getString(R.string.packageListActivityName))) {
+                    Package mNewPackage = new Package(
+                            scannedID,
+                            mDb.SafeGetIntFromEditText(etMass.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etHeight.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etWidth.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etDepth.getText().toString()),
+                            mDb.SafeGetStringFromEditText(etAdditionalInfo.getText().toString()),
+                            mDb.SafeGetStringFromEditText(etBarcode.getText().toString()),
+                            mDb.SafeGetStringFromEditText(etAisle.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etRack.getText().toString()),
+                            mDb.SafeGetIntFromEditText(etShelf.getText().toString())
+                    );
+                    mDb.addPackage(mNewPackage);
+                    mCurrentPackage = mDb.getPackageByRFID(scannedID);
+                }
                 startActivityForResult(intent, REQUEST_CODE_ADD_PARTS);
             }
         });
@@ -125,7 +148,6 @@ public class PackageModifyActivity extends AppCompatActivity {
             });
         } else {
             btnDelete.setOnClickListener(new View.OnClickListener() {
-                //TODO implement
                 @Override
                 public void onClick(View view) {
                     mDb.deletePackage(mCurrentPackage.getRfidTag());
@@ -134,11 +156,10 @@ public class PackageModifyActivity extends AppCompatActivity {
             });
         }
         btnSave.setOnClickListener(new View.OnClickListener() {
-            //TODO implement
             @Override
             public void onClick(View view) {
 
-                if (previousActivity.equals(PackageSingleActivity.ACTIVITY_NAME)) {
+                if (mCurrentPackage==null) {
                     Package mNewPackage = new Package(
                             mCurrentPackage.getId(),
                             mCurrentPackage.getRfidTag(),
@@ -181,37 +202,49 @@ public class PackageModifyActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mCurrentPackage = mDb.getPackageByRFID(mCurrentPackage.getRfidTag());
-        ListView lvPackageParts = findViewById(R.id.modifyPackagePartsList);
-        PartsInPackageArrayAdapter adapter = new PartsInPackageArrayAdapter(this, mCurrentParts);
-        lvPackageParts.setAdapter(adapter);
+        if (mCurrentPackage==null) {
+            shit = true;
+        } else {
+            mCurrentPackage = mDb.getPackageByRFID(mCurrentPackage.getRfidTag());
+            ListView lvPackageParts = findViewById(R.id.modifyPackagePartsList);
+            PartsInPackageArrayAdapter adapter = new PartsInPackageArrayAdapter(this, mCurrentParts);
+            lvPackageParts.setAdapter(adapter);
+        }
     }
 
     private void updatePartsPackageDatabase(ArrayList<Part> oldList, ArrayList<Part> newList) {
         ArrayList<Part> partsToRemove = new ArrayList<>();
-        for(Part singleOldPart : oldList) {
-            if(newList.contains(singleOldPart)) {
-                partsToRemove.add(singleOldPart);
+        if(oldList == null) {
+            mDb.addPackageParts(mCurrentPackage, newList);
+        } else {
+            for (Part singleOldPart : oldList) {
+                if (newList.contains(singleOldPart)) {
+                    partsToRemove.add(singleOldPart);
+                }
             }
-        }
 
-        for(Part singlePartToRemove : partsToRemove) {
-            oldList.remove(singlePartToRemove);
-            newList.remove(singlePartToRemove);
-        }
+            for (Part singlePartToRemove : partsToRemove) {
+                oldList.remove(singlePartToRemove);
+                newList.remove(singlePartToRemove);
+            }
 
-        mDb.deletePackageParts(mCurrentPackage, oldList);
-        mDb.addPackageParts(mCurrentPackage, newList);
+            mDb.deletePackageParts(mCurrentPackage, oldList);
+            mDb.addPackageParts(mCurrentPackage, newList);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_ADD_PARTS) {
-            if(resultCode == RESULT_OK) {
-                ArrayList<Part> newParts = data.getParcelableArrayListExtra(PartListActivity.KEY_SELECTED_PARTS);
-                updatePartsPackageDatabase(mCurrentParts, newParts);
-                mCurrentParts = mDb.getPartsInPackage(mCurrentPackage);
+        if (requestCode == REQUEST_CODE_ADD_PARTS) {
+            if (resultCode == RESULT_OK) {
+                if (mCurrentPackage==null) {
+                }
+                else {
+                    ArrayList<Part> newParts = data.getParcelableArrayListExtra(PartListActivity.KEY_SELECTED_PARTS);
+                    updatePartsPackageDatabase(mCurrentParts, newParts);
+                    mCurrentParts = mDb.getPartsInPackage(mCurrentPackage);
+                }
 
             }
         }
@@ -222,7 +255,7 @@ public class PackageModifyActivity extends AppCompatActivity {
         private Context mContext;
         private ArrayList<Part> mParts;
 
-        public PartsInPackageArrayAdapter(@NonNull Context context, ArrayList<Part> objects ) {
+        public PartsInPackageArrayAdapter(@NonNull Context context, ArrayList<Part> objects) {
             super(context, android.R.layout.simple_list_item_1, objects);
             mParts = objects;
             mContext = context;
@@ -231,7 +264,7 @@ public class PackageModifyActivity extends AppCompatActivity {
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            if(convertView == null) {
+            if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
             }
