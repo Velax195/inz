@@ -16,7 +16,7 @@ import java.util.Random;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 7;
     public static final String DATABASE_NAME = "DatabaseX.db";
 
     // default db values below
@@ -59,6 +59,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         final static String ID = "ID";
         final static String PACKAGE_ID = "fk_package_id";
+        final static String PART_ID = "fk_part_id";
+        final static String QUANTITY = "quantity";
+    }
+
+    public static class TClient{
+        public final static String TNAME = "Client";
+
+        final static String ID = "ID";
+        final static String NAME = "name";
+        final static String STREET = "street";
+        final static String NUMBER = "number";
+        final static String CITY = "city";
+        final static String PHONE = "phone";
+        final static String ADDITIONAL_INFO = "additionalInfo";
+    }
+
+    public static class TOrder{
+        public final static String TNAME = "OrderTable";
+
+        final static String ID = "ID";
+        final static String IS_EXECUTED = "isExecuted";
+        final static String CLIENT_ID = "fk_client_id";
+    }
+
+    public static class TPartInOrder{
+        public final static String TNAME = "PartInOrder";
+
+        final static String ID = "ID";
+        final static String ORDER_ID = "fk_order_id";
         final static String PART_ID = "fk_part_id";
         final static String QUANTITY = "quantity";
     }
@@ -110,6 +139,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "FOREIGN KEY (" + TPackagePart.PART_ID + ") "
                 + "REFERENCES " + TPart.TNAME + "(" + TPart.ID + ") )";
         sqLiteDatabase.execSQL(createPackagePart);
+
+        String createClient = "CREATE TABLE " + TClient.TNAME + " ("
+                + TClient.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + TClient.NAME + "  TEXT NOT NULL, "
+                + TClient.STREET + " TEXT, "
+                + TClient.NUMBER + " INT, "
+                + TClient.CITY + " TEXT, "
+                + TClient.PHONE + " INT, "
+                + TClient.ADDITIONAL_INFO + "TEXT)";
+        sqLiteDatabase.execSQL(createClient);
+
+        String createOrder = "CREATE TABLE " + TOrder.TNAME + " ("
+                + TOrder.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + TOrder.IS_EXECUTED + " INTEGER, "
+                + TOrder.CLIENT_ID + " INTEGER, "
+                + "FOREIGN KEY (" + TOrder.CLIENT_ID + ") "
+                + "REFERENCES " + TClient.TNAME + "(" + TClient.ID + ") ) ";
+        sqLiteDatabase.execSQL(createOrder);
+
+
+//        String createOrder = "CREATE TABLE " + TOrder.TNAME + " ("
+//                + TOrder.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+//                + TOrder.IS_EXECUTED + " INTEGER, "
+//                + TOrder.CLIENT_ID + " INTEGER, "
+//                + "FOREIGN KEY (" + TOrder.CLIENT_ID + ") "
+//                + "REFERENCES " + TClient.TNAME + "(" + TClient.ID + ") )";
+//        sqLiteDatabase.execSQL(createOrder);
+
+        String createPartInOrder = "CREATE TABLE " + TPartInOrder.TNAME + " ("
+                + TPartInOrder.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + TPartInOrder.ORDER_ID + " INTEGER, "
+                + TPartInOrder.PART_ID + " INTEGER, "
+                + TPartInOrder.QUANTITY + " INTEGER, "
+                + "FOREIGN KEY (" + TPartInOrder.ORDER_ID + ") "
+                + "REFERENCES " + TOrder.TNAME + "(" + TOrder.ID + "), "
+                + "FOREIGN KEY (" + TPartInOrder.PART_ID + ") "
+                + "REFERENCES " + TPart.TNAME + "(" + TPart.ID + ") )";
+        sqLiteDatabase.execSQL(createPartInOrder);
+
     }
 
     @Override
@@ -323,7 +391,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Package getPackageByRFID(String scannedRFID) {
-        //TODO get uid, find package in database, return it
 
         String queryString = "SELECT * FROM " + TPackage.TNAME
                 + " WHERE " + TPackage.RFID_TAG + " = ?";
