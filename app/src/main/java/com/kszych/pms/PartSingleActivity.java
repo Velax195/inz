@@ -128,6 +128,7 @@ public class PartSingleActivity extends AppCompatActivity {
         TextView tvProducerName = findViewById(R.id.tvProducer);
         TextView tvPrice = findViewById(R.id.tvPrice);
         TextView tvAdditionalInfo = findViewById(R.id.tvAdditionalInfo);
+        TextView tvQuantity = findViewById(R.id.tvQuantity);
 
         tvName.setText(mCurrentPart.getName() == DatabaseHelper.DEFAULT_STRING
                 ? DatabaseHelper.NULL_VAL
@@ -144,5 +145,6 @@ public class PartSingleActivity extends AppCompatActivity {
         tvAdditionalInfo.setText(mCurrentPart.getAdditionalInfo() == DatabaseHelper.DEFAULT_STRING
                 ? DatabaseHelper.NULL_VAL
                 : mCurrentPart.getAdditionalInfo());
+        tvQuantity.setText(Integer.toString(mDb.countParts(mCurrentPart.getId())));
     }
 }

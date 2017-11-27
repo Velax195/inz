@@ -16,8 +16,8 @@ import java.util.Random;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 
-    public static final int DATABASE_VERSION = 13;
-    public static final String DATABASE_NAME = "Database.db";
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "DatabaseX.db";
 
     // default db values below
     public static final String DEFAULT_STRING = null;
@@ -60,6 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         final static String ID = "ID";
         final static String PACKAGE_ID = "fk_package_id";
         final static String PART_ID = "fk_part_id";
+        final static String QUANTITY = "quantity";
     }
 
     private DatabaseHelper(Context context) {
@@ -103,6 +104,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + TPackagePart.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + TPackagePart.PACKAGE_ID + " INTEGER, "
                 + TPackagePart.PART_ID + " INTEGER, "
+                + TPackagePart.QUANTITY + " INTEGER, "
                 + "FOREIGN KEY (" + TPackagePart.PACKAGE_ID + ") "
                 + "REFERENCES " + TPackage.TNAME + "(" + TPackage.ID + "), "
                 + "FOREIGN KEY (" + TPackagePart.PART_ID + ") "
@@ -438,6 +440,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ContentValues cv = new ContentValues();
                 cv.put(TPackagePart.PACKAGE_ID, packagesID.get(i));
                 cv.put(TPackagePart.PART_ID, partsID.get(j));
+                cv.put(TPackagePart.QUANTITY, 1);
                 db.insert(TPackagePart.TNAME, null, cv);
             }
         }
@@ -564,10 +567,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(TPackagePart.PACKAGE_ID, fromPackage.getId());
                 contentValues.put(TPackagePart.PART_ID, singlePart.getId());
+                contentValues.put(TPackagePart.QUANTITY, 1);
                 db.insert(TPackagePart.TNAME, null, contentValues);
             }
             db.setTransactionSuccessful();
             db.endTransaction();
         }
+    }
+
+    public int countParts(int partId){
+        int count = 0;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String queryString = "SELECT "
+                + TPackagePart.QUANTITY
+                + " FROM " + TPackagePart.TNAME
+                + " WHERE " + TPackagePart.PART_ID + " = ? ";
+
+        Cursor cursor = db.rawQuery(queryString, new String[]{Integer.toString(partId)});
+        int piQuantity = cursor.getColumnIndex(TPackagePart.QUANTITY);
+        while(cursor.moveToNext()){
+            count += cursor.getInt(piQuantity);
+        }
+        return count;
     }
 }

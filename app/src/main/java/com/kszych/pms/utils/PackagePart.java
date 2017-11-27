@@ -8,15 +8,17 @@ public class PackagePart {
 
     private int mPackageId = DatabaseHelper.DEFAULT_INT;
     private int mPartId = DatabaseHelper.DEFAULT_INT;
+    private int mQuantity = DatabaseHelper.DEFAULT_INT;
 
-    public PackagePart( int id, int packageId, int partId) {
+    public PackagePart( int id, int packageId, int partId, int quantity) {
         this.mId=id;
         this.mPackageId=packageId;
         this.mPartId=partId;
+        this.mQuantity = quantity;
     }
 
-    public PackagePart( int packageId, int partId){
-        this(DatabaseHelper.DEFAULT_INT, packageId, partId);
+    public PackagePart( int packageId, int partId, int quantity){
+        this(DatabaseHelper.DEFAULT_INT, packageId, partId, quantity);
     }
 
     public int getId() {
@@ -29,6 +31,10 @@ public class PackagePart {
 
     public int getPartId() {
         return mPartId;
+    }
+
+    public int getQuantity() {
+        return mQuantity;
     }
 
     public void save(Context context) {
