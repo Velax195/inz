@@ -41,11 +41,11 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        btnTestActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MenuActivity.this, TestActivity.class));
-            }
-        });
+//        btnTestActivity.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(MenuActivity.this, TestActivity.class));
+//            }
+//        });
     }
 }
