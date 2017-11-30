@@ -56,4 +56,8 @@
     <string name="add_parts">Dodaj części</string>
     <string name="action_done">Done</string>
     <string name="quantityAll">Ilość w magazynie:</string>
+    <string name="label_street">Ulica</string>
+    <string name="label_street_number">Numer domu</string>
+    <string name="label_city">Miasto</string>
+    <string name="label_number">Numer telefonu</string>
 </resources>

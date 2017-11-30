@@ -16,7 +16,7 @@ import java.util.Random;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 9;
     public static final String DATABASE_NAME = "DatabaseX.db";
 
     // default db values below
@@ -81,6 +81,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         final static String ID = "ID";
         final static String IS_EXECUTED = "isExecuted";
         final static String CLIENT_ID = "fk_client_id";
+        final static String NUMBER = "number";
+        final static String DATE = "date";
+        final static String ADDITIONAL_INFO = "additionalInfo";
     }
 
     public static class TPartInOrder{
@@ -154,18 +157,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + TOrder.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + TOrder.IS_EXECUTED + " INTEGER, "
                 + TOrder.CLIENT_ID + " INTEGER, "
+                + TOrder.NUMBER + " INTEGER, "
+                + TOrder.DATE + " TEXT, "
+                + TOrder.ADDITIONAL_INFO + " TEXT, "
                 + "FOREIGN KEY (" + TOrder.CLIENT_ID + ") "
                 + "REFERENCES " + TClient.TNAME + "(" + TClient.ID + ") ) ";
         sqLiteDatabase.execSQL(createOrder);
-
-
-//        String createOrder = "CREATE TABLE " + TOrder.TNAME + " ("
-//                + TOrder.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-//                + TOrder.IS_EXECUTED + " INTEGER, "
-//                + TOrder.CLIENT_ID + " INTEGER, "
-//                + "FOREIGN KEY (" + TOrder.CLIENT_ID + ") "
-//                + "REFERENCES " + TClient.TNAME + "(" + TClient.ID + ") )";
-//        sqLiteDatabase.execSQL(createOrder);
 
         String createPartInOrder = "CREATE TABLE " + TPartInOrder.TNAME + " ("
                 + TPartInOrder.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "

@@ -24,7 +24,7 @@ public class ScanRFIDActivity extends AppCompatActivity {
     private static final String REQUEST_TAG = "ScannerRequest";
     public static final String FROM_ACTIVITY = "FromActivity";
 
-    String mRequestURL = "http://192.168.0.14/scaner";
+    String mRequestURL = "http://172.16.48.76/scaner";
     Package mPackage;
     DatabaseHelper mDb = DatabaseHelper.getInstance(this);
     private RequestQueue mRequestQueue;

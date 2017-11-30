@@ -11,29 +11,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.kszych.pms.TestActivity" />
-        <activity android:name="com.kszych.pms.MenuActivity">
+        <activity android:name=".TestActivity" />
+        <activity android:name=".MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.kszych.pms.PackageListActivity" />
-        <activity android:name="com.kszych.pms.PackageSingleActivity" />
+        <activity android:name=".PackageListActivity" />
+        <activity android:name=".PackageSingleActivity" />
         <activity
-            android:name="com.kszych.pms.PackageModifyActivity"
+            android:name=".PackageModifyActivity"
             android:label="@string/title_activity_modify_package" />
         <activity
-            android:name="com.kszych.pms.ScanRFIDActivity"
+            android:name=".ScanRFIDActivity"
             android:label="@string/title_activity_scan_rfid"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.kszych.pms.PartListActivity" />
-        <activity android:name="com.kszych.pms.PartSingleActivity" />
-        <activity android:name="com.kszych.pms.PartAddActivity"
-            android:noHistory="true"/>
-        <activity android:name="com.kszych.pms.PartSearchActivity" />
+        <activity android:name=".PartListActivity" />
+        <activity android:name=".PartSingleActivity" />
+        <activity
+            android:name=".PartAddActivity"
+            android:noHistory="true" />
+        <activity android:name=".PartSearchActivity" />
+        <activity android:name=".OrderListActivity" />
+        <activity android:name=".OrderModifyActivity" />
+        <activity android:name=".OrderSingleActivity" />
+        <activity android:name=".OrderExecuteActivity" />
+        <activity android:name=".ClientListActivity" />
+        <activity android:name=".ClientModifyActivity" />
+        <activity android:name=".ClientSingleActivity"></activity>
     </application>
 
 </manifest>
