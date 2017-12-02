@@ -1,11 +1,17 @@
 package com.kszych.pms;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,16 +19,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kszych.pms.utils.DatabaseHelper;
+import com.kszych.pms.utils.Package;
 import com.kszych.pms.utils.Part;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Locale;
 
 public class PartListActivity extends AppCompatActivity {
 
@@ -32,9 +40,12 @@ public class PartListActivity extends AppCompatActivity {
     final int sendRequestCode = 1;
     boolean shouldResume = true;
     private Flow mCurrentFlow;
+    private Package mCurrentPackage = null;
 
     public static final String KEY_ACTIVITY = "previousActivity";
     public static final String KEY_SELECTED_PARTS = "selectedParts";
+    public static final String KEY_PARTS_QUANTITY = "partsQuantity";
+    public static final String KEY_INCOMING_PACKAGE = "incomingPackage";
 
     enum Flow {
         STANDARD, CHECKABLE
@@ -53,6 +64,9 @@ public class PartListActivity extends AppCompatActivity {
         else {
             mCurrentFlow = Flow.STANDARD;
         }
+        if(mCurrentFlow == Flow.CHECKABLE) {
+            mCurrentPackage = extras.getParcelable(KEY_INCOMING_PACKAGE);
+        }
 
         mDb = DatabaseHelper.getInstance(PartListActivity.this);
         mParts = mDb.getParts();
@@ -65,7 +79,7 @@ public class PartListActivity extends AppCompatActivity {
             mParts = mDb.getParts();
             ListView listView = findViewById(R.id.lv_parts);
             if(mCurrentFlow == Flow.CHECKABLE) {
-                mCurrentListAdapter = new PartsAddArrayAdapter(PartListActivity.this, mParts);
+                mCurrentListAdapter = new PartsAddArrayAdapter(PartListActivity.this, mParts, mCurrentPackage);
             }
             else {
                 mCurrentListAdapter = new PartsArrayAdapter(PartListActivity.this, mParts);
@@ -73,14 +87,12 @@ public class PartListActivity extends AppCompatActivity {
 
             listView.setAdapter(mCurrentListAdapter);
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
-                    intent.putExtra(PartSingleActivity.KEY_PART, mParts.get(position));
-                    startActivity(intent);
-                }
-            });
+            if(mCurrentFlow == Flow.STANDARD) {
+                listView.setOnItemClickListener(constructListenerForStandardFlow());
+            }
+            else if(mCurrentFlow == Flow.CHECKABLE) {
+                listView.setOnItemClickListener(constructListenerForCheckable());
+            }
         }
         shouldResume = true;
     }
@@ -110,8 +122,11 @@ public class PartListActivity extends AppCompatActivity {
             case R.id.action_done:
                 Intent resultIntent = new Intent();
                 ArrayList<Part> selectedParts
-                        = ((PartsAddArrayAdapter) mCurrentListAdapter).getSelectedPartsList();
+                    = ((PartsAddArrayAdapter) mCurrentListAdapter).getSelectedPartsList();
+                ArrayList<Integer> selectedPartsQuantity
+                        = ((PartsAddArrayAdapter) mCurrentListAdapter).getSelectedPartsQuantity();
                 resultIntent.putParcelableArrayListExtra(KEY_SELECTED_PARTS, selectedParts);
+                resultIntent.putExtra(KEY_PARTS_QUANTITY, selectedPartsQuantity);
                 setResult(RESULT_OK, resultIntent);
                 finish();
                 return true;
@@ -135,18 +150,52 @@ public class PartListActivity extends AppCompatActivity {
                 PartsArrayAdapter adapter = new PartsArrayAdapter(PartListActivity.this, mParts);
                 listView.setAdapter(adapter);
 
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
-                        intent.putExtra(PartSingleActivity.KEY_PART, mParts.get(position));
-                        startActivity(intent);
-                    }
-                });
+                if(mCurrentFlow == Flow.STANDARD) {
+                    listView.setOnItemClickListener(constructListenerForStandardFlow());
+                }
+                else if(mCurrentFlow == Flow.CHECKABLE) {
+                    listView.setOnItemClickListener(constructListenerForCheckable());
+                }
             } else {
                 onResume();
             }
         }
+    }
+
+    private AdapterView.OnItemClickListener constructListenerForStandardFlow() {
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(PartListActivity.this, PartSingleActivity.class);
+                intent.putExtra(PartSingleActivity.KEY_PART, mParts.get(position));
+                startActivity(intent);
+            }
+        };
+    }
+
+    private AdapterView.OnItemClickListener constructListenerForCheckable() {
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
+                LayoutInflater inflater = PartListActivity.this.getLayoutInflater();
+                final PartsAddArrayAdapter adapter = (PartsAddArrayAdapter) adapterView.getAdapter();
+                View dialogContent = inflater.inflate(R.layout.dialog_content_part_quantity, null);
+                final EditText editText = dialogContent.findViewById(R.id.etDialogPartQuantity);
+                editText.setText(String.format(Locale.ENGLISH, "%d", adapter.getQuantityForItem(position)));
+                AlertDialog.Builder builder = new AlertDialog.Builder(PartListActivity.this);
+                builder.setMessage("MOVE ME TO STRINGS.XML")
+                        .setView(dialogContent)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // TODO save
+                                adapter.setQuantityForItem(position, Integer.valueOf(editText.getText().toString()));
+                                adapter.notifyDataSetChanged();
+                            }
+                        })
+                        .show();
+            }
+        };
     }
 
     class PartsArrayAdapter extends ArrayAdapter<Part> {
@@ -177,30 +226,31 @@ public class PartListActivity extends AppCompatActivity {
     class PartsAddArrayAdapter extends ArrayAdapter<Part> {
 
         private Context mContext;
+        private Package mPackage;
         private ArrayList<Part> mParts;
-        private boolean[] mCheckArray;
+        private int[] mQuantityArray;
 
-        public PartsAddArrayAdapter(Context context, ArrayList<Part> objects) {
+        public PartsAddArrayAdapter(Context context, ArrayList<Part> objects, Package currentPackage) {
             super(context, R.layout.simple_checkbox_list_item_1, objects);
             mParts = objects;
             mContext = context;
-            mCheckArray = new boolean[mParts.size()];
-            initBoolArray();
+            mPackage = currentPackage;
+            mQuantityArray = new int[mParts.size()];
+            initIntArray();
         }
 
-        private void initBoolArray() {
-            ArrayList <Part> partsToCheck = getIntent().getParcelableArrayListExtra(PackageModifyActivity.KEY_CHECK_PARTS);
-            if(partsToCheck == null) {
-                Toast.makeText(PartListActivity.this, "dupa", Toast.LENGTH_SHORT).show();
-                for (int i = 0; i < mCheckArray.length; i++) {
-                    mCheckArray[i] = false;
+        private void initIntArray() {
+            ArrayList<Part> partsToSetText = getIntent().getParcelableArrayListExtra(PackageModifyActivity.KEY_CHECK_PARTS);
+            if(partsToSetText == null) {
+                for (int i = 0; i < mQuantityArray.length; i++){
+                    mQuantityArray[i] = 0;
                 }
             } else {
-                for (int i = 0; i < mCheckArray.length; i++) {
-                    if(partsToCheck.contains(mParts.get(i)))                     {
-                        mCheckArray [i] = true;
+                for(int i = 0; i < mQuantityArray.length; i++){
+                    if(partsToSetText.contains(mParts.get(i))) {
+                        mQuantityArray[i] = mDb.countPartsInPackage(mPackage, mParts.get(i));
                     } else {
-                        mCheckArray[i] = false;
+                        mQuantityArray[i] = 0;
                     }
                 }
             }
@@ -209,30 +259,46 @@ public class PartListActivity extends AppCompatActivity {
         @NonNull
         @Override
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.simple_checkbox_list_item_1, null);
-            CheckBox checkBox = convertView.findViewById(R.id.checkbox);
-            checkBox.setChecked(mCheckArray[position]);
-            checkBox.setText((mParts.get(position).getName()));
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    CheckBox cb = view.findViewById(R.id.checkbox);
-                    cb.toggle();
-                    mCheckArray[position] = cb.isChecked();
-                }
-            });
+            convertView = inflater.inflate(R.layout.simple_edit_text_list_item_1, null);
+
+            EditText editText = convertView.findViewById(R.id.etPartQuantity);
+            TextView textView = convertView.findViewById(R.id.partName);
+
+            editText.setText(String.format(Locale.ENGLISH, "%d", mQuantityArray[position]));
+            textView.setText((mParts.get(position).getName()));
+
             return convertView;
         }
 
+
         public ArrayList<Part> getSelectedPartsList() {
             ArrayList<Part> selectedPartsList = new ArrayList<>();
-            for(int i = 0; i < mCheckArray.length; i++) {
-                if(mCheckArray[i]) {
+            for(int i = 0; i < mQuantityArray.length; i++){
+                if(mQuantityArray[i] > 0) {
                     selectedPartsList.add(mParts.get(i));
                 }
             }
             return selectedPartsList;
+        }
+
+        public ArrayList<Integer> getSelectedPartsQuantity() {
+            ArrayList<Integer> selectedPartsQuantity = new ArrayList<>();
+            for(int i = 0; i < mQuantityArray.length; i++){
+                if(mQuantityArray[i] > 0) {
+                    selectedPartsQuantity.add(mQuantityArray[i]);
+                }
+            }
+            return selectedPartsQuantity;
+        }
+
+        void setQuantityForItem(int position, int quantity) {
+            mQuantityArray[position] = quantity;
+        }
+
+        int getQuantityForItem(int position) {
+            return mQuantityArray[position];
         }
     }
 }

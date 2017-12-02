@@ -623,23 +623,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // else do nothing
     }
 
-    public void addPackageParts(@NonNull Package fromPackage, @Nullable List<Part> parts) {
+    public void addPackageParts(@NonNull Package fromPackage, @Nullable List<Part> parts, List<Integer> quantity) {
         if(parts != null && parts.size() > 0) {
             SQLiteDatabase db = this.getWritableDatabase();
             db.beginTransaction();
+            int i = 0;
             for(Part singlePart : parts) {
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(TPackagePart.PACKAGE_ID, fromPackage.getId());
                 contentValues.put(TPackagePart.PART_ID, singlePart.getId());
-                contentValues.put(TPackagePart.QUANTITY, 1);
+                contentValues.put(TPackagePart.QUANTITY, quantity.get(i));
                 db.insert(TPackagePart.TNAME, null, contentValues);
+                i++;
             }
             db.setTransactionSuccessful();
             db.endTransaction();
         }
     }
 
-    public int countParts(int partId){
+    public int countPartsInPackage(Package givenPackage, Part part) {
+        int count = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String queryString = " SELECT " + TPackagePart.QUANTITY
+                + " FROM " + TPackagePart.TNAME
+                + " WHERE " + TPackagePart.PART_ID + " = ? "
+                + " AND " + TPackagePart.PACKAGE_ID + " = ?";
+        Cursor cursor = db.rawQuery(queryString
+                , new String[]{ Integer.toString(givenPackage.getId()), Integer.toString(part.getId()) });
+        if(cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            count = cursor.getInt(cursor.getColumnIndex(TPackagePart.QUANTITY));
+        }
+        cursor.close();
+        return count;
+    }
+
+    public int countAllPartsInWarehouse(int partId){
         int count = 0;
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -653,6 +672,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while(cursor.moveToNext()){
             count += cursor.getInt(piQuantity);
         }
+        cursor.close();
         return count;
     }
 }

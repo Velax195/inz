@@ -145,6 +145,6 @@ public class PartSingleActivity extends AppCompatActivity {
         tvAdditionalInfo.setText(mCurrentPart.getAdditionalInfo() == DatabaseHelper.DEFAULT_STRING
                 ? DatabaseHelper.NULL_VAL
                 : mCurrentPart.getAdditionalInfo());
-        tvQuantity.setText(Integer.toString(mDb.countParts(mCurrentPart.getId())));
+        tvQuantity.setText(Integer.toString(mDb.countAllPartsInWarehouse(mCurrentPart.getId())));
     }
 }

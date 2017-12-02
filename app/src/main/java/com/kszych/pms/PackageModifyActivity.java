@@ -134,6 +134,7 @@ public class PackageModifyActivity extends AppCompatActivity {
                     mDb.addPackage(mNewPackage);
                     mCurrentPackage = mDb.getPackageByRFID(scannedID);
                 }
+                intent.putExtra(PartListActivity.KEY_INCOMING_PACKAGE, mCurrentPackage);
                 startActivityForResult(intent, REQUEST_CODE_ADD_PARTS);
             }
         });
@@ -212,10 +213,31 @@ public class PackageModifyActivity extends AppCompatActivity {
         }
     }
 
-    private void updatePartsPackageDatabase(ArrayList<Part> oldList, ArrayList<Part> newList) {
+//    private void updatePartsPackageDatabase(ArrayList<Part> oldList, ArrayList<Part> newList) {
+//        ArrayList<Part> partsToRemove = new ArrayList<>();
+//        if(oldList == null) {
+//            mDb.addPackageParts(mCurrentPackage, newList, 1);
+//        } else {
+//            for (Part singleOldPart : oldList) {
+//                if (newList.contains(singleOldPart)) {
+//                    partsToRemove.add(singleOldPart);
+//                }
+//            }
+//
+//            for (Part singlePartToRemove : partsToRemove) {
+//                oldList.remove(singlePartToRemove);
+//                newList.remove(singlePartToRemove);
+//            }
+//
+//            mDb.deletePackageParts(mCurrentPackage, oldList);
+//            mDb.addPackageParts(mCurrentPackage, newList, 1);
+//        }
+//    }
+
+    private void updatePartsPackageDatabase(ArrayList<Part> oldList, ArrayList<Part> newList, ArrayList<Integer> partsQuantity) {
         ArrayList<Part> partsToRemove = new ArrayList<>();
         if(oldList == null) {
-            mDb.addPackageParts(mCurrentPackage, newList);
+            mDb.addPackageParts(mCurrentPackage, newList, partsQuantity);
         } else {
             for (Part singleOldPart : oldList) {
                 if (newList.contains(singleOldPart)) {
@@ -229,7 +251,7 @@ public class PackageModifyActivity extends AppCompatActivity {
             }
 
             mDb.deletePackageParts(mCurrentPackage, oldList);
-            mDb.addPackageParts(mCurrentPackage, newList);
+            mDb.addPackageParts(mCurrentPackage, newList, partsQuantity);
         }
     }
 
@@ -242,7 +264,8 @@ public class PackageModifyActivity extends AppCompatActivity {
                 }
                 else {
                     ArrayList<Part> newParts = data.getParcelableArrayListExtra(PartListActivity.KEY_SELECTED_PARTS);
-                    updatePartsPackageDatabase(mCurrentParts, newParts);
+                    ArrayList<Integer> partsQuantity = data.getExtras().getIntegerArrayList(PartListActivity.KEY_PARTS_QUANTITY);
+                    updatePartsPackageDatabase(mCurrentParts, newParts, partsQuantity);
                     mCurrentParts = mDb.getPartsInPackage(mCurrentPackage);
                 }
 
