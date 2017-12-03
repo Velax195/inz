@@ -188,4 +188,9 @@ public class Package implements Parcelable {
             return new Package[size];
         }
     };
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Package && ((Package) obj).getId() == this.getId();
+    }
 }

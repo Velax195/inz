@@ -1,5 +1,6 @@
 package com.kszych.pms;
 
+import android.content.Intent;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class TestActivity extends AppCompatActivity {
     Button btOFF;
     Button btTimer;
     Button btDatabase;
+    Button btOrder;
     TextView tvData;
     String ip = "http://192.168.0.14";
 
@@ -40,15 +42,17 @@ public class TestActivity extends AppCompatActivity {
 
         btON = findViewById(R.id.btON);
         btOFF = findViewById(R.id.btOFF);
-        btTimer =  findViewById(R.id.btTimer);
+        btTimer = findViewById(R.id.btTimer);
         tvData = findViewById(R.id.data);
-        btDatabase=findViewById(R.id.btDatabase);
+        btDatabase = findViewById(R.id.btDatabase);
+        btOrder = findViewById(R.id.btTestExecuteOrder);
 
 
         btON.setOnClickListener(myListener);
         btOFF.setOnClickListener(myListener);
         btTimer.setOnClickListener(myListener);
         btDatabase.setOnClickListener(myListener);
+        btOrder.setOnClickListener(myListener);
     }
 
 
@@ -68,8 +72,11 @@ public class TestActivity extends AppCompatActivity {
                 DatabaseHelper mDb = DatabaseHelper.getInstance(TestActivity.this);
                 mDb.createTestDatabase();
                 onBackPressed();
-             }
-            else {
+            } else if (view == btOrder) {
+                message = "";
+                Intent intent = new Intent(TestActivity.this, OrderExecuteActivity.class);
+                startActivity(intent);
+            } else {
                 message = null;
             }
             btON.setEnabled(false);

@@ -24,7 +24,7 @@ public class ScanRFIDActivity extends AppCompatActivity {
     private static final String REQUEST_TAG = "ScannerRequest";
     public static final String FROM_ACTIVITY = "FromActivity";
 
-    String mRequestURL = "http://192.168.0.1/scaner";
+    String mRequestURL = "http://192.168.0.14/scaner";
     Package mPackage;
     DatabaseHelper mDb = DatabaseHelper.getInstance(this);
     private RequestQueue mRequestQueue;
@@ -92,7 +92,6 @@ public class ScanRFIDActivity extends AppCompatActivity {
         String previousActivity = getIntent().getStringExtra(FROM_ACTIVITY);
         if (previousActivity.equals(getResources().getString(R.string.menuActivityName))) {
             if(mPackage == null) {
-                // TODO toast and back
                 Toast.makeText(ScanRFIDActivity.this, "Not in database", Toast.LENGTH_SHORT).show();
                 onBackPressed();
             }

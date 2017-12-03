@@ -160,7 +160,7 @@ public class PackageModifyActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (mCurrentPackage==null) {
+                if (mCurrentPackage!=null) {
                     Package mNewPackage = new Package(
                             mCurrentPackage.getId(),
                             mCurrentPackage.getRfidTag(),

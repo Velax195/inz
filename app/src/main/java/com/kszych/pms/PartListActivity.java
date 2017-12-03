@@ -188,7 +188,6 @@ public class PartListActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                // TODO save
                                 adapter.setQuantityForItem(position, Integer.valueOf(editText.getText().toString()));
                                 adapter.notifyDataSetChanged();
                             }

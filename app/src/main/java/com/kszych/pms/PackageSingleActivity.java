@@ -49,6 +49,8 @@ public class PackageSingleActivity extends AppCompatActivity {
         }
 
         setTitle(getString(R.string.activity_name_single_package, mCurrentPackage.getId()));
+        Toast.makeText(this, "d" + mCurrentPackage.getRfidTag() + "b", Toast.LENGTH_SHORT).show();
+
 
         Button btnModify = findViewById(R.id.singlePackageModify);
         Button btnDelete = findViewById(R.id.singlePackageDelete);
