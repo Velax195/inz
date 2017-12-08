@@ -38,6 +38,7 @@ public class OrderExecuteActivity extends AppCompatActivity {
     String mRequestURL = "http://192.168.0.14/scaner";
     private RequestQueue mRequestQueue;
     private boolean[] mCheckArray;
+    PackagesArrayAdapter mAdapter;
 
 
     @Override
@@ -53,10 +54,12 @@ public class OrderExecuteActivity extends AppCompatActivity {
         ListView lvPackagesToExecute = findViewById(R.id.lvPackagesToExecute);
 
         tvHowManyLeft.setText(String.format(Locale.ENGLISH, "%d", mPackagesArray.size()));
-        PackagesArrayAdapter adapter = new PackagesArrayAdapter(OrderExecuteActivity.this, mPackagesArray);
-        lvPackagesToExecute.setAdapter(adapter);
+        mAdapter = new PackagesArrayAdapter(OrderExecuteActivity.this, mPackagesArray);
+        lvPackagesToExecute.setAdapter(mAdapter);
 
         mRequestQueue = Volley.newRequestQueue(this);
+        android.os.SystemClock.sleep(100);
+
     }
 
     @Override
@@ -96,6 +99,16 @@ public class OrderExecuteActivity extends AppCompatActivity {
             checkbox.setText(mPackages.get(position).getRfidTag());
 
             return convertView;
+        }
+
+        @Override
+        public void notifyDataSetChanged() {
+            super.notifyDataSetChanged();
+            for (int i = 0; i < mPackages.size(); i++){
+                CheckBox checkbox = findViewById(R.id.checkbox);
+                checkbox.setChecked(mCheckArray[i]);
+                checkbox.setText(mPackages.get(i).getRfidTag());
+            }
         }
     }
 
@@ -143,6 +156,7 @@ public class OrderExecuteActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(OrderExecuteActivity.this, "Take this package", Toast.LENGTH_SHORT).show();
                 mCheckArray[mPackagesArray.indexOf(mScannedPackage)] = true;
+                mAdapter.notifyDataSetChanged();
                 isFinished();
                 onResume();
                 //TODO change checkViev
@@ -161,4 +175,5 @@ public class OrderExecuteActivity extends AppCompatActivity {
             Intent intent = new Intent(OrderExecuteActivity.this, MenuActivity.class);
             startActivity(intent);
     }
+
 }
