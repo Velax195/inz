@@ -22,6 +22,8 @@ import com.kszych.pms.utils.Part;
 
 import java.util.ArrayList;
 
+//TODO show part in package quantity next to name
+
 public class PackageSingleActivity extends AppCompatActivity {
 
     public static final String KEY_PACKAGE = "incoming_package";

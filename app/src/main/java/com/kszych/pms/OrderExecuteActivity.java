@@ -23,33 +23,63 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.kszych.pms.utils.DatabaseHelper;
 import com.kszych.pms.utils.Package;
+import com.kszych.pms.utils.Part;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class OrderExecuteActivity extends AppCompatActivity {
 
-    private ArrayList<Package> mPackagesArray = new ArrayList<>();
-    private DatabaseHelper mDb = DatabaseHelper.getInstance(this);
-    Package mScannedPackage;
     public static final String DEFAULT_RESPOND_MESSAGE = "CARD_NOT_PRESENT";
     public static final String NOT_READABLE_RESPOND_MESSAGE = "CARD_NOT_READABLE";
     private static final String REQUEST_TAG = "ScannerRequest";
+    Package mScannedPackage;
     String mRequestURL = "http://192.168.0.14/scaner";
+    PackagesArrayAdapter mAdapter;
+    private ArrayList<Package> mPackagesArray; // = new ArrayList<>();
+    private DatabaseHelper mDb = DatabaseHelper.getInstance(this);
     private RequestQueue mRequestQueue;
     private boolean[] mCheckArray;
-    PackagesArrayAdapter mAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_execute);
 
-        mPackagesArray.add(mDb.getPackageByRFID(" 85 32 ba 51"));
-        mPackagesArray.add(mDb.getPackageByRFID(" e2 2d a1 d5"));
-        mPackagesArray.add(mDb.getPackageByRFID(" 04 f1 74 a2 3e 3e 80"));
+        boolean isEnough = true;
+        ArrayList<Part> partsInOrder = new ArrayList<>();
+        partsInOrder.add(mDb.getPartByName("ołówek"));
+        partsInOrder.add(mDb.getPartByName("długopis"));
+        partsInOrder.add(mDb.getPartByName("pędzel"));
+        partsInOrder.add(mDb.getPartByName("kartka"));
+        partsInOrder.add(mDb.getPartByName("linijka"));
+        int[] quantity = {20, 10, 30, 50, 10};
 
+
+
+
+        int[] isEnoughParts = mDb.isEnoughParts(partsInOrder, quantity.clone());
+        for (int i = 0; i < isEnoughParts.length; i++) {
+            if (isEnoughParts[i] > 0) {
+                Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
+                isEnough = false;
+            }
+        }
+        if (isEnough) {
+            for (int i = 0; i < partsInOrder.size(); i++) {
+                Toast.makeText(this, partsInOrder.get(i).getName() +
+                        " " + Integer.toString(quantity[i]), Toast.LENGTH_SHORT).show();
+            }
+
+            mPackagesArray = mDb.getPackagesInOrder(partsInOrder, quantity);
+        } else {
+            mPackagesArray = new ArrayList<>();
+
+            mPackagesArray.add(mDb.getPackageByRFID(" 85 32 ba 51"));
+            mPackagesArray.add(mDb.getPackageByRFID(" e2 2d a1 d5"));
+            mPackagesArray.add(mDb.getPackageByRFID(" 04 f1 74 a2 3e 3e 80"));
+
+        }
         TextView tvHowManyLeft = findViewById(R.id.tvHowManyLeft);
         ListView lvPackagesToExecute = findViewById(R.id.lvPackagesToExecute);
 
@@ -66,6 +96,70 @@ public class OrderExecuteActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         sendRequest();
+    }
+
+    private void sendRequest() {
+        StringRequest request = new StringRequest(Request.Method.GET, mRequestURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (isDefaultMessage(response)) {
+                    sendRequest();
+                } else {
+                    String[] uids = response.split("\n");
+                    cardIsRead(uids[0]);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                sendRequest();
+            }
+        });
+        request.setShouldCache(false).setTag(REQUEST_TAG);
+        mRequestQueue.add(request);
+    }
+
+    public boolean isDefaultMessage(String response) {
+        if (response.equals(ScanRFIDActivity.DEFAULT_RESPOND_MESSAGE)) {
+            //loop
+        } else if (response.equals(ScanRFIDActivity.NOT_READABLE_RESPOND_MESSAGE)) {
+
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    private void cardIsRead(final String uidHex) {
+        mScannedPackage = mDb.getPackageByRFID(uidHex);
+        if (mScannedPackage == null) {
+            Toast.makeText(OrderExecuteActivity.this, "Not in database", Toast.LENGTH_SHORT).show();
+            onResume();
+        } else {
+            if (mPackagesArray.indexOf(mScannedPackage) == -1) {
+                Toast.makeText(OrderExecuteActivity.this, "Not in order", Toast.LENGTH_SHORT).show();
+                onResume();
+            } else {
+                Toast.makeText(OrderExecuteActivity.this, "Take this package", Toast.LENGTH_SHORT).show();
+                mCheckArray[mPackagesArray.indexOf(mScannedPackage)] = true;
+                mAdapter.notifyDataSetChanged();
+                isFinished();
+                onResume();
+                //TODO change checkViev
+                //TODO single toast pls
+            }
+        }
+    }
+
+    void isFinished() {
+        for (int i = 0; i < mCheckArray.length; i++) {
+            if (!mCheckArray[i]) {
+                return;
+            }
+        }
+        Toast.makeText(OrderExecuteActivity.this, "Order completed", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(OrderExecuteActivity.this, MenuActivity.class);
+        startActivity(intent);
     }
 
     class PackagesArrayAdapter extends ArrayAdapter<Package> {
@@ -104,76 +198,12 @@ public class OrderExecuteActivity extends AppCompatActivity {
         @Override
         public void notifyDataSetChanged() {
             super.notifyDataSetChanged();
-            for (int i = 0; i < mPackages.size(); i++){
+            for (int i = 0; i < mPackages.size(); i++) {
                 CheckBox checkbox = findViewById(R.id.checkbox);
                 checkbox.setChecked(mCheckArray[i]);
                 checkbox.setText(mPackages.get(i).getRfidTag());
             }
         }
-    }
-
-    private void sendRequest() {
-        StringRequest request = new StringRequest(Request.Method.GET, mRequestURL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (isDefaultMessage(response)) {
-                    sendRequest();
-                } else {
-                    String[] uids = response.split("\n");
-                    cardIsRead(uids[0]);
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                sendRequest();
-            }
-        });
-        request.setShouldCache(false).setTag(REQUEST_TAG);
-        mRequestQueue.add(request);
-    }
-
-    public boolean isDefaultMessage(String response) {
-        if(response.equals(ScanRFIDActivity.DEFAULT_RESPOND_MESSAGE)) {
-            //loop
-        } else if(response.equals(ScanRFIDActivity.NOT_READABLE_RESPOND_MESSAGE)) {
-
-        } else {
-            return false;
-        }
-        return true;
-    }
-
-    private  void cardIsRead(final String uidHex) {
-        mScannedPackage = mDb.getPackageByRFID(uidHex);
-        if(mScannedPackage == null) {
-            Toast.makeText(OrderExecuteActivity.this, "Not in database", Toast.LENGTH_SHORT).show();
-            onResume();
-        } else {
-            if (mPackagesArray.indexOf(mScannedPackage) == -1) {
-                Toast.makeText(OrderExecuteActivity.this, "Not in order", Toast.LENGTH_SHORT).show();
-                onResume();
-            } else {
-                Toast.makeText(OrderExecuteActivity.this, "Take this package", Toast.LENGTH_SHORT).show();
-                mCheckArray[mPackagesArray.indexOf(mScannedPackage)] = true;
-                mAdapter.notifyDataSetChanged();
-                isFinished();
-                onResume();
-                //TODO change checkViev
-                //TODO single toast pls
-            }
-        }
-    }
-
-    void isFinished() {
-        for(int i = 0; i < mCheckArray.length; i++) {
-            if (!mCheckArray[i]) {
-                return;
-            }
-        }
-            Toast.makeText(OrderExecuteActivity.this, "Order completed", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(OrderExecuteActivity.this, MenuActivity.class);
-            startActivity(intent);
     }
 
 }

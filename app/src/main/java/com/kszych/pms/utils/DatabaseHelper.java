@@ -63,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         final static String QUANTITY = "quantity";
     }
 
-    public static class TClient{
+    public static class TClient {
         public final static String TNAME = "Client";
 
         final static String ID = "ID";
@@ -75,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         final static String ADDITIONAL_INFO = "additionalInfo";
     }
 
-    public static class TOrder{
+    public static class TOrder {
         public final static String TNAME = "OrderTable";
 
         final static String ID = "ID";
@@ -86,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         final static String ADDITIONAL_INFO = "additionalInfo";
     }
 
-    public static class TPartInOrder{
+    public static class TPartInOrder {
         public final static String TNAME = "PartInOrder";
 
         final static String ID = "ID";
@@ -274,27 +274,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Part> searchParts(Part filteredPart) {
         String querry = "SELECT * FROM " + TPart.TNAME + " WHERE ";
         String temp = null;
-        temp = appendQuerryFromString(temp ,TPart.NAME, filteredPart.getName());
+        temp = appendQuerryFromString(temp, TPart.NAME, filteredPart.getName());
         querry += temp;
-        temp = appendQuerryFromString(temp ,TPart.BUY_URL, filteredPart.getBuyUrl());
+        temp = appendQuerryFromString(temp, TPart.BUY_URL, filteredPart.getBuyUrl());
         querry += temp;
-        temp = appendQuerryFromDouble(temp ,TPart.PRICE, filteredPart.getPrice());
+        temp = appendQuerryFromDouble(temp, TPart.PRICE, filteredPart.getPrice());
         querry += temp;
-        temp = appendQuerryFromString(temp ,TPart.PRODUCER_NAME, filteredPart.getProducerName());
+        temp = appendQuerryFromString(temp, TPart.PRODUCER_NAME, filteredPart.getProducerName());
         querry += temp;
-        temp = appendQuerryFromString(temp ,TPart.ADDITIONAL_INFO, filteredPart.getAdditionalInfo());
+        temp = appendQuerryFromString(temp, TPart.ADDITIONAL_INFO, filteredPart.getAdditionalInfo());
         querry += temp;
 
         return getPartsByQuery(querry, null);
     }
 
-    private String appendQuerryFromString(String previous ,String name, String value){
+    private String appendQuerryFromString(String previous, String name, String value) {
         String string = "";
-        if (value == DEFAULT_STRING || value.matches("")){
+        if (value == DEFAULT_STRING || value.matches("")) {
             return string;
         } else {
-            if(previous != null)
-            {
+            if (previous != null) {
                 string += " OR ";
             }
             string += name + " LIKE " + "'%" + value + "%' ";
@@ -302,20 +301,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return string;
     }
 
-    private String appendQuerryFromDouble(String previous ,String name, Double value){
+    private String appendQuerryFromDouble(String previous, String name, Double value) {
         String string = "";
-        if (value == DEFAULT_REAL){
+        if (value == DEFAULT_REAL) {
             return string;
         } else {
-            if(previous == null)
-            {
+            if (previous == null) {
                 string += " OR ";
             }
             string += name + " LIKE " + Double.toString(value) + " ";
         }
         return string;
     }
-
 
 
     private ArrayList<Package> getPackagesByQuery(String query, String[] queryArgs) {
@@ -392,6 +389,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String queryString = "SELECT * FROM " + TPackage.TNAME
                 + " WHERE " + TPackage.RFID_TAG + " = ?";
         ArrayList<Package> foundPackages = getPackagesByQuery(queryString, new String[]{scannedRFID});
+
+        return foundPackages.size() == 0 ? null : foundPackages.get(0);
+    }
+
+    public Package getPackageByID(int ID) {
+
+        String queryString = "SELECT * FROM " + TPackage.TNAME
+                + " WHERE " + TPackage.ID + " = ?";
+        ArrayList<Package> foundPackages = getPackagesByQuery(queryString, new String[]{Integer.toString(ID)});
 
         return foundPackages.size() == 0 ? null : foundPackages.get(0);
     }
@@ -607,7 +613,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void deletePackageParts(@NonNull Package fromPackage, @Nullable List<Part> parts) {
-        if(parts != null && parts.size() > 0) {
+        if (parts != null && parts.size() > 0) {
             SQLiteDatabase db = this.getWritableDatabase();
             StringBuilder builder = new StringBuilder();
             for (Part singlePart : parts) {
@@ -618,17 +624,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TPackagePart.TNAME
                     , TPackagePart.PACKAGE_ID + "=? " +
                             "AND " + TPackagePart.PART_ID + " IN (" + builder.toString() + ")"
-                    , new String[]{ String.valueOf(fromPackage.getId()) } );
+                    , new String[]{String.valueOf(fromPackage.getId())});
         }
         // else do nothing
     }
 
     public void addPackageParts(@NonNull Package fromPackage, @Nullable List<Part> parts, List<Integer> quantity) {
-        if(parts != null && parts.size() > 0) {
+        if (parts != null && parts.size() > 0) {
             SQLiteDatabase db = this.getWritableDatabase();
             db.beginTransaction();
             int i = 0;
-            for(Part singlePart : parts) {
+            for (Part singlePart : parts) {
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(TPackagePart.PACKAGE_ID, fromPackage.getId());
                 contentValues.put(TPackagePart.PART_ID, singlePart.getId());
@@ -649,8 +655,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " WHERE " + TPackagePart.PART_ID + " = ? "
                 + " AND " + TPackagePart.PACKAGE_ID + " = ?";
         Cursor cursor = db.rawQuery(queryString
-                , new String[]{ Integer.toString(givenPackage.getId()), Integer.toString(part.getId()) });
-        if(cursor.getCount() > 0) {
+                , new String[]{Integer.toString(givenPackage.getId()), Integer.toString(part.getId())});
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             count = cursor.getInt(cursor.getColumnIndex(TPackagePart.QUANTITY));
         }
@@ -658,7 +664,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    public int countAllPartsInWarehouse(int partId){
+    public int countAllPartsInWarehouse(int partId) {
         int count = 0;
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -669,11 +675,164 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(queryString, new String[]{Integer.toString(partId)});
         int piQuantity = cursor.getColumnIndex(TPackagePart.QUANTITY);
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             count += cursor.getInt(piQuantity);
         }
         cursor.close();
         return count;
+    }
+
+    public int[] isEnoughParts(ArrayList<Part> parts, int[] quantity) {
+
+        for (int i = 0; i < parts.size(); i++) {
+            quantity[i] -= countAllPartsInWarehouse(parts.get(i).getId());
+        }
+        return quantity;
+    }
+
+    private Package getPackageContainingPartsExactly(Part part, int quantity, ArrayList<Package> alreadyInOrder) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Package packageToReturn;
+
+        String queryString = " SELECT " + TPackagePart.PACKAGE_ID
+                + ", " + TPackagePart.QUANTITY
+                + " FROM " + TPackagePart.TNAME
+                + " WHERE " + TPackagePart.PART_ID + " = ? ";
+        Cursor cursor = db.rawQuery(queryString
+                , new String[]{Integer.toString(part.getId())});
+
+        int piQuantity = cursor.getColumnIndex(TPackagePart.QUANTITY);
+        int piPackageId = cursor.getColumnIndex(TPackagePart.PACKAGE_ID);
+
+        while (cursor.moveToNext()) {
+            if (cursor.getInt(piQuantity) == quantity
+                    && !alreadyInOrder.contains(getPackageByID(cursor.getInt(piPackageId)))) {
+                packageToReturn = getPackageByID(cursor.getInt(piPackageId));
+                cursor.close();
+                return packageToReturn;
+            }
+        }
+
+        cursor.close();
+        return null;
+    }
+
+    private Package getPackageContainingPartsGreater(Part part, int quantity, ArrayList<Package> alreadyInOrder) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Package packageToReturn;
+
+        String queryString = " SELECT " + TPackagePart.PACKAGE_ID
+                + ", " + TPackagePart.QUANTITY
+                + " FROM " + TPackagePart.TNAME
+                + " WHERE " + TPackagePart.PART_ID + " = ? ";
+        Cursor cursor = db.rawQuery(queryString
+                , new String[]{Integer.toString(part.getId())});
+
+        int piQuantity = cursor.getColumnIndex(TPackagePart.QUANTITY);
+        int piPackageId = cursor.getColumnIndex(TPackagePart.PACKAGE_ID);
+
+
+        while (cursor.moveToNext()) {
+            if (cursor.getInt(piQuantity) > quantity
+                    && !alreadyInOrder.contains(getPackageByID(cursor.getInt(piPackageId)))) {
+                packageToReturn = getPackageByID(cursor.getInt(piPackageId));
+                cursor.close();
+                return packageToReturn;
+            }
+        }
+
+        cursor.close();
+        return null;
+    }
+
+    private Package getPackageContainingPartsLess(Part part, ArrayList<Package> alreadyInOrder) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Package packageToReturn = null;
+        int quantity = 0;
+
+        String queryString = " SELECT " + TPackagePart.PACKAGE_ID
+                + ", " + TPackagePart.QUANTITY
+                + " FROM " + TPackagePart.TNAME
+                + " WHERE " + TPackagePart.PART_ID + " = ? ";
+        Cursor cursor = db.rawQuery(queryString
+                , new String[]{Integer.toString(part.getId())});
+
+        int piQuantity = cursor.getColumnIndex(TPackagePart.QUANTITY);
+        int piPackageId = cursor.getColumnIndex(TPackagePart.PACKAGE_ID);
+
+        while (cursor.moveToNext()) {
+            if (cursor.getInt(piQuantity) > quantity
+                    && !alreadyInOrder.contains(getPackageByID(cursor.getInt(piPackageId)))) {
+                packageToReturn = getPackageByID(cursor.getInt(piPackageId));
+                quantity = cursor.getInt(piQuantity);
+            }
+        }
+
+        cursor.close();
+        return packageToReturn;
+    }
+
+
+    public ArrayList<Package> getPackagesInOrder(ArrayList<Part> parts, int[] quantity) {
+
+        ArrayList<Package> packagesInOrder = new ArrayList<>();
+        ArrayList<Part> partsInCurrentPackage;
+        Package currentPackage;
+        int index;
+        boolean isFinished = false;
+
+        while (!isFinished) {
+            for (int i = 0; i < parts.size(); i++) {
+
+                if (quantity[i] > 0) {
+                    currentPackage = getPackageContainingPartsExactly(parts.get(i), quantity[i], packagesInOrder);
+                    if (currentPackage != null) {
+                        packagesInOrder.add(currentPackage);
+                        partsInCurrentPackage = getPartsInPackage(currentPackage);
+                        for (int j = 0; j < partsInCurrentPackage.size(); j++) {
+                            index = parts.indexOf(partsInCurrentPackage.get(j));
+                            if (index != -1) {
+                                quantity[index] -= countPartsInPackage(currentPackage, partsInCurrentPackage.get(j));
+                            }
+                        }
+                    } else {
+                        currentPackage = getPackageContainingPartsGreater(parts.get(i), quantity[i], packagesInOrder);
+                        if (currentPackage != null) {
+                            packagesInOrder.add(currentPackage);
+                            partsInCurrentPackage = getPartsInPackage(currentPackage);
+                            for (int j = 0; j < partsInCurrentPackage.size(); j++) {
+                                index = parts.indexOf(partsInCurrentPackage.get(j));
+                                if (index != -1) {
+                                    quantity[index] -= countPartsInPackage(currentPackage, partsInCurrentPackage.get(j));
+                                }
+                            }
+                        } else {
+                            currentPackage = getPackageContainingPartsLess(parts.get(i), packagesInOrder);
+                            if (currentPackage != null) {
+                                packagesInOrder.add(currentPackage);
+                                partsInCurrentPackage = getPartsInPackage(currentPackage);
+                                for (int j = 0; j < partsInCurrentPackage.size(); j++) {
+                                    index = parts.indexOf(partsInCurrentPackage.get(j));
+                                    if (index != -1) {
+                                        quantity[index] -= countPartsInPackage(currentPackage, partsInCurrentPackage.get(j));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            isFinished = true;
+            for (int i = 0; i < parts.size(); i++) {
+                if (quantity[i] > 0) {
+                    isFinished = false;
+                }
+            }
+        }
+        return packagesInOrder;
     }
 
 }
