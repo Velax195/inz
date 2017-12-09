@@ -34,7 +34,7 @@ public class ScanRFIDActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_rfid);
 
-        mRequestQueue = Volley.newRequestQueue(this);
+        mRequestQueue = Volley.newRequestQueue(getApplicationContext());
     }
 
     @Override
@@ -47,7 +47,12 @@ public class ScanRFIDActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if(mRequestQueue != null) {
-            mRequestQueue.cancelAll(REQUEST_TAG);
+            mRequestQueue.cancelAll(new RequestQueue.RequestFilter() {
+                @Override
+                public boolean apply(Request<?> request) {
+                    return request.getTag() != null && request.getTag().equals(REQUEST_TAG);
+                }
+            });
         }
     }
 

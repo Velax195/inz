@@ -3,6 +3,7 @@ package com.kszych.pms;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -86,8 +87,7 @@ public class OrderExecuteActivity extends AppCompatActivity {
         mAdapter = new PackagesArrayAdapter(OrderExecuteActivity.this, mPackagesArray);
         lvPackagesToExecute.setAdapter(mAdapter);
 
-        mRequestQueue = Volley.newRequestQueue(this);
-        android.os.SystemClock.sleep(100);
+        mRequestQueue = Volley.newRequestQueue(getApplicationContext());
 
     }
 
@@ -95,6 +95,19 @@ public class OrderExecuteActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         sendRequest();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mRequestQueue != null) {
+            mRequestQueue.cancelAll(new RequestQueue.RequestFilter() {
+                @Override
+                public boolean apply(Request<?> request) {
+                    return request.getTag() != null && request.getTag().equals(REQUEST_TAG);
+                }
+            });
+        }
     }
 
     private void sendRequest() {
@@ -133,21 +146,23 @@ public class OrderExecuteActivity extends AppCompatActivity {
         mScannedPackage = mDb.getPackageByRFID(uidHex);
         if (mScannedPackage == null) {
             Toast.makeText(OrderExecuteActivity.this, "Not in database", Toast.LENGTH_SHORT).show();
-            onResume();
         } else {
             if (mPackagesArray.indexOf(mScannedPackage) == -1) {
                 Toast.makeText(OrderExecuteActivity.this, "Not in order", Toast.LENGTH_SHORT).show();
-                onResume();
             } else {
                 Toast.makeText(OrderExecuteActivity.this, "Take this package", Toast.LENGTH_SHORT).show();
                 mCheckArray[mPackagesArray.indexOf(mScannedPackage)] = true;
                 mAdapter.notifyDataSetChanged();
                 isFinished();
-                onResume();
-                //TODO change checkViev
                 //TODO single toast pls
             }
         }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onResume();
+            }
+        }, 1000);
     }
 
     void isFinished() {
