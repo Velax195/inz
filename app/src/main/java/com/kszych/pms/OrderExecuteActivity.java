@@ -208,16 +208,6 @@ public class OrderExecuteActivity extends AppCompatActivity {
 
             return convertView;
         }
-
-        @Override
-        public void notifyDataSetChanged() {
-            super.notifyDataSetChanged();
-            for (int i = 0; i < mPackages.size(); i++) {
-                CheckBox checkbox = findViewById(R.id.checkbox);
-                checkbox.setChecked(mCheckArray[i]);
-                checkbox.setText(mPackages.get(i).getRfidTag());
-            }
-        }
     }
 
 }
