@@ -35,13 +35,12 @@ public class OrderExecuteActivity extends AppCompatActivity {
 
     private static final String TAG = OrderExecuteActivity.class.getSimpleName();
 
-    public static final String DEFAULT_RESPOND_MESSAGE = "CARD_NOT_PRESENT";
-    public static final String NOT_READABLE_RESPOND_MESSAGE = "CARD_NOT_READABLE";
+
     private static final String REQUEST_TAG = "ScannerRequest";
     Package mScannedPackage;
     String mRequestURL = "http://192.168.0.14/scaner";
     PackagesArrayAdapter mAdapter;
-    private ArrayList<Package> mPackagesArray; // = new ArrayList<>();
+    private ArrayList<Package> mPackagesArray;
     private DatabaseHelper mDb = DatabaseHelper.getInstance(this);
     private RequestQueue mRequestQueue;
     private boolean[] mCheckArray;
@@ -73,6 +72,7 @@ public class OrderExecuteActivity extends AppCompatActivity {
             mPackagesArray = mDb.getPackagesInOrder(partsInOrder);
 
         } else {
+            //TODO show missing parts
             mPackagesArray = new ArrayList<>();
 
             mPackagesArray.add(mDb.getPackageByRFID(" 85 32 ba 51"));

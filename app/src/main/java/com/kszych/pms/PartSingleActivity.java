@@ -21,6 +21,7 @@ import com.kszych.pms.utils.Package;
 import com.kszych.pms.utils.Part;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class PartSingleActivity extends AppCompatActivity {
 
@@ -41,6 +42,8 @@ public class PartSingleActivity extends AppCompatActivity {
 
             if(mCurrentPart == null) {
                 // TODO die panic etc
+                Toast.makeText(this, "PART IS NULLL WHAAAT TO DOOOOO", Toast.LENGTH_SHORT).show();
+                onBackPressed();
             }
             mPackagesOfPart = mDb.getPackagesContainingPart(mCurrentPart);
 
@@ -113,7 +116,9 @@ public class PartSingleActivity extends AppCompatActivity {
                 convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
             }
             TextView listItemText = convertView.findViewById(android.R.id.text1);
-            listItemText.setText(mPackages.get(position).getRfidTag());
+            String string = mDb.countPartsInPackage(mPackages.get(position), mCurrentPart)
+                    + " w " + mPackages.get(position).getRfidTag();
+            listItemText.setText(string);
 
             return convertView;
         }
@@ -145,6 +150,7 @@ public class PartSingleActivity extends AppCompatActivity {
         tvAdditionalInfo.setText(mCurrentPart.getAdditionalInfo() == DatabaseHelper.DEFAULT_STRING
                 ? DatabaseHelper.NULL_VAL
                 : mCurrentPart.getAdditionalInfo());
-        tvQuantity.setText(Integer.toString(mDb.countAllPartsInWarehouse(mCurrentPart.getId())));
+        tvQuantity.setText(String.format(Locale.ENGLISH, "%d",
+                mDb.countAllPartsInWarehouse(mCurrentPart.getId())));
     }
 }
