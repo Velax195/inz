@@ -51,8 +51,6 @@ public class PackageSingleActivity extends AppCompatActivity {
         }
 
         setTitle(getString(R.string.activity_name_single_package, mCurrentPackage.getId()));
-        Toast.makeText(this, "d" + mCurrentPackage.getRfidTag() + "b", Toast.LENGTH_SHORT).show();
-
 
         Button btnModify = findViewById(R.id.singlePackageModify);
         Button btnDelete = findViewById(R.id.singlePackageDelete);
@@ -118,7 +116,9 @@ public class PackageSingleActivity extends AppCompatActivity {
                 convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
             }
             TextView listItemText = convertView.findViewById(android.R.id.text1);
-            listItemText.setText(mParts.get(position).getName());
+            String builder = String.valueOf(mDb.countPartsInPackage(mCurrentPackage, mParts.get(position))) +
+                    " x " + mParts.get(position).getName();
+            listItemText.setText(builder);
 
             return convertView;
         }
