@@ -2,10 +2,10 @@ package com.kszych.pms;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +26,13 @@ import com.kszych.pms.utils.Package;
 import com.kszych.pms.utils.Part;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class OrderExecuteActivity extends AppCompatActivity {
+
+    private static final String TAG = OrderExecuteActivity.class.getSimpleName();
 
     public static final String DEFAULT_RESPOND_MESSAGE = "CARD_NOT_PRESENT";
     public static final String NOT_READABLE_RESPOND_MESSAGE = "CARD_NOT_READABLE";
@@ -47,31 +51,26 @@ public class OrderExecuteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_execute);
 
         boolean isEnough = true;
-        ArrayList<Part> partsInOrder = new ArrayList<>();
-        partsInOrder.add(mDb.getPartByName("ołówek"));
-        partsInOrder.add(mDb.getPartByName("długopis"));
-        partsInOrder.add(mDb.getPartByName("pędzel"));
-        partsInOrder.add(mDb.getPartByName("kartka"));
-        partsInOrder.add(mDb.getPartByName("linijka"));
-        int[] quantity = {20, 10, 30, 50, 10};
+
+        Map<Part, Integer> partsInOrder = new HashMap<>();
+        partsInOrder.put(mDb.getPartByName("ołówek"), 20);
+        partsInOrder.put(mDb.getPartByName("długopis"), 10);
+        partsInOrder.put(mDb.getPartByName("pędzel"), 30);
+        partsInOrder.put(mDb.getPartByName("kartka"), 50);
+        partsInOrder.put(mDb.getPartByName("linijka"), 10);
 
 
-
-
-        int[] isEnoughParts = mDb.isEnoughParts(partsInOrder, quantity.clone());
-        for (int i = 0; i < isEnoughParts.length; i++) {
-            if (isEnoughParts[i] > 0) {
+        Map<Part, Integer> filteredPartCounts = mDb.getPartsMissingFromDb(partsInOrder);
+        for(Map.Entry<Part, Integer> singleEntry : filteredPartCounts.entrySet()) {
+            if(singleEntry.getValue() > 0) {
                 Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
                 isEnough = false;
             }
         }
-        if (isEnough) {
-            for (int i = 0; i < partsInOrder.size(); i++) {
-                Toast.makeText(this, partsInOrder.get(i).getName() +
-                        " " + Integer.toString(quantity[i]), Toast.LENGTH_SHORT).show();
-            }
 
-            mPackagesArray = mDb.getPackagesInOrder(partsInOrder, quantity);
+        if (isEnough) {
+            mPackagesArray = mDb.getPackagesInOrder(partsInOrder);
+
         } else {
             mPackagesArray = new ArrayList<>();
 

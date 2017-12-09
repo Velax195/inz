@@ -42,4 +42,9 @@ public class PackagePart {
         helper.save(this);
     }
 
+    @Override
+    public int hashCode() {
+        return Integer.valueOf(this.getId()).hashCode();
+    }
+
 }

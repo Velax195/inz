@@ -2,7 +2,6 @@ package com.kszych.pms.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -10,11 +9,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     public static final int DATABASE_VERSION = 9;
     public static final String DATABASE_NAME = "DatabaseX.db";
@@ -655,7 +658,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " WHERE " + TPackagePart.PART_ID + " = ? "
                 + " AND " + TPackagePart.PACKAGE_ID + " = ?";
         Cursor cursor = db.rawQuery(queryString
-                , new String[]{Integer.toString(givenPackage.getId()), Integer.toString(part.getId())});
+                , new String[]{Integer.toString(part.getId()), Integer.toString(givenPackage.getId())});
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             count = cursor.getInt(cursor.getColumnIndex(TPackagePart.QUANTITY));
@@ -682,12 +685,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    public int[] isEnoughParts(ArrayList<Part> parts, int[] quantity) {
+    public Map<Part, Integer> getPartsMissingFromDb(Map<Part, Integer> partsInOrder) {
 
-        for (int i = 0; i < parts.size(); i++) {
-            quantity[i] -= countAllPartsInWarehouse(parts.get(i).getId());
+        Map<Part, Integer> retMap = new HashMap<>(partsInOrder);
+
+        for(Map.Entry<Part, Integer> singleEntry : retMap.entrySet()) {
+            retMap.put(singleEntry.getKey()
+                    , singleEntry.getValue() - countAllPartsInWarehouse(singleEntry.getKey().getId()));
         }
-        return quantity;
+
+        return retMap;
     }
 
     private Package getPackageContainingPartsExactly(Part part, int quantity, ArrayList<Package> alreadyInOrder) {
@@ -776,58 +783,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<Package> getPackagesInOrder(ArrayList<Part> parts, int[] quantity) {
+    public ArrayList<Package> getPackagesInOrder(Map<Part, Integer> packagesWithQuantities) {
 
         ArrayList<Package> packagesInOrder = new ArrayList<>();
         ArrayList<Part> partsInCurrentPackage;
         Package currentPackage;
-        int index;
         boolean isFinished = false;
 
         while (!isFinished) {
-            for (int i = 0; i < parts.size(); i++) {
+            Set<Map.Entry<Part, Integer>> testedSet = packagesWithQuantities.entrySet();
+            for (Map.Entry<Part, Integer> singleEntry : testedSet) {
 
-                if (quantity[i] > 0) {
-                    currentPackage = getPackageContainingPartsExactly(parts.get(i), quantity[i], packagesInOrder);
+                if (singleEntry.getValue() > 0) {
+                    currentPackage = getPackageContainingPartsExactly(singleEntry.getKey()
+                            , singleEntry.getValue(), packagesInOrder);
+                    if (currentPackage == null) {
+                        currentPackage = getPackageContainingPartsGreater(singleEntry.getKey()
+                                , singleEntry.getValue(), packagesInOrder);
+                        if (currentPackage == null) {
+                            currentPackage = getPackageContainingPartsLess(singleEntry.getKey()
+                                    , packagesInOrder);
+                        }
+                    }
+
                     if (currentPackage != null) {
                         packagesInOrder.add(currentPackage);
                         partsInCurrentPackage = getPartsInPackage(currentPackage);
-                        for (int j = 0; j < partsInCurrentPackage.size(); j++) {
-                            index = parts.indexOf(partsInCurrentPackage.get(j));
-                            if (index != -1) {
-                                quantity[index] -= countPartsInPackage(currentPackage, partsInCurrentPackage.get(j));
-                            }
-                        }
-                    } else {
-                        currentPackage = getPackageContainingPartsGreater(parts.get(i), quantity[i], packagesInOrder);
-                        if (currentPackage != null) {
-                            packagesInOrder.add(currentPackage);
-                            partsInCurrentPackage = getPartsInPackage(currentPackage);
-                            for (int j = 0; j < partsInCurrentPackage.size(); j++) {
-                                index = parts.indexOf(partsInCurrentPackage.get(j));
-                                if (index != -1) {
-                                    quantity[index] -= countPartsInPackage(currentPackage, partsInCurrentPackage.get(j));
-                                }
-                            }
-                        } else {
-                            currentPackage = getPackageContainingPartsLess(parts.get(i), packagesInOrder);
-                            if (currentPackage != null) {
-                                packagesInOrder.add(currentPackage);
-                                partsInCurrentPackage = getPartsInPackage(currentPackage);
-                                for (int j = 0; j < partsInCurrentPackage.size(); j++) {
-                                    index = parts.indexOf(partsInCurrentPackage.get(j));
-                                    if (index != -1) {
-                                        quantity[index] -= countPartsInPackage(currentPackage, partsInCurrentPackage.get(j));
-                                    }
-                                }
+                        for (Part singlePart : partsInCurrentPackage) {
+                            if (packagesWithQuantities.containsKey(singlePart)) {
+                                int partsInPackage = countPartsInPackage(currentPackage, singlePart);
+                                packagesWithQuantities.put(
+                                        singlePart
+                                        , packagesWithQuantities.get(singlePart)
+                                                - partsInPackage);
                             }
                         }
                     }
                 }
             }
             isFinished = true;
-            for (int i = 0; i < parts.size(); i++) {
-                if (quantity[i] > 0) {
+
+            for (Map.Entry<Part, Integer> singleEntry : packagesWithQuantities.entrySet()) {
+                if (singleEntry.getValue() > 0) {
                     isFinished = false;
                 }
             }

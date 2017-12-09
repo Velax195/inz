@@ -38,4 +38,8 @@ public class PartInOrder {
         return mQuantity;
     }
 
+    @Override
+    public int hashCode() {
+        return Integer.valueOf(this.getId()).hashCode();
+    }
 }

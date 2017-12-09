@@ -89,4 +89,9 @@ public class Order implements Parcelable{
             return new Order[size];
         }
     };
+
+    @Override
+    public int hashCode() {
+        return Integer.valueOf(this.getId()).hashCode();
+    }
 }

@@ -193,4 +193,9 @@ public class Package implements Parcelable {
     public boolean equals(Object obj) {
         return obj instanceof Package && ((Package) obj).getId() == this.getId();
     }
+
+    @Override
+    public int hashCode() {
+        return Integer.valueOf(this.getId()).hashCode();
+    }
 }

@@ -104,4 +104,9 @@ public class Client implements Parcelable {
     public boolean equals(Object obj) {
         return obj instanceof Client && ((Client) obj).getId() == this.getId();
     }
+
+    @Override
+    public int hashCode() {
+        return Integer.valueOf(this.getId()).hashCode();
+    }
 }
