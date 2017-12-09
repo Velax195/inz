@@ -171,6 +171,7 @@ public class OrderExecuteActivity extends AppCompatActivity {
                 return;
             }
         }
+        mAdapter.initBoolArray();
         Toast.makeText(OrderExecuteActivity.this, "Order completed", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(OrderExecuteActivity.this, MenuActivity.class);
         startActivity(intent);
@@ -188,7 +189,7 @@ public class OrderExecuteActivity extends AppCompatActivity {
             initBoolArray();
         }
 
-        void initBoolArray() {
+        public void initBoolArray() {
             mCheckArray = new boolean[mPackages.size()];
             for (int i = 0; i < mPackages.size(); i++) {
                 mCheckArray[i] = false;
@@ -203,6 +204,7 @@ public class OrderExecuteActivity extends AppCompatActivity {
                 convertView = inflater.inflate(R.layout.simple_checkbox_list_item_1, null);
             }
             CheckBox checkbox = convertView.findViewById(R.id.checkbox);
+            checkbox.setClickable(false);
             checkbox.setChecked(mCheckArray[position]);
             checkbox.setText(mPackages.get(position).getRfidTag());
 
