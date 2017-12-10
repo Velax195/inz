@@ -22,6 +22,7 @@
     <string name="no">Nie</string>
     <string name="ok">OK</string>
     <string name="warning">Uwaga!</string>
+    <string name="error">Błąd</string>
 
     <string name="btn_modify">Modyfikuj</string>
     <string name="btn_delete">Usuń</string>
@@ -30,6 +31,7 @@
     <string name="btn_save">Zapisz</string>
     <string name="btn_search">Wyszukaj</string>
     <string name="btn_add_parts">Dodaj części</string>
+    <string name="btn_back">Cofnij</string>
 
     <string name="action_done">Done</string>
     <string name="action_search">search</string>
@@ -61,5 +63,13 @@
     <string name="dialog_confirm_delete_message">Czy na pewno chcesz usunąć?</string>
     <string name="dialog_warning_overwrite_package">Zamierzasz nadpisać paczkę</string>
     <string name="dialog_show_info">Pokaż dalsze informacje</string>
+    <string name="dialog_tittle_how_many_parts">Podaj ilość</string>
+
+    <string name="warning_not_in_database">Brak paczki w bazie danych</string>
+    <string name="warning_not_in_order">Tej paczki nie ma w zamówieniu</string>
+    <string name="warning_take_this_package">Ta paczka znajduje się w zamówieniu</string>
+    <string name="warning_order_completed">Zamówienie zakończone</string>
+    <string name="warning_insert_name">Wprowadź nazwę</string>
+
 
 </resources>

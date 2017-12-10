@@ -27,7 +27,7 @@ public class PartAddActivity extends AppCompatActivity {
             mCurrentPart = extras.getParcelable(KEY_PART);
         } else {
             //TODO tink of it
-            Toast.makeText(PartAddActivity.this, "error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PartAddActivity.this, R.string.error,  Toast.LENGTH_SHORT).show();
         }
 
         final EditText etName = findViewById(R.id.etName);
@@ -66,7 +66,7 @@ public class PartAddActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (etName.getText().toString().matches("")
                         || etName.getText().toString() == DatabaseHelper.NULL_VAL) {
-                    Toast.makeText(PartAddActivity.this, "Wprowadź nazwę", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PartAddActivity.this, R.string.warning_insert_name , Toast.LENGTH_SHORT).show();
                 } else if (mCurrentPart == null) {
                     Part mNewPart = new Part(
                             mDb.SafeGetStringFromEditText(etName.getText().toString()),

@@ -2,10 +2,10 @@ package com.kszych.pms;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kszych.pms.utils.DatabaseHelper;
 import com.kszych.pms.utils.Package;
@@ -41,8 +40,6 @@ public class PartSingleActivity extends AppCompatActivity {
             mCurrentPart = extras.getParcelable(KEY_PART);
 
             if(mCurrentPart == null) {
-                // TODO die panic etc
-                Toast.makeText(this, "PART IS NULLL WHAAAT TO DOOOOO", Toast.LENGTH_SHORT).show();
                 onBackPressed();
             }
             mPackagesOfPart = mDb.getPackagesContainingPart(mCurrentPart);
@@ -84,8 +81,6 @@ public class PartSingleActivity extends AppCompatActivity {
 
         }
         else {
-            // TODO die etc. We require extras
-            Toast.makeText(this, "PART IS NULLL WHAAAT TO DOOOOO", Toast.LENGTH_SHORT).show();
             onBackPressed();
         }
     }

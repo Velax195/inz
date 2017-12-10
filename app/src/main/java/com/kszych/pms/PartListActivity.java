@@ -177,7 +177,7 @@ public class PartListActivity extends AppCompatActivity {
                 final EditText editText = dialogContent.findViewById(R.id.etDialogPartQuantity);
                 editText.setText(String.format(Locale.ENGLISH, "%d", adapter.getQuantityForItem(position)));
                 AlertDialog.Builder builder = new AlertDialog.Builder(PartListActivity.this);
-                builder.setMessage("MOVE ME TO STRINGS.XML")
+                builder.setMessage(R.string.dialog_tittle_how_many_parts)
                         .setView(dialogContent)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override

@@ -63,7 +63,7 @@ public class OrderExecuteActivity extends AppCompatActivity {
         Map<Part, Integer> filteredPartCounts = mDb.getPartsMissingFromDb(partsInOrder);
         for(Map.Entry<Part, Integer> singleEntry : filteredPartCounts.entrySet()) {
             if(singleEntry.getValue() > 0) {
-                Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
                 isEnough = false;
             }
         }
@@ -145,12 +145,12 @@ public class OrderExecuteActivity extends AppCompatActivity {
     private void cardIsRead(final String uidHex) {
         mScannedPackage = mDb.getPackageByRFID(uidHex);
         if (mScannedPackage == null) {
-            Toast.makeText(OrderExecuteActivity.this, "Not in database", Toast.LENGTH_SHORT).show();
+            Toast.makeText(OrderExecuteActivity.this, R.string.warning_not_in_database, Toast.LENGTH_SHORT).show();
         } else {
             if (mPackagesArray.indexOf(mScannedPackage) == -1) {
-                Toast.makeText(OrderExecuteActivity.this, "Not in order", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OrderExecuteActivity.this, R.string.warning_not_in_order, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(OrderExecuteActivity.this, "Take this package", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OrderExecuteActivity.this, R.string.warning_take_this_package, Toast.LENGTH_SHORT).show();
                 mCheckArray[mPackagesArray.indexOf(mScannedPackage)] = true;
                 mAdapter.notifyDataSetChanged();
                 isFinished();
@@ -172,7 +172,7 @@ public class OrderExecuteActivity extends AppCompatActivity {
             }
         }
         mAdapter.initBoolArray();
-        Toast.makeText(OrderExecuteActivity.this, "Order completed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(OrderExecuteActivity.this, R.string.warning_order_completed, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(OrderExecuteActivity.this, MenuActivity.class);
         startActivity(intent);
     }

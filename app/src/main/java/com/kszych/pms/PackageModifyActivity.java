@@ -56,7 +56,7 @@ public class PackageModifyActivity extends AppCompatActivity {
             }
         } else {
             // TODO fail die etc.
-            Toast.makeText(PackageModifyActivity.this, "error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PackageModifyActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
         }
 
         final EditText etMass = findViewById(R.id.etMass);
@@ -140,7 +140,7 @@ public class PackageModifyActivity extends AppCompatActivity {
         });
 
         if (previousActivity.equals(PackageListActivity.ACTIVITY_NAME)) {
-            btnDelete.setText("Cofnij");
+            btnDelete.setText(R.string.btn_back);
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

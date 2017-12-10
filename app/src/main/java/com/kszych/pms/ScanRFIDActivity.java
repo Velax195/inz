@@ -98,7 +98,7 @@ public class ScanRFIDActivity extends AppCompatActivity {
         String previousActivity = getIntent().getStringExtra(FROM_ACTIVITY);
         if (previousActivity.equals(MenuActivity.ACTIVITY_NAME)) {
             if(mPackage == null) {
-                Toast.makeText(ScanRFIDActivity.this, "Not in database", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScanRFIDActivity.this, R.string.warning_not_in_database, Toast.LENGTH_SHORT).show();
                 onBackPressed();
             }
             else {
