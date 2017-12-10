@@ -19,8 +19,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
-    public static final int DATABASE_VERSION = 9;
-    public static final String DATABASE_NAME = "DatabaseX.db";
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "Database.db";
 
     // default db values below
     public static final String DEFAULT_STRING = null;

@@ -1,11 +1,13 @@
 package com.kszych.pms;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,11 +55,11 @@ public class OrderExecuteActivity extends AppCompatActivity {
         boolean isEnough = true;
 
         Map<Part, Integer> partsInOrder = new HashMap<>();
-        partsInOrder.put(mDb.getPartByName("ołówek"), 20);
-        partsInOrder.put(mDb.getPartByName("długopis"), 10);
-        partsInOrder.put(mDb.getPartByName("pędzel"), 30);
-        partsInOrder.put(mDb.getPartByName("kartka"), 50);
-        partsInOrder.put(mDb.getPartByName("linijka"), 10);
+        partsInOrder.put(mDb.getPartByName("ołówek"), 200);
+        partsInOrder.put(mDb.getPartByName("długopis"), 100);
+        partsInOrder.put(mDb.getPartByName("pędzel"), 300);
+        partsInOrder.put(mDb.getPartByName("kartka"), 500);
+        partsInOrder.put(mDb.getPartByName("linijka"), 100);
 
 
         Map<Part, Integer> filteredPartCounts = mDb.getPartsMissingFromDb(partsInOrder);
@@ -71,21 +73,36 @@ public class OrderExecuteActivity extends AppCompatActivity {
         if (isEnough) {
             mPackagesArray = mDb.getPackagesInOrder(partsInOrder);
 
-        } else {
-            //TODO show missing parts
-            mPackagesArray = new ArrayList<>();
+            TextView tvHowManyLeft = findViewById(R.id.tvHowManyLeft);
+            ListView lvPackagesToExecute = findViewById(R.id.lvPackagesToExecute);
 
-            mPackagesArray.add(mDb.getPackageByRFID(" 85 32 ba 51"));
-            mPackagesArray.add(mDb.getPackageByRFID(" e2 2d a1 d5"));
-            mPackagesArray.add(mDb.getPackageByRFID(" 04 f1 74 a2 3e 3e 80"));
+            tvHowManyLeft.setText(String.format(Locale.ENGLISH, "%d", mPackagesArray.size()));
+            mAdapter = new PackagesArrayAdapter(OrderExecuteActivity.this, mPackagesArray);
+            lvPackagesToExecute.setAdapter(mAdapter);
+
+
+        } else {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(getResources().getString(R.string.label_missing_part_list));
+            for(Map.Entry<Part, Integer> singleEntry : filteredPartCounts.entrySet()) {
+                if(singleEntry.getValue() > 0) {
+                    stringBuilder.append(singleEntry.getValue()).append(" x ")
+                            .append(singleEntry.getKey().getName()).append(" \n");
+                }
+            }
+
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(OrderExecuteActivity.this);
+            alertBuilder.setTitle(getResources().getString(R.string.dialog_warning_order_not_executable))
+                    .setMessage(stringBuilder.toString())
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            onBackPressed();
+                        }
+                    }).show();
+
 
         }
-        TextView tvHowManyLeft = findViewById(R.id.tvHowManyLeft);
-        ListView lvPackagesToExecute = findViewById(R.id.lvPackagesToExecute);
-
-        tvHowManyLeft.setText(String.format(Locale.ENGLISH, "%d", mPackagesArray.size()));
-        mAdapter = new PackagesArrayAdapter(OrderExecuteActivity.this, mPackagesArray);
-        lvPackagesToExecute.setAdapter(mAdapter);
 
         mRequestQueue = Volley.newRequestQueue(getApplicationContext());
 
@@ -108,6 +125,15 @@ public class OrderExecuteActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    void refreshTextView(){
+        TextView tvHowManyLeft = findViewById(R.id.tvHowManyLeft);
+        int count = 0;
+        for( int i = 0; i < mCheckArray.length; i++){
+            if(!mCheckArray[i]){ count++;}
+        }
+        tvHowManyLeft.setText(String.format(Locale.ENGLISH, "%d", count));
     }
 
     private void sendRequest() {
@@ -153,6 +179,7 @@ public class OrderExecuteActivity extends AppCompatActivity {
                 Toast.makeText(OrderExecuteActivity.this, R.string.warning_take_this_package, Toast.LENGTH_SHORT).show();
                 mCheckArray[mPackagesArray.indexOf(mScannedPackage)] = true;
                 mAdapter.notifyDataSetChanged();
+                refreshTextView();
                 isFinished();
                 //TODO single toast pls
             }

@@ -37,6 +37,7 @@
     <string name="action_search">search</string>
     <string name="action_add">add</string>
 
+    <string name="label_missing_part_list">Lista brakujących części \n</string>
     <string name="label_package_part_list">Lista części w paczce:</string>
     <string name="label_mass">Masa:</string>
     <string name="label_dimensions">Wymiary:</string>
@@ -64,6 +65,8 @@
     <string name="dialog_warning_overwrite_package">Zamierzasz nadpisać paczkę</string>
     <string name="dialog_show_info">Pokaż dalsze informacje</string>
     <string name="dialog_tittle_how_many_parts">Podaj ilość</string>
+    <string name="dialog_warning_order_not_executable">W magazynie nie ma wystarczającej liczby części</string>
+
 
     <string name="warning_not_in_database">Brak paczki w bazie danych</string>
     <string name="warning_not_in_order">Tej paczki nie ma w zamówieniu</string>
