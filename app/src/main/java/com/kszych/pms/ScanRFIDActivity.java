@@ -23,6 +23,8 @@ public class ScanRFIDActivity extends AppCompatActivity {
     public static final String NOT_READABLE_RESPOND_MESSAGE = "CARD_NOT_READABLE";
     private static final String REQUEST_TAG = "ScannerRequest";
     public static final String FROM_ACTIVITY = "FromActivity";
+    public static final String ACTIVITY_NAME = ScanRFIDActivity.class.getName();
+
 
     String mRequestURL = "http://192.168.0.14/scaner";
     Package mPackage;
@@ -71,7 +73,6 @@ public class ScanRFIDActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // TODO ignore, resend?
                 sendRequest();
             }
         });
@@ -95,7 +96,7 @@ public class ScanRFIDActivity extends AppCompatActivity {
         Toast.makeText(ScanRFIDActivity.this, "Read " + uidHex + " " + uidDec, Toast.LENGTH_SHORT).show();
         mPackage = mDb.getPackageByRFID(uidHex);
         String previousActivity = getIntent().getStringExtra(FROM_ACTIVITY);
-        if (previousActivity.equals(getResources().getString(R.string.menuActivityName))) {
+        if (previousActivity.equals(MenuActivity.ACTIVITY_NAME)) {
             if(mPackage == null) {
                 Toast.makeText(ScanRFIDActivity.this, "Not in database", Toast.LENGTH_SHORT).show();
                 onBackPressed();
@@ -106,34 +107,34 @@ public class ScanRFIDActivity extends AppCompatActivity {
                 startActivity(sendIntent);
             }
         }
-        else if (previousActivity.equals(getResources().getString(R.string.packageListActivityName))) {
+        else if (previousActivity.equals(PackageListActivity.ACTIVITY_NAME)) {
             if(mPackage == null) {
                 Intent sendIntent = new Intent(ScanRFIDActivity.this, PackageModifyActivity.class);
                 sendIntent.putExtra(PackageModifyActivity.KEY_PACKAGE, mPackage);
                 sendIntent.putExtra(PackageModifyActivity.KEY_RFID_TAG, uidHex);
-                sendIntent.putExtra(PackageModifyActivity.KEY_ACTIVITY, getResources().getString(R.string.packageListActivityName));
+                sendIntent.putExtra(PackageModifyActivity.KEY_ACTIVITY, PackageListActivity.ACTIVITY_NAME);
                 startActivity(sendIntent);
             }
             else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ScanRFIDActivity.this);
                 builder.setTitle(R.string.warning)
-                        .setMessage(R.string.overwritePackage)
-                        .setPositiveButton(R.string.overwrite, new DialogInterface.OnClickListener() {
+                        .setMessage(R.string.dialog_warning_overwrite_package)
+                        .setPositiveButton(R.string.btn_overwrite, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 mDb.deletePackage(uidHex);
                                 Intent sIntent = new Intent(ScanRFIDActivity.this, PackageModifyActivity.class);
                                 sIntent.putExtra(PackageModifyActivity.KEY_RFID_TAG, uidHex);
-                                sIntent.putExtra(PackageModifyActivity.KEY_ACTIVITY, getResources().getString(R.string.packageListActivityName));
+                                sIntent.putExtra(PackageModifyActivity.KEY_ACTIVITY, PackageListActivity.ACTIVITY_NAME);
                                 startActivity(sIntent);
                             }
                         })
-                        .setNegativeButton(R.string.showInfo, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.dialog_show_info, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Intent sIntent = new Intent(ScanRFIDActivity.this, PackageSingleActivity.class);
                                 sIntent.putExtra(PackageModifyActivity.KEY_PACKAGE, mDb.getPackageByRFID(uidHex));
-                                sIntent.putExtra(PackageModifyActivity.KEY_ACTIVITY, "ScanRFID");
+                                sIntent.putExtra(PackageModifyActivity.KEY_ACTIVITY, ACTIVITY_NAME);
                                 startActivity(sIntent);
                             }
                         })

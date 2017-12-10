@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.kszych.pms.utils.DatabaseHelper;
@@ -39,9 +38,9 @@ public class PartAddActivity extends AppCompatActivity {
         Button btAdd = findViewById(R.id.btnAdd);
 
         if (mCurrentPart != null) {
-            setTitle(getString(R.string.modifyPartTitle, mCurrentPart.getName()));
+            setTitle(getString(R.string.tittle_modify_part, mCurrentPart.getName()));
         } else {
-            setTitle(getString(R.string.modifyPartTitle, "nowa"));
+            setTitle(getString(R.string.tittle_modify_part, "nowa"));
         }
 
         if (mCurrentPart != null) {

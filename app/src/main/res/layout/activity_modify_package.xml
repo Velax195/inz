@@ -17,20 +17,20 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:text="@string/add_parts"
+            android:text="@string/btn_add_parts"
             />
         <Button
             android:id="@+id/modifyPackageDelete"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:text="@string/delete"/>
+            android:text="@string/btn_delete"/>
         <Button
             android:id="@+id/modifyPackageSave"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:text="@string/save"/>
+            android:text="@string/btn_save"/>
     </LinearLayout>
 
     <LinearLayout

@@ -15,6 +15,7 @@ public class PartSearchActivity extends AppCompatActivity {
     private DatabaseHelper mDb = DatabaseHelper.getInstance(this);
     public static final String SEARCH_PACKAGE = "search_package";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

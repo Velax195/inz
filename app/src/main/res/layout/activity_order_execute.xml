@@ -12,7 +12,7 @@
         android:id="@+id/tvHowManyLeft"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/modify"
+        android:text="@string/btn_modify"
         android:gravity="center_horizontal"
         android:layout_marginBottom="15dp"/>
 

@@ -50,7 +50,7 @@ public class PackageSingleActivity extends AppCompatActivity {
             mPartsInPackage = mDb.getPartsInPackage(mCurrentPackage);
         }
 
-        setTitle(getString(R.string.activity_name_single_package, mCurrentPackage.getId()));
+        setTitle(getString(R.string.tittle_activity_single_package, mCurrentPackage.getId()));
 
         Button btnModify = findViewById(R.id.singlePackageModify);
         Button btnDelete = findViewById(R.id.singlePackageDelete);

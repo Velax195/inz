@@ -1,63 +1,65 @@
 <resources>
-    <string name="app_name">PMS</string>
+    <string name="app_name">Package Management System</string>
 
-    <string name="activity_name_list_packages">Lista paczek</string>
-    <string name="activity_name_single_package">Paczka %1$05d</string>
+    <string name="not_implemented">Not yet implemented</string>
 
-    <string name="yes">Tak</string>
-    <string name="no">Nie</string>
-    <string name="ok">OK</string>
-    <string name="modify">Modyfikuj</string>
-    <string name="delete">Usuń</string>
-    <string name="overwrite">Nadpisz</string>
-    <string name="add">Dodaj</string>
-    <string name="save">Zapisz</string>
+    <string name="tittle_modify_package">Paczka %1$s</string>
+    <string name="tittle_modify_part">Część %1$s</string>
+    <string name="tittle_activity_list_parts">Lista części</string>
+    <string name="tittle_activity_list_packages">Lista paczek</string>
+    <string name="tittle_activity_single_package">Paczka %1$05d</string>
+    <string name="title_activity_scan_rfid">scanRFID</string>
+    <string name="title_activity_modify_package">Modyfikuj Paczkę</string>
 
     <string name="menu_manage_parts">Zarządzaj częściami</string>
     <string name="menu_manage_packages">Zarządzaj paczkami</string>
     <string name="menu_scan">Zeskanuj paczkę</string>
     <string name="menu_test">Aktywność testowa</string>
 
-    <string name="action_add">Dodaj</string>
+    <string name="scanRFID">Zeskanuj RFID</string>
+
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
+    <string name="ok">OK</string>
+    <string name="warning">Uwaga!</string>
+
+    <string name="btn_modify">Modyfikuj</string>
+    <string name="btn_delete">Usuń</string>
+    <string name="btn_overwrite">Nadpisz</string>
+    <string name="btn_add">Dodaj</string>
+    <string name="btn_save">Zapisz</string>
+    <string name="btn_search">Wyszukaj</string>
+    <string name="btn_add_parts">Dodaj części</string>
+
+    <string name="action_done">Done</string>
+    <string name="action_search">search</string>
+    <string name="action_add">add</string>
 
     <string name="label_package_part_list">Lista części w paczce:</string>
     <string name="label_mass">Masa:</string>
     <string name="label_dimensions">Wymiary:</string>
     <string name="label_barcode">Kod kreskowy:</string>
-    <string name="label_location">Dzieto:</string>
+    <string name="label_location">Lokalizacja:</string>
     <string name="label_additional_info">Dodatkowe informacje:</string>
     <string name="label_aisle">Alejka:</string>
-
-
-    <string name="dialog_confirm_delete_title">Potwierdź usunięcie</string>
-    <string name="dialog_confirm_delete_message">Czy na pewno chcesz usunąć?</string>
-
-    <string name="not_implemented">Not yet implemented</string>
-    <string name="title_activity_modify_package">Modyfikuj Paczkę</string>
-    <string name="modifyPackageTitle">Paczka %1$s</string>
-    <string name="modifyPartTitle">Część %1$s</string>
-    <string name="title_activity_scan_rfid">scanRFID</string>
-    <string name="scanRFID">Zeskanuj RFID</string>
     <string name="label_name">Nazwa</string>
     <string name="label_producer">Nazwa producenta</string>
     <string name="label_buyURL">Link do sklepu</string>
     <string name="label_price">Cena [zł]</string>
-    <string name="search">Wyszukaj</string>
-    <string name="menuActivityName">MenuActivity</string>
-    <string name="packageListActivityName">PackageListActivity</string>
-    <string name="overwritePackage">Zamierzasz nadpisać paczkę</string>
-    <string name="warning">Uwaga!</string>
-    <string name="showInfo">Pokaż dalsze informacje</string>
     <string name="label_height">Wysokość</string>
     <string name="label_width">Szerokość</string>
     <string name="label_depth">Głębokość</string>
     <string name="label_rack">Regał</string>
     <string name="label_shelf">Półka</string>
-    <string name="add_parts">Dodaj części</string>
-    <string name="action_done">Done</string>
-    <string name="quantityAll">Ilość w magazynie:</string>
     <string name="label_street">Ulica</string>
     <string name="label_street_number">Numer domu</string>
     <string name="label_city">Miasto</string>
     <string name="label_number">Numer telefonu</string>
+    <string name="label_quantity_all">Ilość w magazynie:</string>
+
+    <string name="dialog_confirm_delete_title">Potwierdź usunięcie</string>
+    <string name="dialog_confirm_delete_message">Czy na pewno chcesz usunąć?</string>
+    <string name="dialog_warning_overwrite_package">Zamierzasz nadpisać paczkę</string>
+    <string name="dialog_show_info">Pokaż dalsze informacje</string>
+
 </resources>

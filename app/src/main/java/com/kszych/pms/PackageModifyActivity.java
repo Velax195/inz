@@ -48,7 +48,7 @@ public class PackageModifyActivity extends AppCompatActivity {
         if (extras != null) {
             previousActivity = extras.getString(KEY_ACTIVITY);
             scannedID = extras.getString(KEY_RFID_TAG);
-            if (previousActivity.equals(getResources().getString(R.string.packageListActivityName))) {
+            if (previousActivity.equals(PackageListActivity.ACTIVITY_NAME)) {
                 shit = true;
             } else {
             mCurrentPackage = extras.getParcelable(KEY_PACKAGE);
@@ -75,9 +75,9 @@ public class PackageModifyActivity extends AppCompatActivity {
 
 
         if (mCurrentPackage != null) {
-            setTitle(getString(R.string.modifyPackageTitle, Integer.toString(mCurrentPackage.getId())));
+            setTitle(getString(R.string.tittle_modify_package, Integer.toString(mCurrentPackage.getId())));
         } else {
-            setTitle(getString(R.string.modifyPackageTitle, "nowa"));
+            setTitle(getString(R.string.tittle_modify_package, "nowa"));
             //mCurrentPackage = new Package(DatabaseHelper.DEFAULT_INT, DatabaseHelper.DEFAULT_STRING);
         }
 
@@ -118,7 +118,7 @@ public class PackageModifyActivity extends AppCompatActivity {
                 Intent intent = new Intent(PackageModifyActivity.this, PartListActivity.class);
                 intent.putExtra(PartListActivity.KEY_ACTIVITY, PartListActivity.Flow.CHECKABLE.name());
                 intent.putParcelableArrayListExtra(KEY_CHECK_PARTS, mCurrentParts);
-                if (previousActivity.equals(getResources().getString(R.string.packageListActivityName))) {
+                if (previousActivity.equals(PackageListActivity.ACTIVITY_NAME)) {
                     Package mNewPackage = new Package(
                             scannedID,
                             mDb.SafeGetIntFromEditText(etMass.getText().toString()),
@@ -139,7 +139,7 @@ public class PackageModifyActivity extends AppCompatActivity {
             }
         });
 
-        if (previousActivity.equals(getResources().getString(R.string.packageListActivityName))) {
+        if (previousActivity.equals(PackageListActivity.ACTIVITY_NAME)) {
             btnDelete.setText("Cofnij");
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -212,27 +212,6 @@ public class PackageModifyActivity extends AppCompatActivity {
             lvPackageParts.setAdapter(adapter);
         }
     }
-
-//    private void updatePartsPackageDatabase(ArrayList<Part> oldList, ArrayList<Part> newList) {
-//        ArrayList<Part> partsToRemove = new ArrayList<>();
-//        if(oldList == null) {
-//            mDb.addPackageParts(mCurrentPackage, newList, 1);
-//        } else {
-//            for (Part singleOldPart : oldList) {
-//                if (newList.contains(singleOldPart)) {
-//                    partsToRemove.add(singleOldPart);
-//                }
-//            }
-//
-//            for (Part singlePartToRemove : partsToRemove) {
-//                oldList.remove(singlePartToRemove);
-//                newList.remove(singlePartToRemove);
-//            }
-//
-//            mDb.deletePackageParts(mCurrentPackage, oldList);
-//            mDb.addPackageParts(mCurrentPackage, newList, 1);
-//        }
-//    }
 
     private void updatePartsPackageDatabase(ArrayList<Part> oldList, ArrayList<Part> newList, ArrayList<Integer> partsQuantity) {
         ArrayList<Part> partsToRemove = new ArrayList<>();

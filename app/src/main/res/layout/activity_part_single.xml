@@ -18,14 +18,14 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/modify"
+            android:text="@string/btn_modify"
             android:layout_alignParentBottom="true"/>
         <Button
             android:id="@+id/btnDelete"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/delete"/>
+            android:text="@string/btn_delete"/>
     </LinearLayout>
 
     <LinearLayout
@@ -84,7 +84,7 @@
                 </TableRow>
                 <TableRow>
                     <TextView
-                        android:text="@string/quantityAll"
+                        android:text="@string/label_quantity_all"
                         android:layout_width="0dp"
                         android:layout_weight="1"/>
                     <TextView

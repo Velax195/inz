@@ -2,10 +2,10 @@ package com.kszych.pms;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,9 +20,10 @@ import com.kszych.pms.utils.DatabaseHelper;
 import com.kszych.pms.utils.Package;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class PackageListActivity extends AppCompatActivity {
+
+    public static final String ACTIVITY_NAME = PackageListActivity.class.getName();
 
     private DatabaseHelper mDb;
     private ArrayList<Package> mPackages;
@@ -31,7 +32,7 @@ public class PackageListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_package_list);
-        setTitle(R.string.activity_name_list_packages);
+        setTitle(R.string.tittle_activity_list_packages);
 
         mDb = DatabaseHelper.getInstance(PackageListActivity.this);
         mPackages = mDb.getPackages();
@@ -80,7 +81,7 @@ public class PackageListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_add:
                 Intent mIntent = new Intent(PackageListActivity.this, ScanRFIDActivity.class);
-                mIntent.putExtra(ScanRFIDActivity.FROM_ACTIVITY, getResources().getString(R.string.packageListActivityName));
+                mIntent.putExtra(ScanRFIDActivity.FROM_ACTIVITY, ACTIVITY_NAME);
                 startActivity(mIntent);
                 return true;
             default:

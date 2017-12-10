@@ -8,6 +8,8 @@ import android.widget.Button;
 
 public class MenuActivity extends AppCompatActivity {
 
+    public static final String ACTIVITY_NAME = MenuActivity.class.getName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +38,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent mIntent = new Intent(MenuActivity.this, ScanRFIDActivity.class);
-                mIntent.putExtra(ScanRFIDActivity.FROM_ACTIVITY, getResources().getString(R.string.menuActivityName));
+                mIntent.putExtra(ScanRFIDActivity.FROM_ACTIVITY, ACTIVITY_NAME);
                 startActivity(mIntent);
             }
         });
